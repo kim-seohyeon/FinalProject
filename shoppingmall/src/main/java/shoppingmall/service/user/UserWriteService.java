@@ -15,9 +15,10 @@ public class UserWriteService {
 	PasswordEncoder passwordEncoder;
 	@Autowired
 	MemberRepository memberRepository;
+	/*
 	@Autowired
 	EmailSendService emailSendService;
-	
+	*/
 	public void execute(MemberCommand membercommand) {
 		
 		MemberDTO dto = new MemberDTO();
@@ -35,7 +36,7 @@ public class UserWriteService {
 		dto.setMemberPhone2(membercommand.getMemberPhone2());
 		dto.setMemberRegist(membercommand.getMemberRegist());
 		memberRepository.memberInsert(dto);
-		
+		/*
 		String fromEmail = "soongmoostudent@gmail.com";
 		String toEmail = dto.getMemberEmail();
 		String subject = "가입을 환영합니다.";
@@ -45,6 +46,6 @@ public class UserWriteService {
 								+dto.getMemberId()+"'>여기</a>를 클릭하세요";
 		
 		emailSendService.send(fromEmail, toEmail, subject, contents);
-		
+		*/
 	}
 }

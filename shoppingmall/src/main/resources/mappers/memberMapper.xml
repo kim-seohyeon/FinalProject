@@ -21,7 +21,7 @@
     <select id="memberSelectOne" parameterType="string" resultType="shoppingmall.domain.AuthInfoDTO">
         select member_id userId, member_pw userPw, member_name userName, member_email userEmail, 'mem' grade
         from members
-        where member_id = #{userId} and member_email_conf is not null
+        where member_id = #{userId}
         union
         select emp_id, emp_pw, emp_name, emp_email, 'emp' grade
         from employees
