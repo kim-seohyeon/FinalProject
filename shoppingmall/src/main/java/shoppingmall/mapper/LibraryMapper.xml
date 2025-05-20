@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+<mapper namespace="shoppingmall.mapper.LibraryMapper">
+
+<sql id="libNum">
+	select nvl(max(lib_num),0)+1 from libraries
+</sql>
+
+<insert id="libraryInsert" parameterType="lib">
+	insert into libraries(lib_num, lib_writer, lib_subject, lib_content
+						 , LIB_ORIGINAL_NAME, LIB_STORE_NAME, LIB_IMAGE_ORIGINAL_NAME, LIB_IMAGE_STORE_NAME
+						 , lib_regist)
+	values ((<include refid="libNum"/>), #{libWriter}, #{libSubject}, #{libContent}
+			<if test="libOriginalName != null">
+				, #{libOriginalName}, #{libStoreName}
+			</if>
+			<if test="libOriginalName == null">
+				, null, null
+			</if>
+			<if test="libImageOriginalName != null">
+				, #{libImageOriginalName}, #{libImageStoreName}
+			</if>
+			<if test="libImageOriginalName == null">
+				, null, null
+			</if>
+			, sysdate
+			)
+</insert>
+
+<select id="libSelectList" resultType="lib">
+select * 
+from (select row_number() over (order by lib_num desc) as rn
+    	, lib_num, lib_writer, lib_subject, lib_content
+    	, LIB_ORIGINAL_NAME, LIB_STORE_NAME, LIB_IMAGE_ORIGINAL_NAME, LIB_IMAGE_STORE_NAME
+    	, lib_regist
+	  from libraries
+	  where lib_writer like '%' || #{searchWord} || '%'
+	  		or lib_subject like '%' || #{searchWord} || '%'
+	  		or lib_content like '%' || #{searchWord} || '%'
+	  )
+where rn between #{startRow} and #{endRow}
+</select>
+
+<select id="libSelectOne" parameterType="integer" resultType="lib">
+	select lib_num, lib_writer, lib_subject, lib_content
+			, LIB_ORIGINAL_NAME, LIB_STORE_NAME, LIB_IMAGE_ORIGINAL_NAME, LIB_IMAGE_STORE_NAME
+			, lib_regist
+	from libraries
+	where lib_num = #{libNum}
+</select>
+
+<delete id="libraryDelete" parameterType="integer" >
+	delete from libraries
+	where lib_num = #{libNum}
+</delete>
+
+<update id="libraryUpdate" parameterType="lib">
+	update libraries 
+	<trim prefix="set" suffixOverrides=",">
+		lib_writer = #{libWriter},
+		lib_subject = #{libSubject},
+		lib_content = #{libContent},
+		<if test="libOriginalName != null">
+		LIB_ORIGINAL_NAME = #{libOriginalName},
+		LIB_STORE_NAME = #{libStoreName},
+		</if>
+		<if test="libOriginalName == null">
+		LIB_ORIGINAL_NAME = null,
+		LIB_STORE_NAME = null,
+		</if>
+		<if test="libImageOriginalName != null">
+		LIB_IMAGE_ORIGINAL_NAME = #{libImageOriginalName},
+		LIB_IMAGE_STORE_NAME = #{libImageStoreName}
+		</if>
+		<if test="libImageOriginalName == null">
+		LIB_IMAGE_ORIGINAL_NAME = null,
+		LIB_IMAGE_STORE_NAME = null
+		</if>
+	</trim>
+	<trim prefix="where" prefixOverrides="AND / OR">
+		lib_num = #{libNum}
+	</trim>
+</update>
+
+<select id="libraryCount" resultType="int" >
+	select count(*) from libraries
+	where lib_writer like '%' || #{searchWord} || '%'
+	  		or lib_subject like '%' || #{searchWord} || '%'
+	  		or lib_content like '%' || #{searchWord} || '%'
+</select>
+
+<delete id="libraryNumsDelete" parameterType="integer">
+	delete from libraries
+	where lib_num in
+		<foreach collection="nums" item="libNum" index="index" open="(" close=")" separator=",">
+			#{libNum}
+		</foreach>
+</delete>
+
+
+</mapper>

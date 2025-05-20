@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="memberSql">
+
+    <!-- memberNum 생성 -->
+    <sql id="memberNum">
+        select concat('mem_', nvl(substr(max(member_num),5),10000)+1) from members
+    </sql>
+
+    <!-- 회원 추가 -->
+    <insert id="memberInsert" parameterType="shoppingmall.domain.MemberDTO">
+        insert into members(member_num, member_id, member_pw, member_name, member_email)
+        values( (<include refid="memberNum" />), #{memberId}, #{memberPw}, #{memberName}, #{memberEmail})
+    </insert>
+
+    <!-- 회원 로그인 정보 조회 -->
+    <select id="memberSelectOne" parameterType="string" resultType="shoppingmall.domain.AuthInfoDTO">
+        select member_id userId, member_pw userPw, member_name userName, member_email userEmail, 'mem' grade
+        from members
+        where member_id = #{userId} and member_email_conf is not null
+        union
+        select emp_id, emp_pw, emp_name, emp_email, 'emp' grade
+        from employees
+        where emp_id = #{userId}
+    </select>
+
+    <!-- 비밀번호 수정 -->
+    <update id="userPwUpdate" parameterType="userChangePasswordDTO">
+        <!-- ${} : 테이블명, 컬럼 / #{}: 값 -->
+        update ${tableName}
+        set ${pwColumnName} = #{userPw}
+        where ${userIdColumnName} = #{userId}
+            and ${phoneColumnName} = #{userPhone}
+    </update>
+
+    <!-- 이메일 확인 및 업데이트 -->
+    <update id="emailCheckUpdate" parameterType="string">
+        update members
+        set member_email_conf = 'y'
+        where member_id = #{userId}
+            and member_email_conf is null
+    </update>
+
+    <!-- 아이디 중복 체크 -->
+    <select id="selectId" parameterType="hashmap" resultType="string">
+        select member_id
+        from members
+        where member_email = #{userEmail}
+            and (member_phone1 = #{userPhone} or member_phone2 = #{userPhone})
+        union all
+        select emp_id
+        from employees
+        where emp_email = #{userEmail} and emp_phone = #{userPhone}
+    </select>
+
+</mapper>
