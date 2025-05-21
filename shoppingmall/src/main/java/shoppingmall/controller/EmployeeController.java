@@ -51,11 +51,12 @@ public class EmployeeController {
 	@PostMapping("/empWrite")
 	public String write(@Validated EmployeeCommand employeeCommand
 						, BindingResult result) { //BindingResult는 항상 Command 뒤에 와야 함
-
+		System.out.println("zsfsfsa");
 		if(result.hasErrors()) {
 			return "employee/empForm";
 		}
 		if(!employeeCommand.isEmpPwEquealsEmpPwCon()) {
+			System.out.println("dasdfa");
 			result.rejectValue("empPwCon", "errPw", "비밀번호 확인이 일치하지 않습니다");
 			return "employee/empForm";
 

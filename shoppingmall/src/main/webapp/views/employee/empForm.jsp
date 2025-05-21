@@ -37,6 +37,12 @@
 			<td><form:password path="empPw" />
 				<form:errors path="empPw"/></td>
 		</tr>
+		
+		<tr>
+			<td>비밀번호 확인</td>
+			<td><form:password path="empPwCon" />
+				<form:errors path="empPwCon"/></td>
+		</tr>
 
 		<tr>
 			<td>주소</td>
