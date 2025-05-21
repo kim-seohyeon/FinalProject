@@ -36,7 +36,7 @@
 		<th>상품 상세 이미지</th>
 		<td>
 			<c:forTokens items="${dto.goodsDetailStoreImage }" delims="`" var="image">
-				<img width="300" height="200" src="/goods/upload/${image }"/>
+				<img width="300" height="200" src="/static/goodsUpload/${image }"/>
 			</c:forTokens>
 		</td>
 	</tr>	

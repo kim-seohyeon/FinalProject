@@ -58,7 +58,7 @@ $(function(){
 <body>
 <table width=800 >
 	<tr>
-		<td rowspan=5><img src="/goods/upload/${dto.goodsMainStoreImage }" /></td>
+		<td rowspan=5><img src="/static/goodsUpload/${dto.goodsMainStoreImage }" /></td>
 		<td>${dto.goodsName }</td>
 	</tr>
 	
