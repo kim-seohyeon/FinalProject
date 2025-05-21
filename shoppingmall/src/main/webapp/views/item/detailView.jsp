@@ -39,10 +39,10 @@ $(function(){
 			url : "wishItem",
 			data : {"goodsNum" : "${dto.goodsNum}"},
 			success : function(){
-				if($("#wish").attr("src")=="images/hart1.jpg"){
-					$("#wish").attr("src", "images/hart.png")
+				if($("#wish").attr("src")=="/static/images/heart.jpg"){
+					$("#wish").attr("src", "/static/images/emptyheart.png")
 				}else{
-					$("#wish").attr("src", "images/hart1.jpg")
+					$("#wish").attr("src", "/static/images/heart.jpg")
 				}				
 			},
 			error:function(){
@@ -77,10 +77,10 @@ $(function(){
 			<button type="button" id="cartBtn">장바구니</button> |
 			<button type="button" id="buyItem">바로 구매</button> | 
 			<c:if test="${empty wish }">
-				<img src="images/hart1.jpg" width=30 id="wish"/>
+				<img src="/static/images/emptyheart.png" width=30 id="wish"/>
 			</c:if>
 			<c:if test="${!empty wish }">
-				<img src="images/hart.png" width=30 id="wish"/>
+				<img src="/static/images/heart.jpg" width=30 id="wish"/>
 			</c:if>
 		</td>
 	</tr>
@@ -90,7 +90,7 @@ $(function(){
 			<div id="content">
 				${dto.goodsContents }<br/>
 				<c:forTokens items="${dto.goodsDetailStoreImage }" delims="`" var="image">
-				<img src="/goods/upload/${image }" />
+				<img src="/static/goodsUpload/${image }" />
 				</c:forTokens>
 			</div>
 		</td>
