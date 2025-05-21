@@ -31,7 +31,7 @@
 	<tr><th>수정일</th>
 		<td>${dto.goodsUpdateDate }</td></tr>	
 	<tr><th>메인이미지</th>
-		<td><img width="300" height="200" src="/goods/upload/${dto.goodsMainStoreImage }"/></td></tr>	
+		<td><img width="300" height="200" src="/static/goodsUpload/${dto.goodsMainStoreImage }"/></td></tr>	
 	<tr>
 		<th>상품 상세 이미지</th>
 		<td>

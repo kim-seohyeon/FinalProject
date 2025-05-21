@@ -54,14 +54,9 @@ public class GoodsController {
     @PostMapping("goodsWrite")
     public String Write(
         GoodsCommand goodsCommand,
-        @RequestParam("mainImage") MultipartFile mainImage,
-        @RequestParam("image1") MultipartFile image1,
-        @RequestParam("image2") MultipartFile image2,
-        @RequestParam("image3") MultipartFile image3,
-        HttpServletRequest request,
         HttpSession session
     ) {
-        goodsWriteService.execute(goodsCommand, mainImage, image1, image2, image3, request, session);
+        goodsWriteService.execute(goodsCommand, session);
         return "redirect:/goods/goodsList";
     }
 	

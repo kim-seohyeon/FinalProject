@@ -68,12 +68,10 @@
     <tr><th>상품설명</th>
       <td><textarea rows="10" cols="50" name="goodsContents" required></textarea></td></tr>
     <tr><th>대문이미지</th>
-      <td><input type="file" name="mainImage" required /></td></tr>
+      <td><input type="file" name="goodsFile" multiple="multiple" required /></td></tr>
     <tr><th>상품설명이미지</th>
       <td>
-        <input type="file" name="image1" />
-        <input type="file" name="image2" />
-        <input type="file" name="image3" />
+        <input type="file" name="goodsImageFile" />
       </td>
     </tr>  
     <tr><th colspan="2"><input type="submit" value="상품등록" /></th></tr>

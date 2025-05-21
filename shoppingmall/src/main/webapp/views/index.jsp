@@ -109,7 +109,7 @@ hk shoppingmall<br/>
 	    <c:if test="${idx.index % 3 == 0}"><tr></c:if>
 			<td>
 				<a href="/item/detailView?goodsNum=${dto.goodsNum}">
-					<img src="/goods/upload/${dto.goodsMainStoreImage}" width="300" height="150"/><br/>
+					<img src="/static/goodsUpload/${dto.goodsMainStoreImage}" width="300" height="150"/><br/>
 					${dto.goodsName }<br/>
 					${dto.goodsPrice }원
 				</a>

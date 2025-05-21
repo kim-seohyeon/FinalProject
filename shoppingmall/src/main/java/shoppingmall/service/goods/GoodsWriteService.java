@@ -1,13 +1,13 @@
 package shoppingmall.service.goods;
 
 import java.io.File;
-import java.io.IOException;
+import java.net.URL;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import shoppingmall.command.GoodsCommand;
 import shoppingmall.domain.AuthInfoDTO;
@@ -16,68 +16,64 @@ import shoppingmall.repository.GoodsRepository;
 
 @Service
 public class GoodsWriteService {
-
+	@Autowired
     GoodsRepository goodsRepository;
 
-    public GoodsWriteService(GoodsRepository goodsRepository) {
-        this.goodsRepository = goodsRepository;
-    }
-
-    public void execute(
-        GoodsCommand goodsCommand,
-        MultipartFile mainImage,
-        MultipartFile image1,
-        MultipartFile image2,
-        MultipartFile image3,
-        HttpServletRequest request,
-        HttpSession session
-    ) {
-    	String realPath = request.getServletContext().getRealPath("goods/upload");
-    	System.out.println("realPath = " + realPath);
-        File fileDir = new File(realPath);
-        if (!fileDir.exists()) fileDir.mkdirs();
-
-        try {
-            // 메인이미지 저장
-            String mainOriginal = mainImage.getOriginalFilename();
-            String mainStore = UUID.randomUUID().toString().replace("-", "") + "_" + mainOriginal;
-            File saveMain = new File(realPath, mainStore);
-            mainImage.transferTo(saveMain);
-
-            // 상세이미지 저장
-            String[] originalNames = new String[3];
-            String[] storeNames = new String[3];
-            MultipartFile[] images = {image1, image2, image3};
-
-            for (int i = 0; i < images.length; i++) {
-                if (!images[i].isEmpty()) {
-                    originalNames[i] = images[i].getOriginalFilename();
-                    storeNames[i] = UUID.randomUUID().toString().replace("-", "") + "_" + originalNames[i];
-                    images[i].transferTo(new File(realPath, storeNames[i]));
-                }
-            }
-
-            String goodsDetailImage = String.join("`", originalNames);
-            String goodsDetailStoreImage = String.join("`", storeNames);
-
-            // 세션에서 사원 정보 추출
-            AuthInfoDTO auth = (AuthInfoDTO) session.getAttribute("auth");
-
-            // DTO 설정
-            GoodsDTO dto = new GoodsDTO();
-            dto.setGoodsNum(goodsCommand.getGoodsNum());
-            dto.setGoodsName(goodsCommand.getGoodsName());
-            dto.setGoodsPrice(goodsCommand.getGoodsPrice());
-            dto.setGoodsContents(goodsCommand.getGoodsContents());
-            dto.setEmpNum(auth.getUserId()); // 사원 ID
-            dto.setGoodsMainImage(mainOriginal);
-            dto.setGoodsMainStoreImage(mainStore);
-            dto.setGoodsDetailImage(goodsDetailImage);
-            dto.setGoodsDetailStoreImage(goodsDetailStoreImage);
-
-            goodsRepository.goodsInsert(dto);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void execute( GoodsCommand goodsCommand, HttpSession session) {
+    	AuthInfoDTO auth = (AuthInfoDTO)session.getAttribute("auth");
+    	GoodsDTO dto = new GoodsDTO();
+        dto.setGoodsNum(goodsCommand.getGoodsNum());
+        dto.setGoodsName(goodsCommand.getGoodsName());
+        dto.setGoodsPrice(goodsCommand.getGoodsPrice());
+        dto.setGoodsContents(goodsCommand.getGoodsContents());
+        dto.setEmpNum(auth.getUserId()); // 사원 ID
+        URL resource = getClass().getClassLoader().getResource("static/goodsUpload");
+		String fileDir = resource.getFile();
+		if(!goodsCommand.getGoodsFile().getOriginalFilename().isEmpty()) {
+			MultipartFile mf = goodsCommand.getGoodsFile();
+			// 원본 파일 이름
+			String originalName = mf.getOriginalFilename();
+			// 저장 파일 이름 만들기
+			// 확장자 찾아오기 : ???.hwp
+			String extension = originalName.substring(originalName.lastIndexOf("."));
+			// 저장 이름 
+			String storeName = UUID.randomUUID().toString().replace("-", "");
+			// 확장자를 붙인 파일 이름
+			String storeFileName = storeName + extension;
+			// 저장 파일 생성
+			File file = new File(fileDir + "/" +storeFileName);
+			try {
+				// 원본이름을 저장파일이름으로 변경하여 저장
+				mf.transferTo(file);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			// dto저장
+			dto.setGoodsMainImage(originalName);
+			dto.setGoodsMainStoreImage(storeFileName);
+		}
+		if(!goodsCommand.getGoodsImageFile()[0].getOriginalFilename().isEmpty()) {
+			String totalOriginalName = "";
+			String totalStoreName = "";
+			for(MultipartFile mf : goodsCommand.getGoodsImageFile()) {
+				String originalName = mf.getOriginalFilename();
+				String extension = originalName.substring(originalName.lastIndexOf("."));
+				String storeName = UUID.randomUUID().toString().replace("-", "");
+				String storeFileName = storeName + extension;
+				File file = new File(fileDir + "/" +storeFileName);
+				try {
+					mf.transferTo(file);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				totalOriginalName += originalName + "`";
+				totalStoreName += storeFileName + "`";
+			}
+			dto.setGoodsDetailImage(totalOriginalName);
+			dto.setGoodsDetailStoreImage(totalStoreName);
+		}
+		goodsRepository.goodsInsert(dto);
+		
+		// 일반 파일
     }
 }

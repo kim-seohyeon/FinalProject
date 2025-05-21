@@ -78,7 +78,7 @@ public class MemberController {
 	
 	@GetMapping("/memberDelete")
 	public String delete(String memberNum) {
-		memberDeleteService.execute(memberNum);
+		//memberDeleteService.execute(memberNum, session);
 		return "redirect:memberList";
 	}
 	

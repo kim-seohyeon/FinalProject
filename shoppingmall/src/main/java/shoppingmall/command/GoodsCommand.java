@@ -16,11 +16,9 @@ public class GoodsCommand {
 	String goodsContents;
 
 	// 이미지 파일을 MultipartFile로 수정
-	MultipartFile mainImage;
+	MultipartFile goodsFile;
 
-    MultipartFile image1;
-    MultipartFile image2;
-    MultipartFile image3;
+	MultipartFile [] goodsImageFile ;
 	
 	// DB에 저장될 원본 이름, 저장 이름
 	String goodsMainImage;
