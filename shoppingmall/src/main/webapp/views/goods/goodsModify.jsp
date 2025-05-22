@@ -13,6 +13,9 @@
 	<caption> 상품 상세보기</caption>
 	<tr><th width="150" >상품번호</th>
 		<td><input type="text" name="goodsNum" value="${dto.goodsNum }" readonly="readonly"></td></tr>
+	<tr><th width="150" >브랜드명(주식종목이름)</th>
+		<td><input type="text" name="stockName" value="${dto.stockName }"></td></tr>
+	
 	<tr><th width="150" >상품명</th>
 		<td><input type="text" name="goodsName" value="${dto.goodsName }"></td></tr>
 	<tr><th>상품가격</th>

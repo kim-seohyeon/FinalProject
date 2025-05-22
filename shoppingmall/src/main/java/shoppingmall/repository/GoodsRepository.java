@@ -22,18 +22,18 @@ public class GoodsRepository {
 	}
 	
 	public int goodsInsert(GoodsDTO dto) {
-		sql = " insert into goods(GOODS_NUM, GOODS_NAME, GOODS_PRICE, GOODS_CONTENTS"
+		sql = " insert into goods(GOODS_NUM, stock_name, GOODS_NAME, GOODS_PRICE, GOODS_CONTENTS"
 				+ "					, GOODS_MAIN_IMAGE, GOODS_MAIN_STORE_IMAGE, GOODS_DETAIL_IMAGE, GOODS_DETAIL_STORE_IMAGE)"
-				+ " values(?, ?, ?, ?"
+				+ " values(?, ?, ?, ?, ?"
 				+ "		 , ?, ?, ?,?)";
 		
-		return jdbcTemplate.update(sql, dto.getGoodsNum(), dto.getGoodsName(), dto.getGoodsPrice(), dto.getGoodsContents()
+		return jdbcTemplate.update(sql, dto.getGoodsNum(), dto.getStockName(), dto.getGoodsName(), dto.getGoodsPrice(), dto.getGoodsContents()
 										, dto.getGoodsMainImage(), dto.getGoodsMainStoreImage(), dto.getGoodsDetailImage(), dto.getGoodsDetailStoreImage());
 
 	}
 	
 	public List<GoodsDTO> goodsSelectAll() {
-		sql = " select GOODS_NUM, GOODS_NAME, GOODS_PRICE, GOODS_CONTENTS"
+		sql = " select GOODS_NUM, stock_name, GOODS_NAME, GOODS_PRICE, GOODS_CONTENTS"
 				+ "  , GOODS_MAIN_IMAGE, GOODS_MAIN_STORE_IMAGE, GOODS_DETAIL_IMAGE, GOODS_DETAIL_STORE_IMAGE"
 				+ " from goods";
 		
@@ -43,7 +43,7 @@ public class GoodsRepository {
 	
 	public GoodsDTO goodsSelectOne(String goodsNum) {
 		
-		sql = " select GOODS_NUM, GOODS_NAME, GOODS_PRICE, GOODS_CONTENTS"
+		sql = " select GOODS_NUM, stock_name, GOODS_NAME, GOODS_PRICE, GOODS_CONTENTS"
 				+ "  , GOODS_MAIN_IMAGE, GOODS_MAIN_STORE_IMAGE, GOODS_DETAIL_IMAGE, GOODS_DETAIL_STORE_IMAGE"
 				+ " from goods where goods_num=?";
 		
@@ -54,11 +54,11 @@ public class GoodsRepository {
 
 	public int goodsUpdate(GoodsDTO dto) {
 		sql = " update goods"
-				+ " set GOODS_NAME = ?, GOODS_PRICE = ?, GOODS_CONTENTS = ?"
+				+ " set stock_name=?, GOODS_NAME = ?, GOODS_PRICE = ?, GOODS_CONTENTS = ?"
 				+ "  , GOODS_MAIN_IMAGE = ?, GOODS_MAIN_STORE_IMAGE = ?, GOODS_DETAIL_IMAGE = ?, GOODS_DETAIL_STORE_IMAGE = ?"
 				+ " where goods_num = ?";
 		
-		return jdbcTemplate.update(sql, dto.getGoodsName(), dto.getGoodsPrice(), dto.getGoodsContents()
+		return jdbcTemplate.update(sql, dto.getStockName(), dto.getGoodsName(), dto.getGoodsPrice(), dto.getGoodsContents()
 				, dto.getGoodsMainImage(), dto.getGoodsMainStoreImage(), dto.getGoodsDetailImage(), dto.getGoodsDetailStoreImage()
 									  , dto.getGoodsNum());
 	}

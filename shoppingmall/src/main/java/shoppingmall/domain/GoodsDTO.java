@@ -20,4 +20,5 @@ public class GoodsDTO {
 	String updateEmpNum;
 	Date goodsUpdateDate;
 	int visitCount;
+	String stockName;
 }

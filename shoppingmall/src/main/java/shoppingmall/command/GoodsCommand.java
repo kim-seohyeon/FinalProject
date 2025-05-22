@@ -33,6 +33,6 @@ public class GoodsCommand {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	Date goodsUpdateDate;
 
-
+	String stockName;
 	
 }

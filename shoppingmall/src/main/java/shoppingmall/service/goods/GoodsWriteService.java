@@ -23,6 +23,7 @@ public class GoodsWriteService {
     	AuthInfoDTO auth = (AuthInfoDTO)session.getAttribute("auth");
     	GoodsDTO dto = new GoodsDTO();
         dto.setGoodsNum(goodsCommand.getGoodsNum());
+        dto.setStockName(goodsCommand.getStockName());
         dto.setGoodsName(goodsCommand.getGoodsName());
         dto.setGoodsPrice(goodsCommand.getGoodsPrice());
         dto.setGoodsContents(goodsCommand.getGoodsContents());
