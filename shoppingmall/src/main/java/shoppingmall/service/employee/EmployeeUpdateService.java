@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import jakarta.servlet.http.HttpSession;
 import shoppingmall.command.EmployeeCommand;
 import shoppingmall.domain.EmployeeDTO;
 import shoppingmall.repository.EmployeeRepository;
@@ -15,7 +16,7 @@ public class EmployeeUpdateService {
 	EmployeeRepository employeeRepository;
 	@Autowired
 	PasswordEncoder passwordEncoder;
-	public int execute(EmployeeCommand employeeCommand) {
+	public int execute(HttpSession session, EmployeeCommand employeeCommand) {
 		
 		EmployeeDTO dto = employeeRepository.empSelectOne(employeeCommand.getEmpNum());
 		

@@ -16,7 +16,7 @@
 	<li><a href='<c:url value="/"/>'>홈</a></li>
 	<li><a href='/empPage/empMyPage'>직원정보 보기</a></li>
 	<li><a href='/empPage/empUpdate'>직원정보 수정</a></li>
-	<li><a href="/empPage/empPwUpdate">비밀번호 변경</a></li>
+	<li><a href="/empPage/empNewPw">비밀번호 변경</a></li>
 	<li><a>직원 탈퇴</a></li>
 </ul>
 

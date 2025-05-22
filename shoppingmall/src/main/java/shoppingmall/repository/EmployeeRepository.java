@@ -70,4 +70,11 @@ public class EmployeeRepository {
 		sql = " delete from employees where emp_num = ?";
 		return jdbcTemplate.update(sql, empNum);
 	}
+
+	public int employeePwUpdate(String empId, String newPw) {
+		sql = " update employees"
+				+ " set emp_pw = ? "
+				+ " where emp_id = ?";
+		return jdbcTemplate.update(sql, newPw, empId);
+	}
 }

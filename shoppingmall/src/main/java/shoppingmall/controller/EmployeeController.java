@@ -75,21 +75,21 @@ public class EmployeeController {
 		return "employee/empModify";
 	}
 	
-	@PostMapping("/empUpdate")
-	public String update(@Validated EmployeeCommand employeeCommand
-						, BindingResult result) {
-		if(result.hasErrors()) {
-			return "employee/empForm";
-		}
-		int i = employeeUpdateService.execute(employeeCommand);
-		if(i == 0) {
-			result.rejectValue("empPw", "macthErr", "비밀번호가 일치하지 않습니다.");
-			return "employee/empModify";
-
-		}
-		return "redirect:empDetail?empNum="+employeeCommand.getEmpNum();
-
-	}
+//	@PostMapping("/empUpdate")
+//	public String update(@Validated EmployeeCommand employeeCommand
+//						, BindingResult result) {
+//		if(result.hasErrors()) {
+//			return "employee/empForm";
+//		}
+//		int i = employeeUpdateService.execute(employeeCommand);
+//		if(i == 0) {
+//			result.rejectValue("empPw", "macthErr", "비밀번호가 일치하지 않습니다.");
+//			return "employee/empModify";
+//
+//		}
+//		return "redirect:empDetail?empNum="+employeeCommand.getEmpNum();
+//
+//	}
 	
 	@GetMapping("/empDelete")
 	public String delete(String empNum) {
