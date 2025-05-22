@@ -65,11 +65,6 @@ public class ItemRepository {
         jdbcTemplate.update(sql, goodsNum, memberNum);
     }
 
-    // wish 테이블에 데이터 삽입
-    public void wishInsert(WishDTO dto) {
-        sql = "INSERT INTO wish (member_num, goods_num) VALUES (?, ?)";
-        jdbcTemplate.update(sql, dto.getMemberNum(), dto.getGoodsNum());
-    }
 
     public CartListDTO itemSelectOne(String goodsNum, String memberNum) {
         sql = "SELECT c.CART_QTY, g.GOODS_NUM, g.GOODS_NAME, g.GOODS_PRICE, "
@@ -82,6 +77,23 @@ public class ItemRepository {
         } catch (Exception e) {
             return null;  // 상품이 없다면 null을 반환
         }
+    }
+
+    // wish 테이블에 데이터 삽입
+    public void wishInsert(WishDTO dto) {
+    	sql  = " merge into wishgoods w  "
+   			 + " using (select goods_num from goods where goods_num = ?) g "
+   			 + " on (w.goods_num = g.goods_num and w.member_num = ? )"
+   			 + " when matched then "
+   			 + " 	update set WISHGOODS_DATE = sysdate "
+   			 + "    delete where goods_num = ? and member_num  = ? "
+   			 + " when not matched then "
+   			 + " 	insert (member_num, goods_num , WISHGOODS_DATE) "
+   			 + "    values (?, g.goods_num , sysdate) ";
+    
+    	jdbcTemplate.update(sql,dto.getGoodsNum(), dto.getMemberNum()
+    			               ,dto.getGoodsNum(), dto.getMemberNum()
+    			               ,dto.getMemberNum());
     }
 
     // 찜 목록 조회 (회원 번호와 상품 번호로 찜 정보 조회)

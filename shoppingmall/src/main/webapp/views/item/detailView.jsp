@@ -40,14 +40,17 @@ $(function(){
 			data : {"goodsNum" : "${dto.goodsNum}"},
 			success : function(){
 				if($("#wish").attr("src")=="/static/images/heart.jpg"){
-					$("#wish").attr("src", "/static/images/emptyheart.png")
+					$("#wish").attr("src", "/static/images/emptyheart.jpg")
 				}else{
 					$("#wish").attr("src", "/static/images/heart.jpg")
+
 				}				
 			},
 			error:function(){
 				alert("로그아웃 되었습니다. \n 다시 로그인 해 주세요");
-				location.href="<c:url value='/' />";
+				window.open("/login/loginCk", "이름", "width=400, height=100, top=100, left=100");
+
+//				location.href="<c:url value='/item/wishlist' />";
 			}
 		});
 	});
@@ -79,7 +82,7 @@ $(function(){
 			<button type="button" id="cartBtn">장바구니</button> |
 			<button type="button" id="buyItem">바로 구매</button> | 
 			<c:if test="${empty wish }">
-				<img src="/static/images/emptyheart.png" width=30 id="wish"/>
+				<img src="/static/images/emptyheart.jpg" width=30 id="wish"/>
 			</c:if>
 			<c:if test="${!empty wish }">
 				<img src="/static/images/heart.jpg" width=30 id="wish"/>

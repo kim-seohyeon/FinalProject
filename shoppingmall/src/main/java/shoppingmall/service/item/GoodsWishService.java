@@ -15,17 +15,14 @@ import shoppingmall.repository.MemberRepository;
 public class GoodsWishService {
 
     @Autowired
-    private ItemRepository itemRepository;  // ItemRepository 주입
+    ItemRepository itemRepository;  // ItemRepository 주입
 
     @Autowired
-    private MemberRepository memberRepository;  // MemberRepository 주입
+    MemberRepository memberRepository;  // MemberRepository 주입
 
-    public void execute(HttpServletRequest request) {
+    public void execute(HttpSession session, String goodsNum) {
         
-        String goodsNum = request.getParameter("goodsNum");
-        
-        // 사용자 정보 가져오기
-        HttpSession session = request.getSession();
+
         AuthInfoDTO auth = (AuthInfoDTO) session.getAttribute("auth");
         
         String memberNum = null;
@@ -44,6 +41,6 @@ public class GoodsWishService {
         dto = itemRepository.wishSelectOne(dto);
         
         // request에 찜 정보를 담아서 전달
-        request.setAttribute("wish", dto);
+        //request.setAttribute("wish", dto);
     }
 }
