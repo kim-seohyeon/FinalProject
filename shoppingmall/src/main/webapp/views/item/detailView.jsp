@@ -59,11 +59,13 @@ $(function(){
 <table width=800 >
 	<tr>
 		<td rowspan=5><img src="/static/goodsUpload/${dto.goodsMainStoreImage }" /></td>
-		<td>${dto.goodsName }</td>
+		<td>상품명 : ${dto.goodsName }</td>
 	</tr>
-	
 	<tr>
-		<td><fmt:formatNumber value="${dto.goodsPrice }" pattern="###,###"/>원</td>
+		<td>브랜드명 : ${dto.stockName }</td>
+	</tr>	
+	<tr>
+		<td>상품가격 : <fmt:formatNumber value="${dto.goodsPrice }" pattern="###,###"/>원</td>
 	</tr>
 	
 	<tr>
