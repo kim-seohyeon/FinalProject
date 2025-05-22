@@ -1,27 +1,20 @@
 package shoppingmall.controller;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import shoppingmall.command.LoginCommand;
-import shoppingmall.domain.AuthInfoDTO;
 import shoppingmall.repository.ItemRepository;
 import shoppingmall.repository.MemberRepository;
 import shoppingmall.service.FileDelService;
 import shoppingmall.service.LoginService;
 import shoppingmall.service.item.CartInsertService;
 import shoppingmall.service.item.CartListService;
+import shoppingmall.service.item.GoodsWishItemService;
+import shoppingmall.service.item.GoodsWishService;
 import shoppingmall.service.user.EmailCheckService;
 
 @RestController
@@ -41,6 +34,10 @@ public class CheckRestController {
     ItemRepository itemRepository;
     @Autowired
     CartInsertService cartInsertService ;
+    @Autowired
+    GoodsWishService goodsWishService;
+    @Autowired
+    GoodsWishItemService goodsWishItemService;
     // 이메일 인증 처리
     @GetMapping("/help/userConfirm")
     public String confirm(String chk) {
@@ -60,5 +57,13 @@ public class CheckRestController {
     	cartInsertService.execute(goodsNum, cartQty, session);
     }
 
+
+
+    @PostMapping("/item/wishItem")
+    public void wishItem(HttpSession session, String goodsNum) {
+    	goodsWishItemService.execute(session, goodsNum);
+    }
+
+    
 
 }
