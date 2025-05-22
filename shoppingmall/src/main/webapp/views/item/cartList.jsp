@@ -16,7 +16,7 @@
 	
 	<c:forEach items="${list }" var="dto">	
 	<tr><td><input type = "checkbox" name="prodCk" value="${dto.goodsNum }" checked="checked"/></td>
-		<td><img src="/goods/upload/${dto.goodsImage }" width=30/></td><td>${dto.goodsName }</td><td>${dto.cartQty }</td><td>${dto.cartQty * dto.goodsPrice }</td></tr>
+		<td><img src="/static/goodsUpload/${dto.goodsMainStoreImage }" width=30/></td><td>${dto.goodsName }</td><td>${dto.cartQty }</td><td>${dto.cartQty * dto.goodsPrice }</td></tr>
 	</c:forEach>
 	
 	<tr>

@@ -14,7 +14,7 @@ public class CartListDTO {
 	String goodsName;
 	int goodsPrice;
 	String goodsImage;
-	
+	String goodsMainStoreImage;
 	int totalPrice;
 
 	
