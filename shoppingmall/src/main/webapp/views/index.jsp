@@ -52,7 +52,7 @@ $(function(){
 
 <body>
 hk shoppingmall<br/>
-<a href="mailling">메일링</a> | <a href="library">자료실</a>
+<a href="mailling">메일링</a> | <a href="library">자료실</a> | <a href="community">커뮤니티</a>
 
 <c:if test="${!empty auth }">
 <ul>
