@@ -24,16 +24,16 @@ public class ItemRepository {
     public void cartMerge(CartDTO dto) {
         sql = " MERGE INTO cart c "
             + " using (select goods_num from goods where goods_num = ? ) g"
-    		+ " on (c.goods_num = g.goods_num and c.member_num = ? ) "
+            + " on (c.goods_num = g.goods_num and c.member_num = ? ) "
             + " WHEN MATCHED THEN "
             + "  UPDATE SET c.cart_qty = c.cart_qty + ? "
             + " WHEN NOT MATCHED THEN "
             + "  INSERT ( goods_num, member_num, cart_qty, cart_date) "
             + "  VALUES ( ?, ?, ?, sysdate)";
         
-        jdbcTemplate.update(sql
-        	,dto.getGoodsNum(), dto.getMemberNum(), dto.getCartQty() // for ON + UPDATE
-            ,dto.getGoodsNum(), dto.getMemberNum(), dto.getCartQty()  // for INSERT
+        jdbcTemplate.update(sql,
+            dto.getGoodsNum(), dto.getMemberNum(), dto.getCartQty(),
+            dto.getGoodsNum(), dto.getMemberNum(), dto.getCartQty()
         );
     }
 
@@ -52,11 +52,10 @@ public class ItemRepository {
     // 구매 리스트에 상품 정보 추가
     public void purchaseListInsert(String goodsNum, String purchaseNum, String memberNum) {
         sql = "INSERT INTO purchase_list (goods_num, purchase_num, PURCHASE_QTY, GOODS_UNIT_PRICE) "
-        	+ " select ? , ?, cart_qty , cart_qty * goods_price "
-    		+ " from cart c join goods g "
-    		+ " on c.goods_num = g.goods_num "
-    		+ " where g.goods_num = ? and member_num = ? ";
-        jdbcTemplate.update(sql, goodsNum, purchaseNum , goodsNum, memberNum);
+            + "SELECT ?, ?, cart_qty, cart_qty * goods_price "
+            + "FROM cart c JOIN goods g ON c.goods_num = g.goods_num "
+            + "WHERE g.goods_num = ? AND member_num = ?";
+        jdbcTemplate.update(sql, goodsNum, purchaseNum, goodsNum, memberNum);
     }
 
     // 장바구니에서 상품 삭제
@@ -65,71 +64,91 @@ public class ItemRepository {
         jdbcTemplate.update(sql, goodsNum, memberNum);
     }
 
-
+    // 장바구니에서 특정 상품 1개 조회
     public CartListDTO itemSelectOne(String goodsNum, String memberNum) {
         sql = "SELECT c.CART_QTY, g.GOODS_NUM, g.GOODS_NAME, g.GOODS_PRICE, "
-                + "g.GOODS_MAIN_STORE_IMAGE, c.MEMBER_NUM "
-                + "FROM cart c JOIN goods g ON c.GOODS_NUM = g.GOODS_NUM "
-                + "WHERE c.MEMBER_NUM = ? AND c.GOODS_NUM = ?";
+            + "g.GOODS_MAIN_STORE_IMAGE, c.MEMBER_NUM "
+            + "FROM cart c JOIN goods g ON c.GOODS_NUM = g.GOODS_NUM "
+            + "WHERE c.MEMBER_NUM = ? AND c.GOODS_NUM = ?";
         
         try {
             return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(CartListDTO.class), memberNum, goodsNum);
         } catch (Exception e) {
-            return null;  // 상품이 없다면 null을 반환
-        }
-    }
-
-    // wish 테이블에 데이터 삽입
-    public void wishInsert(WishDTO dto) {
-    	sql  = " merge into wishgoods w  "
-   			 + " using (select goods_num from goods where goods_num = ?) g "
-   			 + " on (w.goods_num = g.goods_num and w.member_num = ? )"
-   			 + " when matched then "
-   			 + " 	update set WISHGOODS_DATE = sysdate "
-   			 + "    delete where goods_num = ? and member_num  = ? "
-   			 + " when not matched then "
-   			 + " 	insert (member_num, goods_num , WISHGOODS_DATE) "
-   			 + "    values (?, g.goods_num , sysdate) ";
-    
-    	jdbcTemplate.update(sql,dto.getGoodsNum(), dto.getMemberNum()
-    			               ,dto.getGoodsNum(), dto.getMemberNum()
-    			               ,dto.getMemberNum());
-    }
-
-    // 찜 목록 조회 (회원 번호와 상품 번호로 찜 정보 조회)
-    public WishDTO wishSelectOne(WishDTO dto) {
-        sql = "SELECT member_num, goods_num, WISH_DATE "
-        		+ "FROM wish WHERE member_num = ? AND goods_num = ?";
-        try {
-            // 찜 정보를 가져와서 반환
-            return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<WishDTO>(WishDTO.class), dto.getMemberNum(), dto.getGoodsNum());
-        } catch (Exception e) {
-            // 만약 찜 정보가 없다면 null을 반환
             return null;
         }
     }
+
+    // 찜 등록 (MERGE 방식)
+    public void wishInsert(WishDTO dto) {
+        sql  = " MERGE INTO wishgoods w "
+             + " USING (SELECT goods_num FROM goods WHERE goods_num = ?) g "
+             + " ON (w.goods_num = g.goods_num AND w.member_num = ?) "
+             + " WHEN MATCHED THEN "
+             + "   UPDATE SET wishgoods_date = SYSDATE "
+             + "   DELETE WHERE goods_num = ? AND member_num = ? "
+             + " WHEN NOT MATCHED THEN "
+             + "   INSERT (member_num, goods_num, wishgoods_date) "
+             + "   VALUES (?, g.goods_num, SYSDATE)";
     
-    public PurchaseDTO purchaseSelectOne(String purchaseNum) {
-    	sql = " select  PURCHASE_NUM, PURCHASE_DATE, PURCHASE_PRICE  "
-    			+ "     	,DELIVERY_ADDR, DELIVERY_ADDR_DETAIL, DELIVERY_POST"
-    			+ "     	,DELIVERY_PHONE, MESSAGE, PURCHASE_STATUS, MEMBER_NUM"
-    			+ "     	,DELIVERY_NAME, PURCHASE_NAME"
-    			+ " from purchase "
-    			+ " where PURCHASE_NUM = ? ";       
-    	return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(PurchaseDTO.class), purchaseNum);
+        jdbcTemplate.update(sql, dto.getGoodsNum(), dto.getMemberNum(),
+                                  dto.getGoodsNum(), dto.getMemberNum(),
+                                  dto.getMemberNum());
     }
 
-    public void paymentInsert(PaymentDTO dto) {
-        // SQL 쿼리 작성
-        sql = "INSERT INTO payment (APPLDATE, APPTIME, CARDNUM, CONFIRMNUMBER, PAYMATHOD " +
-                     ", purchase_num, RESULTMASSAGE, tid, TOTALPRICE) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    // 찜 삭제 (찜한 상품 제거)
+    public void wishDelete(String memberNum, String goodsNum) {
+        sql = "DELETE FROM wishgoods WHERE member_num = ? AND goods_num = ?";
+        jdbcTemplate.update(sql, memberNum, goodsNum);
+    }
 
-        // JdbcTemplate을 사용하여 데이터 삽입
-        jdbcTemplate.update(sql, dto.getApplDate(),  dto.getApplTime(), dto.getCardNum(),dto.getConfirmNumber(),
+    // 찜 여부 확인 (이미 찜했는지)
+    public boolean isWished(String memberNum, String goodsNum) {
+        sql = "SELECT COUNT(*) FROM wishgoods WHERE member_num = ? AND goods_num = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, memberNum, goodsNum);
+        return count != null && count > 0;
+    }
+
+    // 찜 단건 조회
+    public WishDTO wishSelectOne(WishDTO dto) {
+        sql = "SELECT member_num, goods_num, WISHGOODS_DATE "
+            + "FROM wishgoods WHERE member_num = ? AND goods_num = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(WishDTO.class), dto.getMemberNum(), dto.getGoodsNum());
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    // 찜 목록 전체 조회 (회원 기준)
+    public List<WishDTO> wishSelectAll(String memberNum) {
+        sql = "SELECT g.goods_num, g.goods_name, g.goods_price, g.goods_main_store_image, g.stock_name, w.wishgoods_date "
+            + "FROM wishgoods w "
+            + "JOIN goods g ON w.goods_num = g.goods_num "
+            + "WHERE w.member_num = ? "
+            + "ORDER BY w.wishgoods_date DESC";
+
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(WishDTO.class), memberNum);
+    }
+
+    // 구매 단건 조회
+    public PurchaseDTO purchaseSelectOne(String purchaseNum) {
+        sql = "SELECT PURCHASE_NUM, PURCHASE_DATE, PURCHASE_PRICE, "
+            + "DELIVERY_ADDR, DELIVERY_ADDR_DETAIL, DELIVERY_POST, "
+            + "DELIVERY_PHONE, MESSAGE, PURCHASE_STATUS, MEMBER_NUM, "
+            + "DELIVERY_NAME, PURCHASE_NAME "
+            + "FROM purchase "
+            + "WHERE PURCHASE_NUM = ?";
+        return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(PurchaseDTO.class), purchaseNum);
+    }
+
+    // 결제 정보 저장
+    public void paymentInsert(PaymentDTO dto) {
+        sql = "INSERT INTO payment (APPLDATE, APPTIME, CARDNUM, CONFIRMNUMBER, PAYMATHOD, "
+            + "purchase_num, RESULTMASSAGE, tid, TOTALPRICE) "
+            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, dto.getApplDate(), dto.getApplTime(), dto.getCardNum(), dto.getConfirmNumber(),
             dto.getPayMathod(), dto.getPurchaseNum(), dto.getResultMessage(),
             dto.getTid(), dto.getTotalPrice()
         );
     }
-
 }

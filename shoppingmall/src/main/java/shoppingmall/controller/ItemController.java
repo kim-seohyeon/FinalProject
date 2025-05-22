@@ -11,13 +11,17 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import shoppingmall.command.PurchaseCommand;
 import shoppingmall.domain.AuthInfoDTO;
+import shoppingmall.domain.MemberDTO;
+import shoppingmall.repository.MemberRepository;
 import shoppingmall.service.goods.GoodsDetailService;
 import shoppingmall.service.item.CartListService;
 import shoppingmall.service.item.GoodsItemService;
 import shoppingmall.service.item.GoodsOrderService;
+import shoppingmall.service.item.GoodsWishService;
 import shoppingmall.service.item.INIstdpayPcReturnService;
 import shoppingmall.service.item.IniPayReqService;
 import shoppingmall.service.item.PurchaseListService;
+import shoppingmall.service.item.WishListService;
 
 @Controller
 @RequestMapping("/item")
@@ -44,6 +48,12 @@ public class ItemController {
     @Autowired
     PurchaseListService purchaseListService;
     
+    @Autowired
+    WishListService wishListService;  // 위시리스트 서비스 추가
+    
+    @Autowired
+    GoodsWishService goodsWishService;
+    
     // 장바구니 목록
     @GetMapping("/cartList")
     public String cartList(HttpSession session, Model model, HttpServletRequest request) {
@@ -64,8 +74,9 @@ public class ItemController {
     
     // 상품 상세 페이지
     @GetMapping("/detailView")
-    public String detail(HttpServletRequest request, Model model, String goodsNum) {
+    public String detail(HttpServletRequest request, Model model, String goodsNum, HttpSession session) {
         goodsDetailService.execute(request, model, goodsNum);
+        goodsWishService.execute(session, goodsNum, model);
         return "item/detailView";
     }
 
@@ -101,7 +112,22 @@ public class ItemController {
     	purchaseListService.execute(model, session);
     	return "item/purchaseList";
     }
-    
+    @Autowired
+    MemberRepository memberRepository;
+    @GetMapping("/wishList")
+    public String wishList(HttpSession session, Model model, HttpServletRequest request) {
+        AuthInfoDTO auth = (AuthInfoDTO) session.getAttribute("auth");
+        if (auth == null) {
+            // 로그인 안 한 경우, 원래 가려던 경로 저장 후 로그인 페이지로 리다이렉트
+            session.setAttribute("redirectURI", request.getRequestURI());
+            return "redirect:/login/login";
+        }
+
+        MemberDTO dto = memberRepository.memberSelectOne(auth.getUserId())    ;
+        
+        wishListService.execute(dto.getMemberNum(), model);
+        return "item/wishlist";  // 위시리스트 jsp 페이지
+    }
     
    
     
