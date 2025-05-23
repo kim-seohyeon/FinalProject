@@ -17,7 +17,7 @@
 	<c:forEach items="${list }" var="dto">
 	
 		<tr>
-			<td><img src="/goods/upload/${dto.goodsImage }" width=30/></td>
+			<td><img src="/static/goodsUpload/${dto.goodsMainStoreImage }" width=30/></td>
 			<td>${dto.goodsName }</td>
 			<td>${dto.cartQty }개/${dto.goodsPrice }원</td>
 			<td>${dto.goodsPrice * dto.cartQty }원</td>

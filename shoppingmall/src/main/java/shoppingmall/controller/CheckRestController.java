@@ -11,10 +11,7 @@ import shoppingmall.repository.ItemRepository;
 import shoppingmall.repository.MemberRepository;
 import shoppingmall.service.FileDelService;
 import shoppingmall.service.LoginService;
-import shoppingmall.service.item.CartInsertService;
-import shoppingmall.service.item.CartListService;
-import shoppingmall.service.item.GoodsWishItemService;
-import shoppingmall.service.item.GoodsWishService;
+import shoppingmall.service.item.*;
 import shoppingmall.service.user.EmailCheckService;
 
 @RestController
@@ -34,9 +31,11 @@ public class CheckRestController {
     ItemRepository itemRepository;
     @Autowired
     CartInsertService cartInsertService ;
-    
+    @Autowired
+    GoodsOrderService goodsOrderService;
     @Autowired
     GoodsWishItemService goodsWishItemService;
+
     // 이메일 인증 처리
     @GetMapping("/help/userConfirm")
     public String confirm(String chk) {
@@ -55,7 +54,12 @@ public class CheckRestController {
     public void cart(String goodsNum , int cartQty, HttpSession session) {
     	cartInsertService.execute(goodsNum, cartQty, session);
     }
-
+    /*
+    @PostMapping("/item/buy")
+    public void buy(String goodsNum, int cartQty, HttpSession session) {
+    	goodsOrderService.execute(goodsNum, cartQty, session);
+    }
+	*/
     @PostMapping("/item/wishItem")
     public boolean wishItem(HttpSession session, String goodsNum) {
     	return goodsWishItemService.execute(session, goodsNum);

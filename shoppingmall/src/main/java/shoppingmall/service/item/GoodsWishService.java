@@ -28,8 +28,10 @@ public class GoodsWishService {
         String memberNum = null;
         
         if (auth != null) {
-            MemberDTO mdto = memberRepository.memberSelectOne(auth.getUserId());
-            memberNum = mdto.getMemberNum();
+        	if(auth.getGrade().equals("mem")) {
+	            MemberDTO mdto = memberRepository.memberSelectOne(auth.getUserId());
+	            memberNum = mdto.getMemberNum();
+        	}
         }
         
         // 찜 정보 저장

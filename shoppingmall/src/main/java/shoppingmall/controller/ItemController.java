@@ -14,6 +14,7 @@ import shoppingmall.domain.AuthInfoDTO;
 import shoppingmall.domain.MemberDTO;
 import shoppingmall.repository.MemberRepository;
 import shoppingmall.service.goods.GoodsDetailService;
+import shoppingmall.service.item.CartInsertService;
 import shoppingmall.service.item.CartListService;
 import shoppingmall.service.item.GoodsItemService;
 import shoppingmall.service.item.GoodsOrderService;
@@ -54,6 +55,9 @@ public class ItemController {
     @Autowired
     GoodsWishService goodsWishService;
     
+    @Autowired
+    CartInsertService cartInsertService ;
+    
     // 장바구니 목록
     @GetMapping("/cartList")
     public String cartList(HttpSession session, Model model, HttpServletRequest request) {
@@ -81,7 +85,7 @@ public class ItemController {
     }
 
     // 상품 구매 페이지
-    @PostMapping("/itemBuy")
+    @RequestMapping("/itemBuy")
     public String buy(String [] prodCk,  Model model, HttpSession session) {
         goodsItemService.execute(prodCk, model, session);
         return "item/goodsOrder";
@@ -129,6 +133,11 @@ public class ItemController {
         return "item/wishlist";  // 위시리스트 jsp 페이지
     }
     
+    @GetMapping("buy")
+    public String buy(String goodsNum, int cartQty, HttpSession session) {
+    	cartInsertService.execute(goodsNum, cartQty, session);
+    	return "redirect:itemBuy?prodCk="+goodsNum;
+    }
    
     
 }

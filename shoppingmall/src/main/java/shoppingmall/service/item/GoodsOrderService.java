@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import jakarta.servlet.http.HttpSession;
 import shoppingmall.command.PurchaseCommand;
 import shoppingmall.domain.AuthInfoDTO;
+import shoppingmall.domain.CartDTO;
 import shoppingmall.domain.MemberDTO;
 import shoppingmall.domain.PurchaseDTO;
 import shoppingmall.repository.ItemRepository;
@@ -65,4 +66,17 @@ public class GoodsOrderService {
 
         return purchaseNum;
     }
+
+	public void execute(String goodsNum, int cartQty, HttpSession session) {
+
+        AuthInfoDTO auth = (AuthInfoDTO) session.getAttribute("auth");
+
+        MemberDTO mdto = memberRepository.memberSelectOne(auth.getUserId());
+        CartDTO dto = new CartDTO();
+        dto.setCartQty(cartQty);
+        dto.setGoodsNum(goodsNum);
+        dto.setMemberNum(mdto.getMemberNum());
+
+        itemRepository.cartMerge(dto);
+	}
 }

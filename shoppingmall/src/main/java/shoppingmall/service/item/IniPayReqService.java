@@ -9,7 +9,6 @@ import org.springframework.ui.Model;
 
 import com.inicis.std.util.SignatureUtil;
 
-import jakarta.servlet.http.HttpServletRequest;
 import shoppingmall.domain.PurchaseDTO;
 import shoppingmall.repository.ItemRepository;
 
