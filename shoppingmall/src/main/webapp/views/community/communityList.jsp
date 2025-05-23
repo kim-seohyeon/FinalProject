@@ -30,7 +30,7 @@
             width: 100px;
             margin: 10px auto 30px;
             padding: 10px 20px;
-            background-color: #4CAF50;
+            background-color: blue;
             color: white;
             text-align: center;
             text-decoration: none;
@@ -56,7 +56,7 @@
         }
 
         th {
-            background-color: #4CAF50;
+            background-color: blue;
             color: white;
         }
 
