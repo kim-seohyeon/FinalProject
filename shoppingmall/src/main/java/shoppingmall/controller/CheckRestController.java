@@ -34,8 +34,7 @@ public class CheckRestController {
     ItemRepository itemRepository;
     @Autowired
     CartInsertService cartInsertService ;
-    @Autowired
-    GoodsWishService goodsWishService;
+    
     @Autowired
     GoodsWishItemService goodsWishItemService;
     // 이메일 인증 처리
@@ -57,11 +56,9 @@ public class CheckRestController {
     	cartInsertService.execute(goodsNum, cartQty, session);
     }
 
-
-
     @PostMapping("/item/wishItem")
-    public void wishItem(HttpSession session, String goodsNum) {
-    	goodsWishItemService.execute(session, goodsNum);
+    public boolean wishItem(HttpSession session, String goodsNum) {
+    	return goodsWishItemService.execute(session, goodsNum);
     }
 
     

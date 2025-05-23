@@ -2,8 +2,8 @@ package shoppingmall.service.item;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import shoppingmall.domain.AuthInfoDTO;
 import shoppingmall.domain.MemberDTO;
@@ -20,7 +20,7 @@ public class GoodsWishService {
     @Autowired
     MemberRepository memberRepository;  // MemberRepository 주입
 
-    public void execute(HttpSession session, String goodsNum) {
+    public void execute(HttpSession session, String goodsNum, Model model) {
         
 
         AuthInfoDTO auth = (AuthInfoDTO) session.getAttribute("auth");
@@ -41,6 +41,6 @@ public class GoodsWishService {
         dto = itemRepository.wishSelectOne(dto);
         
         // request에 찜 정보를 담아서 전달
-        //request.setAttribute("wish", dto);
+        model.addAttribute("wish", dto);
     }
 }

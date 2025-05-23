@@ -65,6 +65,7 @@ hk shoppingmall<br/>
 	<c:if test="${auth.grade == 'mem' }">
 		<li><a href="/myPage/memberMyPage">내정보 보기</a></li>
 		<li><a href="/item/cartList">장바구니</a></li>
+		<li><a href="/item/wishList">찜 목록</a></li>
 		<li><a href="/item/purchaseList">구매목록</a></li>
 		
 	</c:if>
