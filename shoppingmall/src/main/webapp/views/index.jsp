@@ -8,8 +8,6 @@
 <meta charset="UTF-8">
 <title>Index</title>
 
-
-
 <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1.min.js"></script>
 <script type="text/javascript">
 
@@ -52,7 +50,8 @@ $(function(){
 
 <body>
 hk shoppingmall<br/>
-<a href="mailling">메일링</a> | <a href="library">자료실</a> | <a href="/community/communityList">커뮤니티</a>
+<a href="mailling">메일링</a> | <a href="library">자료실</a> |
+<a href="/inquire/inquireList">문의하기</a>| <a href="/community/communityList">커뮤니티</a>
 
 <c:if test="${!empty auth }">
 <ul>

@@ -10,6 +10,7 @@
 <script type="text/javascript" src="/static/js/checkBox.js"></script>
 </head>
 <body>
+<jsp:include page="/views/header.jsp" />
 자료실 검색자료 갯수 : ${count }<br/>
 <form action="library" method="get">
 	<tr>
@@ -58,5 +59,6 @@
 	</tr>
 </table>
 </form>
+<%@ include file="/views/footer.jsp" %>
 </body>
 </html>

@@ -10,6 +10,7 @@
 <title>memberMyPage.jsp</title>
 </head>
 <body>
+<jsp:include page="/views/header.jsp" />
 내 정보 상세보기<br/>
 <ul>
 	<li><a href='<c:url value="/"/>'>홈</a></li>
@@ -32,6 +33,6 @@
 생년월일: ${fn:substring(dto.memberBirth, 0, 10) }<br/>
 이메일: ${dto.memberEmail }<br/>
 
-
+<%@ include file="/views/footer.jsp" %>
 </body>
 </html>

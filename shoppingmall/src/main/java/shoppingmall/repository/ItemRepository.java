@@ -151,4 +151,11 @@ public class ItemRepository {
             dto.getTid(), dto.getTotalPrice()
         );
     }
+    
+    public int deleteByMemberNumAndGoodsNum(String memberNum, String goodsNum) {
+      
+            sql = "DELETE FROM CART WHERE MEMBER_NUM = ? AND GOODS_NUM = ?";
+            return jdbcTemplate.update(sql, memberNum, goodsNum);
+    }
+
 }

@@ -38,28 +38,20 @@ $(function(){
     	}else{
     		location.href="buy?goodsNum=${dto.goodsNum}&cartQty="+$("#cartQty").val();
     	}
-    	/*
-    	$.ajax({
-    		type: "post",
-            url: "buy",   
-            data: {
-                "goodsNum": "${dto.goodsNum}",
-                "cartQty": $("#cartQty").val()
-            },
-            success: function(){        
-                let loc = confirm("구매 페이지로 이동하시겠습니까?");
-                if(loc) 
-                    location.href = "/item/itemBuy";
-            },
-            error: function(){
-                window.open("/login/loginCk", "이름", "width=400, height=100, top=100, left=100");
-            }
-        });
-    	*/
     });
+    
     //문의하기 버튼 클릭 시
     
-
+    /*
+    $("#inquire").click(function(){
+    	if(${empty auth }){
+    		window.open("/login/loginCk", "이름", "width=400, height=100, top=100, left=100");
+    	}else{
+    		location.href="inquire?goodsNum=${dto.goodsNum}="+$("#inquire").val();
+    	}
+    });
+	*/
+	
     // 찜하기 버튼 클릭 시
     $("#wish").click(function(){
         $.ajax({
@@ -107,7 +99,9 @@ $(function(){
         <td>
             <button type="button" id="cartBtn">장바구니</button> |
             <button type="button" id="buyItem">바로 구매</button> | 
+            <!-- 
             <button type="button" id="inquire">문의하기</button>
+             -->
             <c:if test="${empty wish }">
                 <img src="/static/images/emptyheart.jpg" width=30 id="wish"/>
             </c:if>

@@ -46,10 +46,60 @@ $(function() {
     });
 });
 </script>
+<script>
+$(function(){
+    $(document).on('change', '.qtyInput', function(){
+        const $row = $(this).closest('tr');
+        const goodsNum = $row.data('goodsnum');
+        const cartQty = $(this).val();
+
+        $.ajax({
+            url: '/item/updateCartQty',
+            type: 'post',
+            data: {
+                goodsNum: goodsNum,
+                cartQty: cartQty
+            },
+            success: function(result){
+                $row.find('.totalPrice').text(result.toLocaleString() + "원");
+            },
+            error: function(){
+                alert("수량 변경 실패 또는 로그인 필요");
+            }
+        });
+    });
+});
+</script>
+<script>
+function deleteSelectedItems() {
+	var chk_arr = [];
+	$("input:checkbox[name='prodCk']:checked").each(function(){
+		chk_arr.push($(this).val());
+	});
+    $.ajax({
+    	type : "post",
+    	url : "deleteCart",
+    	data : {goodsNums : chk_arr},
+    	dataType: "text",
+    	success:function(result){
+    		if(result){
+    			location.reload();
+    		}else{
+    			location.href="/";
+    		}
+    	},
+    	error:function(){
+    		alert("서버오류");
+    	}
+    });
+}
+</script>
+
 </head>
 <body>
+<jsp:include page="/views/header.jsp" />
 
-<form action="itemBuy" method="post">
+<form action="itemBuy" method="post" >
     <table>
         <caption>장바구니</caption>
         <thead>
@@ -63,24 +113,32 @@ $(function() {
         </thead>
         <tbody>
             <c:forEach items="${list}" var="dto">
-                <tr>
-                    <td><input type="checkbox" name="prodCk" value="${dto.goodsNum}" checked /></td>
-                    <td><img src="/static/goodsUpload/${dto.goodsMainStoreImage}" /></td>
-                    <td>${dto.goodsName}</td>
-                    <td>${dto.cartQty}</td>
-                    <td><fmt:formatNumber value="${dto.cartQty * dto.goodsPrice}" pattern="###,###" />원</td>
-                </tr>
+                <tr data-goodsnum="${dto.goodsNum}">
+    <td><input type="checkbox" name="prodCk" value="${dto.goodsNum}" checked /></td>
+    <td><img src="/static/goodsUpload/${dto.goodsMainStoreImage}" /></td>
+    <td>${dto.goodsName}</td>
+    <td>
+        <input type="number" class="qtyInput" min="1" value="${dto.cartQty}" />
+    </td>
+    <td class="totalPrice">
+        <fmt:formatNumber value="${dto.cartQty * dto.goodsPrice}" pattern="###,###" />원
+    </td>
+</tr>
+
             </c:forEach>
         </tbody>
         <tfoot>
-            <tr>
-                <td colspan="5" style="text-align: right;">
-                    <input type="submit" value="구매하기">
-                </td>
-            </tr>
-        </tfoot>
+    <tr>
+        <td colspan="5" style="text-align: right;">
+            <input type="button" value="삭제" onclick="deleteSelectedItems()" style="padding: 8px 16px; font-size: 1em;" />
+			<input type="submit" value="구매하기" style="padding: 8px 16px; font-size: 1em;" />
+        </td>
+    </tr>
+</tfoot>
+        
     </table>
 </form>
-
+<%@ include file="/views/footer.jsp" %>
 </body>
+
 </html>

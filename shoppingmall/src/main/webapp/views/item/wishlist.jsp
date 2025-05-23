@@ -24,6 +24,7 @@
 </style>
 </head>
 <body>
+<jsp:include page="/views/header.jsp" />
 
 <h2 style="text-align:center;">찜한 상품 목록</h2>
 
@@ -55,6 +56,6 @@
         </tbody>
     </table>
 </c:if>
-
+<%@ include file="/views/footer.jsp" %>
 </body>
 </html>
