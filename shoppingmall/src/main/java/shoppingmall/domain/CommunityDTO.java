@@ -11,6 +11,7 @@ public class CommunityDTO {
 
 	String memberNum;
 	String communityNum;
+	String communityWriter;
 	String communitySubject;
 	String communityContent; 
 	Date communityDate;

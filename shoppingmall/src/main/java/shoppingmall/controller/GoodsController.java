@@ -52,10 +52,7 @@ public class GoodsController {
 	
     // 상품 등록 처리    
     @PostMapping("goodsWrite")
-    public String Write(
-        GoodsCommand goodsCommand,
-        HttpSession session
-    ) {
+    public String Write(GoodsCommand goodsCommand,HttpSession session) {
         goodsWriteService.execute(goodsCommand, session);
         return "redirect:/goods/goodsList";
     }

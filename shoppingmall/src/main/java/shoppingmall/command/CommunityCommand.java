@@ -9,8 +9,8 @@ import lombok.Data;
 @Data
 public class CommunityCommand {
 
-	String memberNum;
 	String communityNum;
+	String communityWriter;
 	String communitySubject;
 	String communityContent; 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")

@@ -75,6 +75,6 @@ public class GoodsWriteService {
 		}
 		goodsRepository.goodsInsert(dto);
 		
-		// 일반 파일
+
     }
 }

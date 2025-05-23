@@ -5,21 +5,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import shoppingmall.command.CommunityCommand;
-import shoppingmall.command.GoodsCommand;
-import shoppingmall.repository.GoodsRepository;
+import shoppingmall.repository.CommunityRepository;
 
 @Service
 public class CommunityAutoNumService {
 
 	@Autowired
-	GoodsRepository communityRepository;
+	CommunityRepository communityRepository;
 	public void execute(Model model) {
 		
-		String CommunityNum = communityRepository.goodsNumAutoSelect();
+		String communityNum = communityRepository.communityNumAutoSelect();
 		
 		CommunityCommand communityCommand = new CommunityCommand();
-		communityCommand.setCommunityNum(CommunityNum);
+		communityCommand.setCommunityNum(communityNum);
 		
-		model.addAttribute("goodsCommand", CommunityNum);
+		model.addAttribute("communityCommand", communityCommand);
 	}
 }
