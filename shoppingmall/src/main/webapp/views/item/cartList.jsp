@@ -70,11 +70,35 @@ $(function(){
     });
 });
 </script>
+<script>
+function deleteSelectedItems() {
+	var chk_arr = [];
+	$("input:checkbox[name='prodCk']:checked").each(function(){
+		chk_arr.push($(this).val());
+	});
+    $.ajax({
+    	type : "post",
+    	url : "deleteCart",
+    	data : {goodsNums : chk_arr},
+    	dataType: "text",
+    	success:function(result){
+    		if(result){
+    			location.reload();
+    		}else{
+    			location.href="/";
+    		}
+    	},
+    	error:function(){
+    		alert("서버오류");
+    	}
+    });
+}
+</script>
 
 </head>
 <body>
 
-<form action="itemBuy" method="post">
+<form action="itemBuy" method="post" >
     <table>
         <caption>장바구니</caption>
         <thead>
@@ -103,12 +127,14 @@ $(function(){
             </c:forEach>
         </tbody>
         <tfoot>
-            <tr>
-                <td colspan="5" style="text-align: right;">
-                    <input type="submit" value="구매하기">
-                </td>
-            </tr>
-        </tfoot>
+    <tr>
+        <td colspan="5" style="text-align: right;">
+            <input type="button" value="삭제" onclick="deleteSelectedItems()" style="padding: 8px 16px; font-size: 1em;" />
+			<input type="submit" value="구매하기" style="padding: 8px 16px; font-size: 1em;" />
+        </td>
+    </tr>
+</tfoot>
+        
     </table>
 </form>
 

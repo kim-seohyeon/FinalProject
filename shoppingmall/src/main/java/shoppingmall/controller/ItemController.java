@@ -13,9 +13,11 @@ import jakarta.servlet.http.HttpSession;
 import shoppingmall.command.PurchaseCommand;
 import shoppingmall.domain.AuthInfoDTO;
 import shoppingmall.domain.MemberDTO;
+import shoppingmall.repository.ItemRepository;
 import shoppingmall.repository.MemberRepository;
 import shoppingmall.service.goods.GoodsDetailService;
 import shoppingmall.service.item.CartListService;
+import shoppingmall.service.item.CartdeletService;
 import shoppingmall.service.item.GoodsItemService;
 import shoppingmall.service.item.GoodsOrderService;
 import shoppingmall.service.item.GoodsWishService;
@@ -31,33 +33,28 @@ public class ItemController {
 
     @Autowired
     CartListService cartListService;
-    
     @Autowired
     GoodsDetailService goodsDetailService;
-    
     @Autowired
     GoodsItemService goodsItemService;
-    
     @Autowired
     GoodsOrderService goodsOrderService;
-    
     @Autowired
-    IniPayReqService iniPayReqService;
-    
+    IniPayReqService iniPayReqService;    
     @Autowired
     INIstdpayPcReturnService iNIstdpayPcReturnService;
-    
     @Autowired
     PurchaseListService purchaseListService;
-    
     @Autowired
     WishListService wishListService;  // 위시리스트 서비스 추가
-    
     @Autowired
     GoodsWishService goodsWishService;
-    
     @Autowired
     UpdateCartQtyService updateCartQtyService;
+    @Autowired
+    ItemRepository itemRepository;
+
+
     
     // 장바구니 목록
     @GetMapping("/cartList")
@@ -144,5 +141,10 @@ public class ItemController {
         return updateCartQtyService.execute(auth.getUserId(), goodsNum, cartQty);
     }
    
+    
+
+
+
+
     
 }
