@@ -135,12 +135,11 @@ public class ItemController {
         return "item/wishlist";  // 위시리스트 jsp 페이지
     }
     
-<<<<<<< HEAD
     @GetMapping("buy")
     public String buy(String goodsNum, int cartQty, HttpSession session) {
     	cartInsertService.execute(goodsNum, cartQty, session);
     	return "redirect:itemBuy?prodCk="+goodsNum;
-=======
+    }
     @PostMapping("/updateCartQty")
     @ResponseBody
     public int updateCartQty(HttpSession session, String goodsNum, int cartQty) {
@@ -149,13 +148,6 @@ public class ItemController {
             return -1;
         }
         return updateCartQtyService.execute(auth.getUserId(), goodsNum, cartQty);
->>>>>>> branch 'main' of https://github.com/kim-seohyeon/FinalProject.git
     }
-   
-    
 
-
-
-
-    
 }

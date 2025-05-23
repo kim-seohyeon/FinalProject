@@ -12,15 +12,12 @@ import shoppingmall.repository.ItemRepository;
 import shoppingmall.repository.MemberRepository;
 import shoppingmall.service.FileDelService;
 import shoppingmall.service.LoginService;
-<<<<<<< HEAD
-import shoppingmall.service.item.*;
-=======
 import shoppingmall.service.item.CartInsertService;
 import shoppingmall.service.item.CartListService;
 import shoppingmall.service.item.CartdeletService;
+import shoppingmall.service.item.GoodsOrderService;
 import shoppingmall.service.item.GoodsWishItemService;
 import shoppingmall.service.item.GoodsWishService;
->>>>>>> branch 'main' of https://github.com/kim-seohyeon/FinalProject.git
 import shoppingmall.service.user.EmailCheckService;
 
 @RestController
@@ -44,15 +41,10 @@ public class CheckRestController {
     GoodsOrderService goodsOrderService;
     @Autowired
     GoodsWishItemService goodsWishItemService;
-<<<<<<< HEAD
-
-=======
-    
     @Autowired
     CartdeletService cartdeletService;
     
-    
->>>>>>> branch 'main' of https://github.com/kim-seohyeon/FinalProject.git
+   
     // 이메일 인증 처리
     @GetMapping("/help/userConfirm")
     public String confirm(String chk) {
