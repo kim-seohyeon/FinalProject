@@ -97,6 +97,7 @@ function deleteSelectedItems() {
 
 </head>
 <body>
+<jsp:include page="/views/header.jsp" />
 
 <form action="itemBuy" method="post" >
     <table>
@@ -137,6 +138,7 @@ function deleteSelectedItems() {
         
     </table>
 </form>
-
+<%@ include file="/views/footer.jsp" %>
 </body>
+
 </html>

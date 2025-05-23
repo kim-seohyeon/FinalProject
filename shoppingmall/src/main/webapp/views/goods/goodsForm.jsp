@@ -20,6 +20,7 @@
 </script>
 </head>
 <body>
+
 <h2>상품 등록</h2>
 
 <form name="goodsForm" action="goodsWrite" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">

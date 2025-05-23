@@ -8,6 +8,7 @@
 <title>purchaseList.jsp</title>
 </head>
 <body>
+<jsp:include page="/views/header.jsp" />
    <table width="800" align="center" border="1">
       <tr>
          <td>주문번호 / 결제번호</td>
@@ -24,4 +25,5 @@
    
    
   </table>
+  <%@ include file="/views/footer.jsp" %>
 </body>
