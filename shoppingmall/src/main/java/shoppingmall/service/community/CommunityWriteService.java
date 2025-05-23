@@ -31,10 +31,10 @@ public class CommunityWriteService {
         dto.setCommunitySubject(communityCommand.getCommunitySubject());
         dto.setCommunityContent(communityCommand.getCommunityContent());
         dto.setMemberNum(mdto.getMemberNum());
-        dto.setCommunityDate(Date.valueOf(LocalDate.now()));
-        communityRepository.communityInsert(dto);
+        
         dto.setCommunityDate(new java.sql.Date(System.currentTimeMillis())); // 📌 등록일 추가
 
+        communityRepository.communityInsert(dto);
 	}
 	
 }
