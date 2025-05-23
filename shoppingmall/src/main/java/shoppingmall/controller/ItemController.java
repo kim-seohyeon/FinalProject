@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -21,6 +22,7 @@ import shoppingmall.service.item.GoodsWishService;
 import shoppingmall.service.item.INIstdpayPcReturnService;
 import shoppingmall.service.item.IniPayReqService;
 import shoppingmall.service.item.PurchaseListService;
+import shoppingmall.service.item.UpdateCartQtyService;
 import shoppingmall.service.item.WishListService;
 
 @Controller
@@ -53,6 +55,9 @@ public class ItemController {
     
     @Autowired
     GoodsWishService goodsWishService;
+    
+    @Autowired
+    UpdateCartQtyService updateCartQtyService;
     
     // 장바구니 목록
     @GetMapping("/cartList")
@@ -129,6 +134,15 @@ public class ItemController {
         return "item/wishlist";  // 위시리스트 jsp 페이지
     }
     
+    @PostMapping("/updateCartQty")
+    @ResponseBody
+    public int updateCartQty(HttpSession session, String goodsNum, int cartQty) {
+        AuthInfoDTO auth = (AuthInfoDTO) session.getAttribute("auth");
+        if (auth == null) {
+            return -1;
+        }
+        return updateCartQtyService.execute(auth.getUserId(), goodsNum, cartQty);
+    }
    
     
 }

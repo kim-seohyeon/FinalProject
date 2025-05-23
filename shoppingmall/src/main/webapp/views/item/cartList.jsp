@@ -46,6 +46,31 @@ $(function() {
     });
 });
 </script>
+<script>
+$(function(){
+    $(document).on('change', '.qtyInput', function(){
+        const $row = $(this).closest('tr');
+        const goodsNum = $row.data('goodsnum');
+        const cartQty = $(this).val();
+
+        $.ajax({
+            url: '/item/updateCartQty',
+            type: 'post',
+            data: {
+                goodsNum: goodsNum,
+                cartQty: cartQty
+            },
+            success: function(result){
+                $row.find('.totalPrice').text(result.toLocaleString() + "원");
+            },
+            error: function(){
+                alert("수량 변경 실패 또는 로그인 필요");
+            }
+        });
+    });
+});
+</script>
+
 </head>
 <body>
 
@@ -63,13 +88,18 @@ $(function() {
         </thead>
         <tbody>
             <c:forEach items="${list}" var="dto">
-                <tr>
-                    <td><input type="checkbox" name="prodCk" value="${dto.goodsNum}" checked /></td>
-                    <td><img src="/static/goodsUpload/${dto.goodsMainStoreImage}" /></td>
-                    <td>${dto.goodsName}</td>
-                    <td>${dto.cartQty}</td>
-                    <td><fmt:formatNumber value="${dto.cartQty * dto.goodsPrice}" pattern="###,###" />원</td>
-                </tr>
+                <tr data-goodsnum="${dto.goodsNum}">
+    <td><input type="checkbox" name="prodCk" value="${dto.goodsNum}" checked /></td>
+    <td><img src="/static/goodsUpload/${dto.goodsMainStoreImage}" /></td>
+    <td>${dto.goodsName}</td>
+    <td>
+        <input type="number" class="qtyInput" min="1" value="${dto.cartQty}" />
+    </td>
+    <td class="totalPrice">
+        <fmt:formatNumber value="${dto.cartQty * dto.goodsPrice}" pattern="###,###" />원
+    </td>
+</tr>
+
             </c:forEach>
         </tbody>
         <tfoot>
