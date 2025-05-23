@@ -24,20 +24,20 @@ public class CommunityRepository {
 	
 	
 	public int communityInsert(CommunityDTO dto) {
-		sql = " insert into community(COMMUNITY_NUM, COMMUNITY_SUBJECT, COMMUNITY_CONTENT"
+		sql = " insert into community(COMMUNITY_NUM, COMMUNITY_WRITER, COMMUNITY_SUBJECT, COMMUNITY_CONTENT"
 				+ "					, COMMUNITY_DATE, COMMENT_COUNT, LIKE_COUNT, COMMUNITY_COMMENT,REPLY_COMMENT"
 				+ "                 ,MEMBER_NUM )"
-				+ " values(?, ?, ?"
+				+ " values(?, ?, ?, ?"
 				+ "		 , sysdate, ?, ?, ?,?, ?)";
 		
-		return jdbcTemplate.update(sql, dto.getCommunityNum(), dto.getCommunitySubject(), dto.getCommunityContent()
+		return jdbcTemplate.update(sql, dto.getCommunityNum(),dto.getCommunityWriter(), dto.getCommunitySubject(), dto.getCommunityContent()
 				, dto.getCommentCount(), dto.getLikeCount()
 				, dto.getCommunityComment(), dto.getReplyComment(), dto.getMemberNum());
 		
 	}
 
 	public List<CommunityDTO> commnunitySelectAll() {
-		sql = " select COMMUNITY_NUM, COMMUNITY_SUBJECT, COMMUNITY_CONTENT"
+		sql = " select COMMUNITY_NUM, COMMUNITY_SUBJECT, COMMUNITY_CONTENT, COMMUNITY_WRITER"
 				+ ", COMMUNITY_DATE, COMMENT_COUNT, LIKE_COUNT, COMMUNITY_COMMENT, REPLY_COMMENT"
 				+ " from COMMUNITY";
 		

@@ -13,11 +13,11 @@
         <table  border="1" width="600" align="center">
  		<tr><th width="100">글번호</th>
       		<td><input type="text" name="communityNum" value="${communityCommand.communityNum }" />번호 자동 부여</td></tr>
-            <tr><th>작성자 : </th>
+            <tr><th>작성자</th>
       			<td><input type="text" name="communityWriter" required /></td></tr>
-            <tr><th>제목:</th>
+            <tr><th>제목</th>
       			<td><input type="text" name="communitySubject" required /></td></tr> 
-            <tr><th>내용 : </th>
+            <tr><th>내용</th>
 			    <td><textarea rows="10" cols="50" name="communityContent" required></textarea></td></tr>
 
 	        

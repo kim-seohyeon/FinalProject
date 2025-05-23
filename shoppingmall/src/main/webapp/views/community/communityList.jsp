@@ -15,7 +15,7 @@
 	<c:forEach items="${list }" var="dto" varStatus="idx">
 		<tr>
 			<th>${idx.count }</th>
-			<th><a href="<c:url value='/community/communityDetail?communityNum=${dto.communityNum}' />">${dto.communityNum }</a></th>
+			<!--  <th><a href="<c:url value='/community/communityDetail?communityNum=${dto.communityNum}' />">${dto.communityNum }</a></th>-->
 			<th>${dto.communityWriter }</th>
 			<th>${dto.communitySubject }</th>
 		</tr>

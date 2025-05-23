@@ -44,5 +44,6 @@ public class CommunityController {
     	communityWriteService.execute(communityCommand, session);
     	return "redirect:/community/communityList";             // 작성 후 목록으로 이동
     }
+    
 
 }

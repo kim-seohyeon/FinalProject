@@ -1,5 +1,8 @@
 package shoppingmall.service.community;
 
+import java.sql.Date;
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,9 +31,9 @@ public class CommunityWriteService {
         dto.setCommunitySubject(communityCommand.getCommunitySubject());
         dto.setCommunityContent(communityCommand.getCommunityContent());
         dto.setMemberNum(mdto.getMemberNum());
-        
+        dto.setCommunityDate(Date.valueOf(LocalDate.now()));
         communityRepository.communityInsert(dto);
-        
+        dto.setCommunityDate(new java.sql.Date(System.currentTimeMillis())); // 📌 등록일 추가
 
 	}
 	
