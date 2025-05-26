@@ -8,77 +8,115 @@
     <style>
         body {
             font-family: 'Segoe UI', sans-serif;
-            background-color: #f7f9fc;
+            background-color: #f2f4f8;
             margin: 0;
             padding: 30px;
         }
 
         .container {
-            width: 80%;
-            max-width: 800px;
+            width: 90%;
+            max-width: 900px;
             margin: auto;
         }
 
         h2 {
             text-align: center;
-            color: #333;
-            margin-bottom: 30px;
+            color: #2c3e50;
+            margin-bottom: 40px;
         }
 
         .write-button {
-            display: block;
-            width: 100px;
-            margin: 10px auto 30px;
+            display: inline-block;
             padding: 10px 20px;
-            background-color: blue;
-            color: white;
+            background-color: #3498db;
+            color: #fff;
             text-align: center;
             text-decoration: none;
             border-radius: 6px;
             font-weight: bold;
+            margin-bottom: 20px;
+            transition: background-color 0.3s;
         }
 
         .write-button:hover {
-            background-color: #45a049;
+            background-color: #2980b9;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             background-color: white;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.05);
         }
 
         th, td {
-            padding: 12px 16px;
-            border-bottom: 1px solid #ddd;
+            padding: 14px 18px;
+            border-bottom: 1px solid #e0e0e0;
             text-align: center;
         }
 
         th {
-            background-color: blue;
+            background-color: #3498db;
             color: white;
+            font-weight: 600;
         }
 
         tr:hover {
-            background-color: #f1f1f1;
+            background-color: #f9fcff;
         }
 
-        a {
-            color: #007BFF;
-            text-decoration: none;
+        td a {
+            color: #2c3e50;
+            font-weight: 500;
         }
 
-        a:hover {
+        td a:hover {
+            color: #3498db;
             text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: 95%;
+            }
+
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+
+            thead tr {
+                display: none;
+            }
+
+            tr {
+                margin-bottom: 15px;
+                border-bottom: 2px solid #eee;
+                padding-bottom: 10px;
+            }
+
+            td {
+                text-align: left;
+                padding: 10px;
+                position: relative;
+            }
+
+            td::before {
+                content: attr(data-label);
+                font-weight: bold;
+                display: inline-block;
+                width: 100px;
+                color: #555;
+            }
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <h2>커뮤니티 글 목록</h2>
+    <h2>📋 커뮤니티 글 목록</h2>
 
-    <a href="write" class="write-button">글쓰기</a>
+    <a href="write" class="write-button">✏️ 게시글 작성</a>
 
     <table>
         <thead>
@@ -92,14 +130,14 @@
         <tbody>
             <c:forEach items="${list}" var="dto" varStatus="idx">
                 <tr>
-                    <td>${idx.count}</td>
-                    <td>${dto.communityWriter}</td>
-                    <td>
+                    <td data-label="번호">${idx.count}</td>
+                    <td data-label="작성자">${dto.communityWriter}</td>
+                    <td data-label="제목">
                         <a href="<c:url value='/community/communityDetail?communityNum=${dto.communityNum}' />">
                             ${dto.communitySubject}
                         </a>
                     </td>
-                    <td><fmt:formatDate value="${dto.communityDate}" pattern="yyyy-MM-dd" /></td>
+                    <td data-label="등록일"><fmt:formatDate value="${dto.communityDate}" pattern="yyyy-MM-dd" /></td>
                 </tr>
             </c:forEach>
         </tbody>

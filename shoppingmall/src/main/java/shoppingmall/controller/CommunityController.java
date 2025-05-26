@@ -9,11 +9,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.servlet.http.HttpSession;
 import shoppingmall.command.CommunityCommand;
+import shoppingmall.domain.AuthInfoDTO;
 import shoppingmall.domain.CommentDTO;
+import shoppingmall.domain.CommunityDTO;
+import shoppingmall.repository.CommunityRepository;
 import shoppingmall.service.community.CommentWriteService;
 import shoppingmall.service.community.CommunityAutoNumService;
 import shoppingmall.service.community.CommunityDetailService;
 import shoppingmall.service.community.CommunityListService;
+import shoppingmall.service.community.CommunityUpdateService;
 import shoppingmall.service.community.CommunityWriteService;
 
 @Controller
@@ -34,6 +38,13 @@ public class CommunityController {
 
     @Autowired
     CommentWriteService commentWriteService;
+    
+    @Autowired
+    CommunityUpdateService communityUpdateService;
+
+    @Autowired
+    CommunityRepository communityRepository;
+
 
     // 커뮤니티 게시글 목록
     @GetMapping("/communityList")
@@ -58,8 +69,12 @@ public class CommunityController {
 
     // 게시글 상세보기 + 댓글 목록 포함
     @GetMapping("/communityDetail")
-    public String detail(String communityNum, Model model) {
+    public String detail(String communityNum, Model model, HttpSession session) {
         communityDetailService.execute(communityNum, model);  // 게시글 + 댓글 서비스 실행
+     // 세션에서 로그인 정보 가져와 model에 넣기 (auth는 JSP에서 사용됨)
+        AuthInfoDTO auth = (AuthInfoDTO) session.getAttribute("auth");
+        model.addAttribute("auth", auth);
+        
         return "community/communityDetail";
     }
 
@@ -75,5 +90,44 @@ public class CommunityController {
         commentWriteService.execute(commentDTO, session);
         return "redirect:/community/communityDetail?communityNum=" + commentDTO.getCommunityNum();
     }
+    
+    @GetMapping("/update")
+    public String showUpdateForm(String communityNum, HttpSession session, Model model) {
+        // 글 상세 정보 가져오기
+        communityDetailService.execute(communityNum, model);
+        
+        // 글 정보 꺼내기
+        CommunityDTO dto = (CommunityDTO) model.getAttribute("community");
+        AuthInfoDTO auth = (AuthInfoDTO) session.getAttribute("auth");
+
+        if (dto == null || auth == null || !dto.getCommunityWriter().equals(auth.getUserId())) {
+            // 작성자가 아니면 접근 불가 처리 (목록으로 돌리거나 에러페이지)
+            return "redirect:/community/communityList";
+        }
+        
+        return "community/communityUpdateForm";  // 수정 폼 JSP
+    }
+
+    // 수정 처리
+    @PostMapping("/update")
+    public String submitUpdate(CommunityCommand communityCommand, HttpSession session) {
+    	communityUpdateService.execute(communityCommand, session);
+        return "redirect:/community/communityDetail?communityNum=" + communityCommand.getCommunityNum();
+    }
+    
+    @GetMapping("/delete")
+    public String deletePost(String communityNum, HttpSession session) {
+        AuthInfoDTO auth = (AuthInfoDTO) session.getAttribute("auth");
+        CommunityDTO dto = communityRepository.communitySelectOne(communityNum);
+
+        if (dto == null || auth == null || !dto.getCommunityWriter().equals(auth.getUserId())) {
+            // 권한 없으면 목록으로 리다이렉트
+            return "redirect:/community/communityList";
+        }
+
+        communityRepository.deleteCommunity(communityNum);
+        return "redirect:/community/communityList";
+    }
+
     
 }

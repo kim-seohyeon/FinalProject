@@ -74,5 +74,19 @@ public class CommunityRepository {
 			+ " WHERE COMMUNITY_NUM = ? ORDER BY COMMENT_DATE DESC";
 		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(CommentDTO.class), communityNum);
 	}
+	
+	// 게시글 수정
+	public int communityUpdate(CommunityDTO dto) {
+	    sql = "UPDATE community SET COMMUNITY_SUBJECT = ?, COMMUNITY_CONTENT = ? WHERE COMMUNITY_NUM = ?";
+	    return jdbcTemplate.update(sql, dto.getCommunitySubject(), dto.getCommunityContent(), dto.getCommunityNum());
+	}
 
+	public int deleteCommunity(String communityNum) {
+	    String sql = "DELETE FROM community WHERE community_num = ?";
+	    return jdbcTemplate.update(sql, communityNum);
+	}
+
+		
 }
+
+

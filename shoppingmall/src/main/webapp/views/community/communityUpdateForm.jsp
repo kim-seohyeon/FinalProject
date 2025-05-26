@@ -1,13 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%
-    String loginId = (String) session.getAttribute("loginId");
-%>
 <!DOCTYPE html>   
 <html>
 <head>
 <meta charset="UTF-8">
-<title>글 쓰기 폼</title>
+<title>글 수정 폼</title>
 <style>
     body {
         font-family: 'Segoe UI', sans-serif;
@@ -96,39 +93,39 @@
 <body>
 
 <div class="form-container">
-    <h2>글 등록</h2>
+    <h2>글 수정</h2>
 
-    <form name="communityForm" action="write" method="post">
+    <form name="communityUpdateForm" action="update" method="post">
         <table>
             <tr>
                 <th>글번호</th>
                 <td>
-                    <input type="text" name="communityNum" value="${communityCommand.communityNum}" readonly />
-                    <small style="color: gray;">번호 자동 부여</small>
+                    <input type="text" name="communityNum" value="${community.communityNum}" readonly />
                 </td>
             </tr>
             <tr>
-           <th>작성자</th>
-   			 <td><input type="text" value="${sessionScope.auth.userId}" readonly /></td>
-                
+                <th>작성자</th>
+                <td>
+                    <input type="text" name="communityWriter" value="${community.communityWriter}" readonly />
+                </td>
             </tr>
             <tr>
                 <th>제목</th>
-                <td><input type="text" name="communitySubject" required /></td>
+                <td>
+                    <input type="text" name="communitySubject" value="${community.communitySubject}" required />
+                </td>
             </tr>
             <tr>
                 <th>내용</th>
-                <td><textarea rows="10" name="communityContent" required></textarea></td>
-            </tr>
-            <tr>
-                <th>등록일</th>
-                <td><span style="color: gray;">자동 등록됩니다</span></td>
+                <td>
+                    <textarea name="communityContent" rows="10" required>${community.communityContent}</textarea>
+                </td>
             </tr>
         </table>
-        <input type="submit" value="글 등록" />
+        <input type="submit" value="수정 완료" />
     </form>
 
-    <a href="${pageContext.request.contextPath}/community/communityList" class="back-link">← 목록으로 돌아가기</a>
+    <a href="communityDetail?communityNum=${community.communityNum}" class="back-link">← 상세보기로 돌아가기</a>
 </div>
 
 </body>

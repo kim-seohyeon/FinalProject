@@ -27,7 +27,7 @@ public class CommunityWriteService {
     	
     	CommunityDTO dto = new CommunityDTO();
     	dto.setCommunityNum(communityCommand.getCommunityNum());
-        dto.setCommunityWriter(communityCommand.getCommunityWriter());
+    	 dto.setCommunityWriter(auth.getUserId());
         dto.setCommunitySubject(communityCommand.getCommunitySubject());
         dto.setCommunityContent(communityCommand.getCommunityContent());
         dto.setMemberNum(mdto.getMemberNum());

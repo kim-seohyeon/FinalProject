@@ -88,6 +88,9 @@
         a.back-link:hover {
             text-decoration: underline;
         }
+        .edit-btn {
+            margin-top: 15px;
+        }
     </style>
     <script>
         function toggleCommentForm() {
@@ -105,6 +108,18 @@
     <h2>${community.communitySubject}</h2>
     <p>작성자: ${community.communityWriter}</p>
     <p>등록일: <fmt:formatDate value="${community.communityDate}" pattern="yyyy-MM-dd" /></p>
+
+    <c:if test="${auth != null && auth.userId == community.communityWriter}">
+        <a href="<c:url value='/community/update?communityNum=${community.communityNum}' />" class="edit-btn">
+            <button>글 수정하기</button>
+        </a>
+         <a href="<c:url value='/community/delete?communityNum=${community.communityNum}' />" class="edit-btn" 
+       onclick="return confirm('정말 이 글을 삭제하시겠습니까?');">
+        <button style="background-color: #dc3545;">글 삭제하기</button>
+    </a>
+
+    </c:if>
+
     <hr>
     <p>내 용: ${community.communityContent}</p>
     <hr>
