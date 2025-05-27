@@ -144,8 +144,9 @@ $(function(){
                 cartQty: cartQty
             },
             success: function(result){
-                if(result && result.totalPrice !== undefined){
-                    $row.find('.totalPrice').text(result.totalPrice.toLocaleString() + "원");
+            	console.log(result)
+                if(result){
+                    $row.find('.totalPrice').text(result.toLocaleString() + "원");
                     updateTotalSummary();
                 } else {
                     alert("응답 오류");
