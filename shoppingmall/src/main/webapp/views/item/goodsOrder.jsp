@@ -11,6 +11,7 @@
 <script type="text/javascript" src ="/static/js/daumAddressScript.js"></script>
 </head>
 <body>
+<jsp:include page="/views/header.jsp" />
 <table width="700" align="center">
 	<tr><td>상품 대표 이미지</td><td>주문 상품 정보</td><td>수량/상품금액</td><td>금액</td></tr>
 	
@@ -65,5 +66,6 @@
 	</tr>
 </table>
 </form>
+<%@ include file="/views/footer.jsp" %>
 </body>
 </html>

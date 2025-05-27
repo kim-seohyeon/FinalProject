@@ -7,10 +7,10 @@
 <title>inquireModify</title>
 </head>
 <body>
+<jsp:include page="/views/header.jsp" />
 글 수정 페이지
 <form action="inquireModify" method="post" >
 <table border=1 align="center" width="600">
-	<caption> 문의 상세보기</caption>
 	<tr><th width="150" >글 번호</th>
 		<td><input type="text" name="inquireNum" value="${dto.inquireNum }" readonly="readonly"></td></tr>
 	<tr><th width="150" >제목</th>
@@ -22,6 +22,6 @@
 		<button type="button" onclick="">글 목록</button></th></tr>
 </table>
 </form>
-
+<%@ include file="/views/footer.jsp" %>
 </body>
 </html>

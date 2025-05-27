@@ -20,7 +20,7 @@
 </script>
 </head>
 <body>
-
+<jsp:include page="/views/header.jsp" />
 <h2>상품 등록</h2>
 
 <form name="goodsForm" action="goodsWrite" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
@@ -45,6 +45,6 @@
     <tr><th colspan="2"><input type="submit" value="상품등록" /></th></tr>
   </table>  
 </form>
-
+<%@ include file="/views/footer.jsp" %>
 </body>
 </html>

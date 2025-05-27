@@ -9,6 +9,7 @@
 <script type="text/javascript" src ="/static/js/daumAddressScript.js"></script>
 </head>
 <body>
+<jsp:include page="/views/header.jsp" />
 회원정보 등록
 <form action="memberWrite" method="post">
 	<table border=1 width=600>
@@ -84,5 +85,6 @@
 			
 	</table>
 </form>
+<%@ include file="/views/footer.jsp" %>
 </body>
 </html>

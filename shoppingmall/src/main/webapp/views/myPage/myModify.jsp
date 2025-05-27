@@ -13,6 +13,7 @@
 
 </head>
 <body>
+<jsp:include page="/views/header.jsp" />
 내 정보 수정<br/>
 <ul>
 	<li><a href='<c:url value="/"/>'>홈</a></li>
@@ -41,6 +42,6 @@
 이메일: <input type="email" name="memberEmail" value="${dto.memberEmail }"/><br/>
 <input type="submit" value="회원정보 수정 완료"/>
 </form>
-
+<%@ include file="/views/footer.jsp" %>
 </body>
 </html>

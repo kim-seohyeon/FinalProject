@@ -14,6 +14,7 @@
 
 </head>
 <body>
+<jsp:include page="/views/header.jsp" />
 직원 정보 수정<br/>
 <ul>
 	<li><a href='<c:url value="/"/>'>홈</a></li>
@@ -40,5 +41,6 @@
 직원 입사일: <input type="date" name="empHireDate" value="${dto.empHireDate }" readonly="readonly"/><br/>
 <input type="submit" value="직원정보 수정완료"/>
 </form>
+<%@ include file="/views/footer.jsp" %>
 </body>
 </html>

@@ -7,6 +7,7 @@
 <title>agree</title>
 </head>
 <body>
+<jsp:include page="/views/header.jsp" />
 <form action="userWrite" method="get">
 필수[글 내용]<br/>
 <textarea rows="5" cols="80" readonly="readonly">
@@ -17,5 +18,6 @@
 <input type="submit" value="회원가입"/>
 
 </form>
+<%@ include file="/views/footer.jsp" %>
 </body>
 </html>

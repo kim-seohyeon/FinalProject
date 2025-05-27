@@ -7,6 +7,7 @@
 <title>글 쓰기 폼</title>
 </head>
 <body>
+<jsp:include page="/views/header.jsp" />
 <h2>글 등록</h2>
 
     <form name="inquireForm" action="write" method="post">
@@ -27,5 +28,6 @@
     </form>
     <br>
     <a href="/community">목록으로 돌아가기</a>
+<%@ include file="/views/footer.jsp" %>
 </body>
 </html>

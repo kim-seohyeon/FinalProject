@@ -77,6 +77,7 @@ $(function(){
 
 </head>
 <body>
+<jsp:include page="/views/header.jsp" />
 <table width=800 >
     <tr>
         <td rowspan=5><img src="/static/goodsUpload/${dto.goodsMainStoreImage }" /></td>
@@ -123,5 +124,6 @@ $(function(){
     </tr>    
     
 </table>
+<%@ include file="/views/footer.jsp" %>
 </body>
 </html>

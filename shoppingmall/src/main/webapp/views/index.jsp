@@ -7,10 +7,10 @@
 <head>
 <meta charset="UTF-8">
 <title>Index</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1.min.js"></script>
 <script type="text/javascript">
-
 $(function(){
 	page = 1;
 	$("#load-more").click(function(){
@@ -22,16 +22,15 @@ $(function(){
 			dataType: "json",
 			success: function(model){
 				var item = "";
-				item += '<table align = "center" width="900">';
+				item += '<table class="table table-borderless text-center mx-auto" style="width:900px;">';
 				item += 	'<tr>';
 				
 				$.each(model.list , function(idx, dto){
 					item += 		'<td><a href="goodsDetail?goodsNum='+dto.goodsNum+'">';
 					item += 			'<img src="/static/goodsUpload/'+dto.goodsImageStoreName+'" width=300/>';
-					item += 			''+dto.goodsSubject+'<br/>';
-					item += 			''+dto.goodsWriter+'<br/>';
-					item += 			'</a>';
-					item += 		'</td>';
+					item += 			'<br/>'+dto.goodsSubject;
+					item += 			'<br/>'+dto.goodsWriter;
+					item += 			'</a></td>';
 					if((idx + 1) % 3) item += "</tr><tr>";
 				});
 				item += 	'</tr>';
@@ -42,92 +41,75 @@ $(function(){
 		});
 	});
 });
-
 </script>
-
-
 </head>
 
 <body>
-hk shoppingmall<br/>
-<a href="mailling">메일링</a> | <a href="library">자료실</a> |
-<a href="/inquire/inquireList">문의하기</a>| <a href="/community/communityList">커뮤니티</a>
+<jsp:include page="/views/header.jsp" />
 
-<c:if test="${!empty auth }">
-<ul>
-	<c:if test="${auth.grade == 'emp' }">
-		<li><a href="/member/memberList">회원관리</a></li>
-		<li><a href="/employee/empList">직원관리</a></li>
-		<li><a href="/empPage/empMyPage">내정보 보기</a></li>
-		<li><a href="/goods/goodsList">상품관리</a></li>
-	</c:if>
-	<c:if test="${auth.grade == 'mem' }">
-		<li><a href="/myPage/memberMyPage">내정보 보기</a></li>
-		<li><a href="/item/cartList">장바구니</a></li>
-		<li><a href="/item/wishList">찜 목록</a></li>
-		<li><a href="/item/purchaseList">구매목록</a></li>
-		
-	</c:if>
-	<li><a href="/login/logout">로그아웃</a></li>
-</ul>
-</c:if>
+<!-- 메인 레이아웃 -->
+<div class="container mt-4 d-flex justify-content-between align-items-start">
 
-<c:if test="${empty auth }">
+  <!-- 왼쪽: 콘텐츠 영역 -->
+  <div id="content" class="flex-grow-1 me-3">
+    <table class="table table-borderless text-center mx-auto" style="width:900px;">
+      <c:forEach items="${list }" var="dto" varStatus="idx">
+        <c:if test="${idx.index % 3 == 0}"><tr></c:if>
+        <td>
+          <a href="/item/detailView?goodsNum=${dto.goodsNum}">
+            <img src="/static/goodsUpload/${dto.goodsMainStoreImage}" width="300" height="150"/><br/>
+            ${dto.goodsName }<br/>
+            ${dto.goodsPrice }원
+          </a>
+        </td>
+        <c:if test="${(idx.index + 1) % 3 == 0}"></tr></c:if>
+      </c:forEach>
+    </table>
 
-<form:form modelAttribute="loginCommand" action="/login/login" method="post">
-<table border=1>
-	<tr>
-		<td colspan=2>
-			자동 로그인<input type="checkbox" name="autoLogin" /> | 
-			아이디 저장<input type="checkbox" name="idStore" 
-				<c:if test="${loginCommand.idStore }">checked</c:if>/>
-		</td>
-	</tr>
-	<tr>
-		<td><form:input path="userId"/>
-			<form:errors path="userId"/></td>
-		<td rowspan=2><input type="submit" value="로그인"/></td>
-	</tr>
-	<tr>
-		<td><form:password path="userPw" />
-			<form:errors path="userPw"/>
-		</td>
-	</tr>
-	<tr>
-		<td colspan=2>
-			<a href="/help/findId">아이디</a>/
-			<a href="/help/findPassword">비밀번호찾기</a> | 
-			<a href="/register/userAgree">회원가입</a></td>
-	</tr>		
-</table>
-</form:form>
-</c:if>
+    <!-- 더보기 버튼 -->
+    <div id="more" class="text-center my-4">
+      <button id="load-more" class="btn btn-primary">더보기</button>
+    </div>
+  </div>
 
-<div id="content">
-<table width=800 align="center">
-	<c:forEach items="${list }" var="dto" varStatus="idx">
-	    <c:if test="${idx.index % 3 == 0}"><tr></c:if>
-			<td>
-				<a href="/item/detailView?goodsNum=${dto.goodsNum}">
-					<img src="/static/goodsUpload/${dto.goodsMainStoreImage}" width="300" height="150"/><br/>
-					${dto.goodsName }<br/>
-					${dto.goodsPrice }원
-				</a>
-			</td>
-		<c:if test="${(idx.index + 1) % 3 == 0}"></tr></c:if>
-	</c:forEach>
-</table>
+  <!-- 오른쪽: 로그인 폼 영역 -->
+  <c:if test="${empty auth}">
+    <div class="login-box bg-white border rounded shadow-sm p-4" style="width: 300px;">
+      <h5 class="mb-3">로그인</h5>
+      <form:form modelAttribute="loginCommand" action="/login/login" method="post">
+        <div class="form-check form-switch mb-2">
+          <input class="form-check-input" type="checkbox" name="autoLogin" id="autoLogin">
+          <label class="form-check-label" for="autoLogin">자동 로그인</label>
+        </div>
+        <div class="form-check form-switch mb-3">
+          <input class="form-check-input" type="checkbox" name="idStore" id="idStore"
+            <c:if test="${loginCommand.idStore}">checked</c:if> />
+          <label class="form-check-label" for="idStore">아이디 저장</label>
+        </div>
+        <div class="mb-3">
+          <label>아이디</label>
+          <form:input path="userId" cssClass="form-control"/>
+          <form:errors path="userId" cssClass="text-danger small"/>
+        </div>
+        <div class="mb-3">
+          <label>비밀번호</label>
+          <form:password path="userPw" cssClass="form-control"/>
+          <form:errors path="userPw" cssClass="text-danger small"/>
+        </div>
+        <div class="d-grid">
+          <input type="submit" value="로그인" class="btn btn-primary"/>
+        </div>
+        <div class="mt-3 text-end small">
+          <a href="/help/findId">아이디</a> /
+          <a href="/help/findPassword">비밀번호 찾기</a> |
+          <a href="/register/userAgree">회원가입</a>
+        </div>
+      </form:form>
+    </div>
+  </c:if>
 
 </div>
 
-<div id="more">
-	<table align="center" width=900>
-		<tr>
-			<th>
-				<button id="load-more">더보기</button>
-			</th>
-		</tr>
-	</table>
-</div>
+<%@ include file="/views/footer.jsp" %>
 </body>
 </html>

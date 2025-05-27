@@ -50,15 +50,15 @@
             <a href="/item/cartList" class="nav-link">장바구니</a>
             <a href="/community/communityList" class="nav-link">커뮤니티</a>
             <a href="/library" class="nav-link">자료실</a>
+            <a href="/inquire/inquireList" class="nav-link">문의하기</a>
         </div>
         <div class="nav-right">
             <c:choose>
                 <c:when test="${not empty sessionScope.auth}">
                     <a href="/myPage/memberMyPage" class="nav-link">마이페이지</a>
-                    <a href="/logout" class="nav-link">로그아웃</a>
+                    <a href="/login/logout" class="nav-link">로그아웃</a>
                 </c:when>
                 <c:otherwise>
-                    <a href="/login" class="nav-link">로그인</a>
                     <a href="/memberJoin/agree" class="nav-link">회원가입</a>
                 </c:otherwise>
             </c:choose>

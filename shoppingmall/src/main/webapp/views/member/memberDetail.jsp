@@ -8,6 +8,7 @@
 <title>memberDetail</title>
 </head>
 <body>
+<jsp:include page="/views/header.jsp" />
 회원 정보 상세보기<br/>
 
 회원번호: ${dto.memberNum }<br/>
@@ -26,6 +27,6 @@
 <a href="memberList">회원 목록</a> |
 <a href="memberUpdate?memberNum=${dto.memberNum }">회원 수정</a> | 
 <a href="memberDelete?memberNum=${dto.memberNum }">회원 탈퇴</a>
-
+<%@ include file="/views/footer.jsp" %>
 </body>
 </html>

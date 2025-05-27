@@ -8,6 +8,7 @@
 <title>memberList</title>
 </head>
 <body>
+<jsp:include page="/views/header.jsp" />
 회원리스트입니다.<br/>
 <a href="memberWrite">회원 등록</a><br/>
 
@@ -31,6 +32,6 @@
 	</c:forEach>
 
 </table>
-
+<%@ include file="/views/footer.jsp" %>
 </body>
 </html>

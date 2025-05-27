@@ -40,6 +40,7 @@ function fileDel(btn, org, store, kind){
 </script>
 </head>
 <body>
+<jsp:include page="/views/header.jsp" />
 <form:form action="libUpdate" method="post" modelAttribute="libraryCommand"
 	enctype="multipart/form-data">
 <form:hidden path="libNum"/>
@@ -75,5 +76,6 @@ function fileDel(btn, org, store, kind){
 	<tr><th colspan="2"><input type="submit" value="자료수정완료"/></th></tr>
 </table>
 </form:form>
+<%@ include file="/views/footer.jsp" %>
 </body>
 </html>
