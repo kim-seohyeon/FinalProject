@@ -14,7 +14,7 @@ public class InquireDetailService {
 	@Autowired
 	InquireRepository inquireRepository;
 	
-	public void execute(HttpServletRequest request, Model model, String inquireNum) {
+	public void execute(Model model, String inquireNum) {
 
 		InquireDTO dto = inquireRepository.inquireSelectOne(inquireNum);
 		model.addAttribute("dto", dto);

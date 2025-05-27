@@ -53,14 +53,14 @@ public class InquireController {
 	}
 	
     @GetMapping("/inquireDetail")
-    public String detail(HttpServletRequest request, Model model, String inquireNum, HttpSession session) {
-        inquireDetailService.execute(request, model, inquireNum);
+    public String detail(Model model, String inquireNum) {
+        inquireDetailService.execute(model, inquireNum);
         return "inquire/inquireInfo";
     }
     
 	@GetMapping("/inquireUpdate")
-	public String update(HttpServletRequest request, Model model, String inquireNum) {
-        inquireDetailService.execute(request, model, inquireNum);
+	public String update(Model model, String inquireNum) {
+        inquireDetailService.execute(model, inquireNum);
 		return "inquire/inquireModify";
 	}
 	
