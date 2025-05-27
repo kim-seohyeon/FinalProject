@@ -18,18 +18,37 @@ public class HelpContoller {
 	FindPwService findPwService;
 	@Autowired
 	FindIdService findIdService;
+	
 
 	@GetMapping("findPassword")
 	public String findPassword() {
-
 		return "help/findPw";
 	}
 	
+    // 2) 아이디+전화번호 확인 -> 회원이 있으면 새 비밀번호 입력 폼으로 이동
+
 	@PostMapping("/findPassword")
-	public String findPassword(String userId, String userPhone, Model model) {
-		findPwService.execute(userId, userPhone, model);
-		return "help/findPwOk";
+	public String checkUserForPasswordReset(String userId, String userPhone, Model model) {
+	    if (!findPwService.verifyUser(userId, userPhone, model)) {
+	        return "help/findPw"; // 실패하면 다시 입력 폼
+	    }
+	    return "help/resetPwForm"; // 성공 시 비밀번호 재설정 폼으로 이동
 	}
+
+	//비밀번호 변경
+	@PostMapping("/resetPassword")
+	public String resetPassword(String userId, String newPassword, Model model) {
+	    findPwService.updatePassword(userId, newPassword, model);
+	    return "help/resetPwResult";
+	}
+
+	
+//	@PostMapping("/findPassword")
+//	public String findPassword(String userId, String userPhone, Model model) {
+//		findPwService.execute(userId, userPhone, model);
+//		return "help/findPwOk";
+//	}
+
 	
 	@GetMapping("/findId")
 	public String findId() {
@@ -37,8 +56,8 @@ public class HelpContoller {
 	}
 	
 	@PostMapping("/findId")
-	public String findId(String userPhone, String userEmail, Model model) {
-		findIdService.execute(userPhone, userEmail, model);
+	public String findId(String userPhone, Model model) {
+		findIdService.execute(userPhone, model);
 		return "help/findIdOk";
 	}
 }

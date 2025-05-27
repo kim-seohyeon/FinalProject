@@ -94,8 +94,6 @@ public class MemberRepository {
 		return jdbcTemplate.update(sql, memberId);
 	}
 
-	
-	
     // 로그인 정보 조회
 	public AuthInfoDTO loginSelectOne(String userId) {
 		statement = namespace + ".memberSelectOne";
@@ -159,12 +157,20 @@ public class MemberRepository {
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<CartListDTO>(CartListDTO.class), goodsNum, memberNum);
     }
 
+    //비밀번호 변경
 	public int memberPwUpdate(String memberId, String newPw) {
 		sql = " update members"
 				+ " set member_pw = ? "
 				+ " where member_id = ? ";
-		return jdbcTemplate.update(sql, newPw, memberId );
+		return jdbcTemplate.update(sql, newPw, memberId);
 		
 		
 	}
+
+	//전화번호로 아이디 찾기
+	public String findUserIdByPhone(String userPhone) {
+        String sql = "SELECT MEMBER_ID FROM members WHERE MEMBER_PHONE1 = ? or member_phone2 = ?";
+        return jdbcTemplate.queryForObject(sql, String.class, userPhone, userPhone);
+	}
+
 }
