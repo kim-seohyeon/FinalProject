@@ -34,6 +34,19 @@
             border-top: 1px solid #ddd;
             margin: 20px 0;
         }
+        /* 게시글 내용 스타일 */
+        .content-area {
+            min-height: 200px; /* 최소 높이 */
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fafafa;
+            font-size: 16px;
+            line-height: 1.6;
+            white-space: pre-wrap; /* 줄바꿈 유지 */
+            margin-bottom: 30px;
+            overflow-wrap: break-word; /* 긴 단어 줄바꿈 */
+        }
         .comment {
             border: 1px solid #ccc;
             padding: 12px;
@@ -45,13 +58,35 @@
             background-color: #007BFF;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 8px 16px;
             border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
-            margin-top: 10px;
+            margin-top: 8px;
+            margin-right: 6px;
+            font-size: 14px;
         }
         button:hover {
+            background-color: #0056b3;
+        }
+        /* 댓글 수정/삭제 버튼 전용 */
+        button.small-btn {
+            padding: 4px 10px;
+            font-size: 12px;
+            margin-top: 4px;
+            margin-right: 4px;
+        }
+        button.small-btn:hover {
+            background-color: #0056b3;
+        }
+        /* 게시글 수정/삭제 버튼 전용 */
+        button.post-btn {
+            padding: 6px 12px;
+            font-size: 12px;
+            margin-top: 6px;
+            margin-right: 6px;
+        }
+        button.post-btn:hover {
             background-color: #0056b3;
         }
         #commentForm {
@@ -88,13 +123,19 @@
         a.back-link:hover {
             text-decoration: underline;
         }
-        .edit-btn {
-            margin-top: 15px;
-        }
     </style>
     <script>
         function toggleCommentForm() {
             var form = document.getElementById("commentForm");
+            if (form.style.display === "none") {
+                form.style.display = "block";
+            } else {
+                form.style.display = "none";
+            }
+        }
+
+        function toggleEditForm(commentId) {
+            var form = document.getElementById("editForm-" + commentId);
             if (form.style.display === "none") {
                 form.style.display = "block";
             } else {
@@ -110,24 +151,39 @@
     <p>등록일: <fmt:formatDate value="${community.communityDate}" pattern="yyyy-MM-dd" /></p>
 
     <c:if test="${auth != null && auth.userId == community.communityWriter}">
-        <a href="<c:url value='/community/update?communityNum=${community.communityNum}' />" class="edit-btn">
-            <button>글 수정하기</button>
+        <a href="<c:url value='/community/update?communityNum=${community.communityNum}' />">
+            <button class="post-btn">글 수정하기</button>
         </a>
-         <a href="<c:url value='/community/delete?communityNum=${community.communityNum}' />" class="edit-btn" 
-       onclick="return confirm('정말 이 글을 삭제하시겠습니까?');">
-        <button style="background-color: #dc3545;">글 삭제하기</button>
-    </a>
-
+        <a href="<c:url value='/community/delete?communityNum=${community.communityNum}' />"
+           onclick="return confirm('정말 이 글을 삭제하시겠습니까?');">
+            <button class="post-btn" style="background-color: #dc3545;">글 삭제하기</button>
+        </a>
     </c:if>
 
     <hr>
-    <p>내 용: ${community.communityContent}</p>
+    <!-- 수정된 게시글 내용 영역 -->
+    <div class="content-area">${community.communityContent}</div>
     <hr>
     <h3>댓글</h3>
     <c:forEach var="comment" items="${commentList}">
         <div class="comment">
             <p><strong>${comment.memberId}</strong> | <fmt:formatDate value="${comment.commentDate}" pattern="yyyy-MM-dd HH:mm" /></p>
             <p>${comment.content}</p>
+            <c:if test="${auth != null && auth.userId == comment.memberId}">
+                <button class="small-btn" onclick="toggleEditForm('${comment.commentNum}')">수정</button>
+                <a href="<c:url value='/community/commentDelete?commentNum=${comment.commentNum}&communityNum=${community.communityNum}' />"
+                   onclick="return confirm('정말 이 댓글을 삭제하시겠습니까?');">
+                    <button class="small-btn" style="background-color: #dc3545;">삭제</button>
+                </a>
+
+                <!-- 인라인 수정 폼 (숨겨진 상태) -->
+                <form id="editForm-${comment.commentNum}" action="<c:url value='/community/commentUpdate' />" method="post" style="display:none; margin-top: 10px;">
+                    <input type="hidden" name="commentNum" value="${comment.commentNum}" />
+                    <input type="hidden" name="communityNum" value="${community.communityNum}" />
+                    <textarea name="content" rows="3" required>${comment.content}</textarea><br/>
+                    <input type="submit" value="저장" />
+                </form>
+            </c:if>
         </div>
     </c:forEach>
 

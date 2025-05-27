@@ -7,11 +7,91 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>detailView.jsp</title>
+<title>${dto.goodsName} - 상세 보기</title>
 <script src="https://code.jquery.com/jquery-1.8.1.js"></script>
-<script type="text/javascript">
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+    }
+    .wrapper {
+        max-width: 960px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    .product {
+        display: flex;
+        gap: 30px;
+    }
+    .product img.main-image {
+        width: 350px;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+    }
+    .details {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    .details h2 {
+        font-size: 24px;
+        margin: 0;
+    }
+    .details .brand, .details .views {
+        color: #777;
+        font-size: 14px;
+    }
+    .details .price {
+        font-size: 20px;
+        color: #d60000;
+        font-weight: bold;
+    }
+    .controls {
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .controls input[type="number"] {
+        width: 60px;
+        padding: 5px;
+    }
+    .controls button {
+        padding: 8px 14px;
+        border: none;
+        border-radius: 6px;
+        background-color: #333;
+        color: #fff;
+        cursor: pointer;
+    }
+    #wish {
+        cursor: pointer;
+        width: 28px;
+        transition: transform 0.2s;
+    }
+    #wish:hover {
+        transform: scale(1.1);
+    }
+    .description {
+        margin-top: 40px;
+        border-top: 1px solid #ddd;
+        padding-top: 20px;
+    }
+    .description img {
+        width: 100%;
+        margin-top: 20px;
+        border-radius: 10px;
+    }
+</style>
+
+<script>
 $(function(){
-    // 장바구니 버튼 클릭 시
     $("#cartBtn").click(function(){
         $.ajax({
             type: "post",
@@ -22,37 +102,22 @@ $(function(){
             },
             success: function(){        
                 let loc = confirm("장바구니로 이동하시겠습니까?");
-                if(loc) 
-                    location.href = "/item/cartList";
+                if(loc) location.href = "/item/cartList";
             },
             error: function(){
-                window.open("/login/loginCk", "이름", "width=400, height=100, top=100, left=100");
+                window.open("/login/loginCk", "로그인", "width=400, height=100");
             }
         });
     });
-    
-    //바로 구매 버튼 클릭 시
+
     $("#buyItem").click(function(){
-    	if(${empty auth }){
-    		window.open("/login/loginCk", "이름", "width=400, height=100, top=100, left=100");
-    	}else{
-    		location.href="buy?goodsNum=${dto.goodsNum}&cartQty="+$("#cartQty").val();
-    	}
+        if(${empty auth}) {
+            window.open("/login/loginCk", "로그인", "width=400, height=100");
+        } else {
+            location.href = "buy?goodsNum=${dto.goodsNum}&cartQty=" + $("#cartQty").val();
+        }
     });
-    
-    //문의하기 버튼 클릭 시
-    
-    /*
-    $("#inquire").click(function(){
-    	if(${empty auth }){
-    		window.open("/login/loginCk", "이름", "width=400, height=100, top=100, left=100");
-    	}else{
-    		location.href="inquire?goodsNum=${dto.goodsNum}="+$("#inquire").val();
-    	}
-    });
-	*/
-	
-    // 찜하기 버튼 클릭 시
+
     $("#wish").click(function(){
         $.ajax({
             type : "post",
@@ -67,63 +132,48 @@ $(function(){
                 }
             },
             error:function(){
-                alert("로그아웃 되었습니다. \n다시 로그인 해 주세요");
-                window.open("/login/loginCk", "이름", "width=400, height=100, top=100, left=100");
+                alert("로그아웃 되었습니다.\n다시 로그인 해 주세요");
+                window.open("/login/loginCk", "로그인", "width=400, height=100");
             }
         });
     });
 });
 </script>
-
 </head>
 <body>
 <jsp:include page="/views/header.jsp" />
-<table width=800 >
-    <tr>
-        <td rowspan=5><img src="/static/goodsUpload/${dto.goodsMainStoreImage }" /></td>
-        <td>상품명 : ${dto.goodsName }</td>
-    </tr>
-    <tr>
-        <td>브랜드명 : ${dto.stockName }</td>
-    </tr>    
-    <tr>
-        <td>상품가격 : <fmt:formatNumber value="${dto.goodsPrice }" pattern="###,###"/>원</td>
-    </tr>
-    
-    <tr>
-        <td>조회수 : ${dto.visitCount }</td>
-    </tr>
-    <tr>
-        <td>수량: <input type="number" min=1 value=1 step=1 id="cartQty"></td>
-    </tr>    
-    <tr>
-        <td>
-            <button type="button" id="cartBtn">장바구니</button> |
-            <button type="button" id="buyItem">바로 구매</button> | 
-            <!-- 
-            <button type="button" id="inquire">문의하기</button>
-             -->
-            <c:if test="${empty wish }">
-                <img src="/static/images/emptyheart.jpg" width=30 id="wish"/>
-            </c:if>
-            <c:if test="${!empty wish }">
-                <img src="/static/images/heart.jpg" width=30 id="wish"/>
-            </c:if>
-        </td>
-    </tr>
 
-    <tr>
-        <td colspan=2>
-            <div id="content">
-                ${dto.goodsContents }<br/>
-                <c:forTokens items="${dto.goodsDetailStoreImage }" delims="`" var="image">
-                <img src="/static/goodsUpload/${image }" />
-                </c:forTokens>
+<div class="wrapper">
+    <div class="product">
+        <img class="main-image" src="/static/goodsUpload/${dto.goodsMainStoreImage}" alt="상품 메인 이미지">
+        <div class="details">
+            <h2>${dto.goodsName}</h2>
+            <div class="brand">브랜드: ${dto.stockName}</div>
+            <div class="price"><fmt:formatNumber value="${dto.goodsPrice}" pattern="###,###"/>원</div>
+            <div class="views">조회수: ${dto.visitCount}</div>
+
+            <div class="controls">
+                <input type="number" min="1" value="1" id="cartQty">
+                <button type="button" id="cartBtn">장바구니</button>
+                <button type="button" id="buyItem">바로 구매</button>
+                <c:if test="${empty wish}">
+                    <img src="/static/images/emptyheart.jpg" id="wish">
+                </c:if>
+                <c:if test="${!empty wish}">
+                    <img src="/static/images/heart.jpg" id="wish">
+                </c:if>
             </div>
-        </td>
-    </tr>    
-    
-</table>
+        </div>
+    </div>
+
+    <div class="description">
+        <p>${dto.goodsContents}</p>
+        <c:forTokens items="${dto.goodsDetailStoreImage}" delims="`" var="image">
+            <img src="/static/goodsUpload/${image}" alt="상품 상세 이미지">
+        </c:forTokens>
+    </div>
+</div>
+
 <%@ include file="/views/footer.jsp" %>
 </body>
 </html>

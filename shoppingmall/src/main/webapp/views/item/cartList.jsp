@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
@@ -7,138 +6,239 @@
 <head>
 <meta charset="UTF-8">
 <title>장바구니</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <style>
-    table {
-        width: 800px;
-        border-collapse: collapse;
-        margin: 20px auto;
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f7f8fa;
+        margin: 0;
+        padding: 0;
+        color: #333;
     }
-    caption {
-        font-size: 1.5em;
+
+    .cart-container {
+        max-width: 1100px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    .cart-header, .cart-item {
+        display: grid;
+        grid-template-columns: 40px 100px 1.5fr 100px 100px 120px 60px;
+        align-items: center;
+        background-color: #fff;
+        padding: 16px 20px;
         margin-bottom: 10px;
+        border-radius: 12px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.06);
     }
-    th, td {
+
+    .cart-header {
+        font-weight: 600;
+        background-color: #f0f2f5;
         border: 1px solid #ddd;
-        padding: 10px;
+    }
+
+    .cart-item img {
+        max-width: 80px;
+        max-height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        background-color: #fff;
+   		padding: 4px;
+    }
+
+    .cart-item .product-name {
+        font-size: 16px;
+        font-weight: 500;
+    }
+
+    .cart-qty input[type="number"] {
+        width: 60px;
+        padding: 6px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
         text-align: center;
     }
-    img {
-        max-width: 100px;
+
+    .cart-price, .cart-total {
+        font-weight: 600;
+        color: #e60023;
+        font-size: 15px;
+        text-align: center;
     }
-    input[type="submit"] {
-        padding: 8px 16px;
-        font-size: 1em;
+
+    .cart-delete button {
+        background-color: #ff4d4f;
+        color: #fff;
+        border: none;
+        padding: 6px 10px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        transition: background-color 0.3s ease;
+    }
+
+    .cart-delete button:hover {
+        background-color: #d9363e;
+    }
+
+    .total-summary {
+        text-align: right;
+        font-size: 18px;
+        font-weight: bold;
+        margin-top: 30px;
+        color: #111;
+        padding: 10px;
+    }
+
+    .cart-actions {
+        text-align: right;
+        margin: 30px 0;
+    }
+
+    .cart-actions input {
+        background-color: #111;
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        font-size: 15px;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-left: 12px;
+        transition: background-color 0.3s ease;
+    }
+
+    .cart-actions input:hover {
+        background-color: #333;
     }
 </style>
+
 <script src="https://code.jquery.com/jquery-1.8.1.js"></script>
 <script>
-$(function() {
-    // 전체 선택 체크박스 제어
+$(function(){
     $("#checkAll").click(function(){
         $("input[name='prodCk']").prop("checked", this.checked);
+        updateTotalSummary();
     });
-
-    // 개별 체크박스 해제 시 전체 선택 체크박스도 해제
     $("input[name='prodCk']").click(function(){
         const total = $("input[name='prodCk']").length;
         const checked = $("input[name='prodCk']:checked").length;
         $("#checkAll").prop("checked", total === checked);
+        updateTotalSummary();
     });
-});
-</script>
-<script>
-$(function(){
+
     $(document).on('change', '.qtyInput', function(){
-        const $row = $(this).closest('tr');
+        const $row = $(this).closest('.cart-item');
         const goodsNum = $row.data('goodsnum');
         const cartQty = $(this).val();
 
         $.ajax({
             url: '/item/updateCartQty',
             type: 'post',
+            dataType: 'json',
             data: {
                 goodsNum: goodsNum,
                 cartQty: cartQty
             },
             success: function(result){
-                $row.find('.totalPrice').text(result.toLocaleString() + "원");
+            	console.log(result)
+                if(result){
+                    $row.find('.totalPrice').text(result.toLocaleString() + "원");
+                    updateTotalSummary();
+                } else {
+                    alert("응답 오류");
+                }
             },
             error: function(){
                 alert("수량 변경 실패 또는 로그인 필요");
             }
         });
     });
+
+    updateTotalSummary();
 });
-</script>
-<script>
+
+function updateTotalSummary(){
+    let sum = 0;
+    $("input[name='prodCk']:checked").each(function(){
+        const $row = $(this).closest('.cart-item');
+        const totalText = $row.find('.totalPrice').text().replace(/원|,/g,'');
+        sum += parseInt(totalText) || 0;
+    });
+    $('.total-summary').text("총 결제 예상금액: " + sum.toLocaleString() + "원");
+}
+
 function deleteSelectedItems() {
-	var chk_arr = [];
-	$("input:checkbox[name='prodCk']:checked").each(function(){
-		chk_arr.push($(this).val());
-	});
+    var chk_arr = [];
+    $("input:checkbox[name='prodCk']:checked").each(function(){
+        chk_arr.push($(this).val());
+    });
     $.ajax({
-    	type : "post",
-    	url : "deleteCart",
-    	data : {goodsNums : chk_arr},
-    	dataType: "text",
-    	success:function(result){
-    		if(result){
-    			location.reload();
-    		}else{
-    			location.href="/";
-    		}
-    	},
-    	error:function(){
-    		alert("서버오류");
-    	}
+        type : "post",
+        url : "deleteCart",
+        data : {goodsNums : chk_arr},
+        dataType: "text",
+        success:function(result){
+            if(result){
+                location.reload();
+            }else{
+                location.href="/";
+            }
+        },
+        error:function(){
+            alert("서버오류");
+        }
     });
 }
 </script>
-
 </head>
 <body>
 <jsp:include page="/views/header.jsp" />
 
-<form action="itemBuy" method="post" >
-    <table>
-        <caption>장바구니</caption>
-        <thead>
-            <tr>
-                <th><input type="checkbox" id="checkAll" checked /></th>
-                <th>상품 이미지</th>
-                <th>상품명</th>
-                <th>수량</th>
-                <th>합계금액</th>
-            </tr>
-        </thead>
-        <tbody>
-            <c:forEach items="${list}" var="dto">
-                <tr data-goodsnum="${dto.goodsNum}">
-    <td><input type="checkbox" name="prodCk" value="${dto.goodsNum}" checked /></td>
-    <td><img src="/static/goodsUpload/${dto.goodsMainStoreImage}" /></td>
-    <td>${dto.goodsName}</td>
-    <td>
-        <input type="number" class="qtyInput" min="1" value="${dto.cartQty}" />
-    </td>
-    <td class="totalPrice">
-        <fmt:formatNumber value="${dto.cartQty * dto.goodsPrice}" pattern="###,###" />원
-    </td>
-</tr>
+<div class="cart-container">
+    <div class="cart-header">
+        <div><input type="checkbox" id="checkAll" checked /></div>
+        <div>이미지</div>
+        <div>상품명</div>
+        <div>수량</div>
+        <div>단가</div>
+        <div>총액</div>
+        <div>삭제</div>
+    </div>
 
-            </c:forEach>
-        </tbody>
-        <tfoot>
-    <tr>
-        <td colspan="5" style="text-align: right;">
-            <input type="button" value="삭제" onclick="deleteSelectedItems()" style="padding: 8px 16px; font-size: 1em;" />
-			<input type="submit" value="구매하기" style="padding: 8px 16px; font-size: 1em;" />
-        </td>
-    </tr>
-</tfoot>
-        
-    </table>
-</form>
+    <form action="itemBuy" method="post">
+        <c:forEach items="${list}" var="dto">
+            <div class="cart-item" data-goodsnum="${dto.goodsNum}">
+                <div><input type="checkbox" name="prodCk" value="${dto.goodsNum}" checked /></div>
+                <div><img src="/static/goodsUpload/${dto.goodsMainStoreImage}" alt="상품 이미지" /></div>
+                <div class="product-name">${dto.goodsName}</div>
+                <div class="cart-qty">
+                    <input type="number" class="qtyInput" min="1" value="${dto.cartQty}" />
+                </div>
+                <div class="cart-price">
+                    <fmt:formatNumber value="${dto.goodsPrice}" pattern="###,###" />원
+                </div>
+                <div class="cart-total totalPrice">
+                    <fmt:formatNumber value="${dto.cartQty * dto.goodsPrice}" pattern="###,###" />원
+                </div>
+                <div class="cart-delete">
+                    <button type="button" onclick="$(this).closest('.cart-item').find('input[type=checkbox]').prop('checked', true); deleteSelectedItems();">X</button>
+                </div>
+            </div>
+        </c:forEach>
+
+        <div class="total-summary">총 결제 예상금액: 0원</div>
+
+        <div class="cart-actions">
+            <input type="button" value="선택 삭제" onclick="deleteSelectedItems()" />
+            <input type="submit" value="선택 상품 주문하기" />
+        </div>
+    </form>
+</div>
+
 <%@ include file="/views/footer.jsp" %>
 </body>
-
 </html>

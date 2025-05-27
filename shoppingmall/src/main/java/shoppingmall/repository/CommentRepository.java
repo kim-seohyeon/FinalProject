@@ -34,4 +34,22 @@ public class CommentRepository {
 		// TODO Auto-generated method stub
 		 return sqlSession.selectList("shoppingmall.mapper.CommentMapper.selectByCommunityNum", communityNum);
 	}
+	
+	// 댓글 하나 가져오기
+	public CommentDTO selectCommentByNum(String commentNum) {
+	    return sqlSession.selectOne("shoppingmall.mapper.CommentMapper.selectCommentByNum", commentNum);
+	}
+
+	// 댓글 수정
+	public int updateComment(CommentDTO dto) {
+	    String sql = "UPDATE community_comment SET content = ? WHERE comment_id = ?";
+	    return jdbcTemplate.update(sql, dto.getContent(), dto.getCommentNum());
+	}
+
+	// 댓글 삭제
+	public int deleteComment(String commentNum) {
+	    String sql = "DELETE FROM community_comment WHERE comment_id = ?";
+	    return jdbcTemplate.update(sql, commentNum);
+	}
+
 }
