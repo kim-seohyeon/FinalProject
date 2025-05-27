@@ -7,9 +7,77 @@
 <head>
 <meta charset="UTF-8">
 <title>Index</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
 <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1.min.js"></script>
+
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f7f7f7;
+    }
+
+    .container {
+        display: flex;
+        justify-content: space-between;
+        padding: 20px;
+    }
+
+    .content-area {
+        flex: 1;
+        margin-right: 280px; /* 로그인 폼 공간 확보 */
+    }
+
+    .login-box {
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        width: 250px;
+        background: white;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .product-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .product-item {
+        width: 250px;
+        background: white;
+        padding: 10px;
+        border-radius: 8px;
+        box-shadow: 1px 1px 6px rgba(0,0,0,0.1);
+        text-align: center;
+    }
+
+    .product-item img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 5px;
+    }
+
+    #more {
+        text-align: center;
+        margin: 30px 0;
+    }
+
+    ul {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    ul li {
+        margin: 5px 0;
+    }
+
+</style>
+
 <script type="text/javascript">
 $(function(){
 	page = 1;
@@ -22,22 +90,18 @@ $(function(){
 			dataType: "json",
 			success: function(model){
 				var item = "";
-				item += '<table class="table table-borderless text-center mx-auto" style="width:900px;">';
-				item += 	'<tr>';
-				
 				$.each(model.list , function(idx, dto){
-					item += 		'<td><a href="goodsDetail?goodsNum='+dto.goodsNum+'">';
-					item += 			'<img src="/static/goodsUpload/'+dto.goodsImageStoreName+'" width=300/>';
-					item += 			'<br/>'+dto.goodsSubject;
-					item += 			'<br/>'+dto.goodsWriter;
-					item += 			'</a></td>';
-					if((idx + 1) % 3) item += "</tr><tr>";
+					item += '<div class="product-item">';
+					item += '<a href="goodsDetail?goodsNum='+dto.goodsNum+'">';
+					item += '<img src="/static/goodsUpload/'+dto.goodsImageStoreName+'" />';
+					item += '<div>'+dto.goodsSubject+'</div>';
+					item += '<div>'+dto.goodsWriter+'</div>';
+					item += '</a>';
+					item += '</div>';
 				});
-				item += 	'</tr>';
-				item += '</table>';
-				$("#content").append(item);
-				if(model.maxPage <= page) $("#more").css("display", "none")
-			},
+				$("#product-list").append(item);
+				if(model.maxPage <= page) $("#more").hide();
+			}
 		});
 	});
 });
@@ -47,67 +111,69 @@ $(function(){
 <body>
 <jsp:include page="/views/header.jsp" />
 
-<!-- 메인 레이아웃 -->
-<div class="container mt-4 d-flex justify-content-between align-items-start">
+<div class="container">
+    <div class="content-area">
+        <c:if test="${!empty auth}">
+            <ul>
+                <c:if test="${auth.grade == 'emp'}">
+                    <li><a href="/member/memberList">회원관리</a></li>
+                    <li><a href="/employee/empList">직원관리</a></li>
+                    <li><a href="/empPage/empMyPage">내정보 보기</a></li>
+                    <li><a href="/goods/goodsList">상품관리</a></li>
+                </c:if>
+                <c:if test="${auth.grade == 'mem'}">
+                    <li><a href="/item/wishList">찜 목록</a></li>
+                    <li><a href="/item/purchaseList">구매목록</a></li>
+                </c:if>
+            </ul>
+        </c:if>
 
-  <!-- 왼쪽: 콘텐츠 영역 -->
-  <div id="content" class="flex-grow-1 me-3">
-    <table class="table table-borderless text-center mx-auto" style="width:900px;">
-      <c:forEach items="${list }" var="dto" varStatus="idx">
-        <c:if test="${idx.index % 3 == 0}"><tr></c:if>
-        <td>
-          <a href="/item/detailView?goodsNum=${dto.goodsNum}">
-            <img src="/static/goodsUpload/${dto.goodsMainStoreImage}" width="300" height="150"/><br/>
-            ${dto.goodsName }<br/>
-            ${dto.goodsPrice }원
-          </a>
-        </td>
-        <c:if test="${(idx.index + 1) % 3 == 0}"></tr></c:if>
-      </c:forEach>
-    </table>
+        <div id="content">
+            <div class="product-grid" id="product-list">
+                <c:forEach items="${list}" var="dto">
+                    <div class="product-item">
+                        <a href="/item/detailView?goodsNum=${dto.goodsNum}">
+                            <img src="/static/goodsUpload/${dto.goodsMainStoreImage}" />
+                            <div>${dto.goodsName}</div>
+                            <div><strong>${dto.goodsPrice}원</strong></div>
+                        </a>
+                    </div>
+                </c:forEach>
+            </div>
+        </div>
 
-    <!-- 더보기 버튼 -->
-    <div id="more" class="text-center my-4">
-      <button id="load-more" class="btn btn-primary">더보기</button>
+        <div id="more">
+            <button id="load-more">더보기</button>
+        </div>
     </div>
-  </div>
 
-  <!-- 오른쪽: 로그인 폼 영역 -->
-  <c:if test="${empty auth}">
-    <div class="login-box bg-white border rounded shadow-sm p-4" style="width: 300px;">
-      <h5 class="mb-3">로그인</h5>
-      <form:form modelAttribute="loginCommand" action="/login/login" method="post">
-        <div class="form-check form-switch mb-2">
-          <input class="form-check-input" type="checkbox" name="autoLogin" id="autoLogin">
-          <label class="form-check-label" for="autoLogin">자동 로그인</label>
+    <c:if test="${empty auth}">
+        <div class="login-box">
+            <form:form modelAttribute="loginCommand" action="/login/login" method="post">
+                <div>
+                    <label><input type="checkbox" name="autoLogin" /> 자동 로그인</label><br/>
+                    <label><input type="checkbox" name="idStore"
+                        <c:if test="${loginCommand.idStore}">checked</c:if> /> 아이디 저장</label>
+                </div>
+                <div>
+                    <form:input path="userId" placeholder="아이디" />
+                    <form:errors path="userId"/>
+                </div>
+                <div>
+                    <form:password path="userPw" placeholder="비밀번호"/>
+                    <form:errors path="userPw"/>
+                </div>
+                <div>
+                    <input type="submit" value="로그인" style="width:100%;" />
+                </div>
+                <div style="margin-top:10px; font-size:0.9em;">
+                    <a href="/help/findId">아이디</a> /
+                    <a href="/help/findPassword">비밀번호 찾기</a> |
+                    <a href="/register/userAgree">회원가입</a>
+                </div>
+            </form:form>
         </div>
-        <div class="form-check form-switch mb-3">
-          <input class="form-check-input" type="checkbox" name="idStore" id="idStore"
-            <c:if test="${loginCommand.idStore}">checked</c:if> />
-          <label class="form-check-label" for="idStore">아이디 저장</label>
-        </div>
-        <div class="mb-3">
-          <label>아이디</label>
-          <form:input path="userId" cssClass="form-control"/>
-          <form:errors path="userId" cssClass="text-danger small"/>
-        </div>
-        <div class="mb-3">
-          <label>비밀번호</label>
-          <form:password path="userPw" cssClass="form-control"/>
-          <form:errors path="userPw" cssClass="text-danger small"/>
-        </div>
-        <div class="d-grid">
-          <input type="submit" value="로그인" class="btn btn-primary"/>
-        </div>
-        <div class="mt-3 text-end small">
-          <a href="/help/findId">아이디</a> /
-          <a href="/help/findPassword">비밀번호 찾기</a> |
-          <a href="/register/userAgree">회원가입</a>
-        </div>
-      </form:form>
-    </div>
-  </c:if>
-
+    </c:if>
 </div>
 
 <%@ include file="/views/footer.jsp" %>
