@@ -50,11 +50,11 @@ $(function(){
 
 <body>
 <jsp:include page="/views/header.jsp" />
-
+<!-- 
 hk shoppingmall<br/>
 <a href="mailling">메일링</a> | <a href="library">자료실</a> |
 <a href="/inquire/inquireList">문의하기</a>| <a href="/community/communityList">커뮤니티</a>
-
+ -->
 <c:if test="${!empty auth }">
 <ul>
 	<c:if test="${auth.grade == 'emp' }">
@@ -64,13 +64,14 @@ hk shoppingmall<br/>
 		<li><a href="/goods/goodsList">상품관리</a></li>
 	</c:if>
 	<c:if test="${auth.grade == 'mem' }">
-		<li><a href="/myPage/memberMyPage">내정보 보기</a></li>
+		<!-- <li><a href="/myPage/memberMyPage">내정보 보기</a></li>
 		<li><a href="/item/cartList">장바구니</a></li>
+		 -->
 		<li><a href="/item/wishList">찜 목록</a></li>
 		<li><a href="/item/purchaseList">구매목록</a></li>
 		
 	</c:if>
-	<li><a href="/login/logout">로그아웃</a></li>
+	<!-- <li><a href="/login/logout">로그아웃</a></li> -->
 </ul>
 </c:if>
 
