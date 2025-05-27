@@ -12,6 +12,7 @@ import shoppingmall.command.CommunityCommand;
 import shoppingmall.domain.AuthInfoDTO;
 import shoppingmall.domain.CommentDTO;
 import shoppingmall.domain.CommunityDTO;
+import shoppingmall.repository.CommentRepository;
 import shoppingmall.repository.CommunityRepository;
 import shoppingmall.service.community.CommentWriteService;
 import shoppingmall.service.community.CommunityAutoNumService;
@@ -19,6 +20,7 @@ import shoppingmall.service.community.CommunityDetailService;
 import shoppingmall.service.community.CommunityListService;
 import shoppingmall.service.community.CommunityUpdateService;
 import shoppingmall.service.community.CommunityWriteService;
+import shoppingmall.service.comment.CommentUpdateService;  // 새로 추가한 서비스
 
 @Controller
 @RequestMapping("/community")
@@ -44,6 +46,12 @@ public class CommunityController {
 
     @Autowired
     CommunityRepository communityRepository;
+
+    @Autowired
+    CommentUpdateService commentUpdateService;
+    
+    @Autowired
+    CommentRepository commentRepository;
 
 
     // 커뮤니티 게시글 목록
@@ -127,6 +135,26 @@ public class CommunityController {
 
         communityRepository.deleteCommunity(communityNum);
         return "redirect:/community/communityList";
+    }
+    
+    // 댓글 수정 처리
+    @PostMapping("/commentUpdate")
+    public String commentUpdate(CommentDTO commentDTO, HttpSession session) {
+        commentUpdateService.execute(commentDTO, session);
+        return "redirect:/community/communityDetail?communityNum=" + commentDTO.getCommunityNum();
+    }
+
+    @GetMapping("/commentDelete")
+    public String commentDelete(String commentNum, String communityNum, HttpSession session) {
+        // 권한 확인 (선택)
+        AuthInfoDTO auth = (AuthInfoDTO) session.getAttribute("auth");
+        // 여기서 댓글 작성자와 로그인한 유저를 비교해도 좋아요
+        
+        // 실제 삭제 처리
+        commentRepository.deleteComment(commentNum);
+        
+        // 삭제 후 다시 해당 게시글 상세보기로 리다이렉트
+        return "redirect:/community/communityDetail?communityNum=" + communityNum;
     }
 
     

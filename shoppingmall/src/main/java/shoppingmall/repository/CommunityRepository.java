@@ -86,7 +86,19 @@ public class CommunityRepository {
 	    return jdbcTemplate.update(sql, communityNum);
 	}
 
+	// 댓글 수정
+	public int updateComment(CommentDTO dto) {
+	    String sql = "UPDATE community_comment SET content = ? WHERE comment_id = ?";
+	    return jdbcTemplate.update(sql, dto.getContent(), dto.getCommentNum());
+	}
+
+	// 댓글 삭제
+	public int deleteComment(String commentNum) {
+	    String sql = "DELETE FROM community_comment WHERE comment_id = ?";
+	    return jdbcTemplate.update(sql, commentNum);
+	}
 		
+	
 }
 
 
