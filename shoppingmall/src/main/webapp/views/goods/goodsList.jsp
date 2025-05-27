@@ -8,6 +8,7 @@
 <title>goodsList.jsp</title>
 </head>
 <body>
+<jsp:include page="/views/header.jsp" />
 상품관리<br/>
 <a href="goodsWrite">상품 추가</a><br />
 <table border=1 width="600" align="center">
@@ -23,6 +24,7 @@
 		</tr>
 	</c:forEach>
 </table>
+<%@ include file="/views/footer.jsp" %>
 </body>
 </html>
 

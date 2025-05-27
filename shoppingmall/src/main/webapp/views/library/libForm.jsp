@@ -8,6 +8,7 @@
 <title>libForm</title>
 </head>
 <body>
+<jsp:include page="/views/header.jsp" />
 자료실 등록<br/>
 <!-- form:form, modelAttribute 유효성 검사하기 위해 command가 필요함 -->
 <form:form action="libWrite" method="post" modelAttribute="libraryCommand" enctype="multipart/form-data">
@@ -42,5 +43,6 @@
 
 </table>
 </form:form>
+<%@ include file="/views/footer.jsp" %>
 </body>
 </html>

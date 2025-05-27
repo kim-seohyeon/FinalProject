@@ -22,6 +22,7 @@ $(function(){
 </script>
 </head>
 <body>
+<jsp:include page="/views/header.jsp" />
 비밀번호 변경<br/>
 
 <ul>
@@ -39,7 +40,6 @@ $(function(){
 새 비밀번호 확인: <input type="password" name="newPwCon" id="newPwCon" required="required"/><br/>
 <input type="submit" value="비밀번호 변경"/>
 </form>
-
-
+<%@ include file="/views/footer.jsp" %>
 </body>
 </html>

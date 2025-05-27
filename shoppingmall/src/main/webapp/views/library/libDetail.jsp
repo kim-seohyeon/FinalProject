@@ -9,6 +9,7 @@
 <title>libDetail</title>
 </head>
 <body>
+<jsp:include page="/views/header.jsp" />
 상세보기<br/>
 글 번호: ${libraryCommand.libNum }<br/>
 작성자: ${libraryCommand.libWriter }<br/>
@@ -27,5 +28,6 @@
 <a href="libUpdate?libNum=${libraryCommand.libNum }">자료실 수정</a> |
 <a href="libDelete?libNum=${libraryCommand.libNum }">자료실 삭제</a> |
 <a href="library">자료실</a>
+<%@ include file="/views/footer.jsp" %>
 </body>
 </html>

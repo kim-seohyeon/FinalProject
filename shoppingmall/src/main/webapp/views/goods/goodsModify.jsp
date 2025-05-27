@@ -7,6 +7,7 @@
 <title>goodsModify.jsp</title>
 </head>
 <body>
+<jsp:include page="/views/header.jsp" />
 상품 수정 페이지
 <form action="goodsModify" method="post" >
 <table border=1 align="center" width="600">
@@ -29,5 +30,6 @@
 		<button type="button" onclick="">상품목록</button></th></tr>
 </table>
 </form>
+<%@ include file="/views/footer.jsp" %>
 </body>
 </html>

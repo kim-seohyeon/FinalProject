@@ -10,6 +10,7 @@
 <title>goodsInfo.jsp</title>
 </head>
 <body>
+<jsp:include page="/views/header.jsp" />
 <table border=1 align="center" width="600">
 <caption>${dto.goodsName } 상품 상세보기</caption>
 	<tr><th width="150" >상품번호</th>
@@ -49,6 +50,7 @@
 		<a href="goodsDelete?goodsNum=${dto.goodsNum }">상품 삭제</a> | 
 		<a href="goodsList">상품목록</a></th></tr>
 </table>
+<%@ include file="/views/footer.jsp" %>
 </body>
 </html>
 

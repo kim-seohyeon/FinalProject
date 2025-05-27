@@ -1,4 +1,5 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
@@ -6,6 +7,8 @@
 <title>communityList.jsp</title>
 </head>
 <body>
+<jsp:include page="/views/header.jsp" />
+
 <!-- 게시글 목록 보여주기 -->
 <a href="write">문의글 쓰기</a><br />
 
@@ -20,5 +23,6 @@
 		</tr>
 	</c:forEach>
 </table>
+<%@ include file="/views/footer.jsp" %>
 </body>
 </html>

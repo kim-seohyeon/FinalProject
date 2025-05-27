@@ -7,10 +7,10 @@
 <title>inquireInfo</title>
 </head>
 <body>
-
+<jsp:include page="/views/header.jsp" />
 <table border=1 align="center" width="600">
 
-<caption>${dto.inquireNum } 글 상세보기</caption>
+<caption> 글 상세보기</caption>
 	<tr><th width="150" >글 번호</th>
 		<td>${dto.inquireNum }</td></tr>
 	<tr><th width="150" >작성자</th>
@@ -28,5 +28,6 @@
 
 
 </table>
+<%@ include file="/views/footer.jsp" %>
 </body>
 </html>

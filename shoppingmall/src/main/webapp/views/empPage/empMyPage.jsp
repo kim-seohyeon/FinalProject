@@ -10,6 +10,7 @@
 <title>empMyPage.jsp</title>
 </head>
 <body>
+<jsp:include page="/views/header.jsp" />
 내 정보 상세보기(직원)
 
 <ul>
@@ -32,4 +33,5 @@
 직원 입사일: ${dto.empHireDate }<br/>
 
 </body>
+<%@ include file="/views/footer.jsp" %>
 </html>

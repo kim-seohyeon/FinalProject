@@ -8,6 +8,7 @@
 <title>memberDrop.jsp</title>
 </head>
 <body>
+<jsp:include page="/views/header.jsp" />
 회원탈퇴<br/>
 
 <ul>
@@ -22,5 +23,6 @@
    	    <input type="submit" value="회원탈퇴" />
    	    <div style = "color: red">${pwErr }</div>
 </form>
+<%@ include file="/views/footer.jsp" %>
 </body>
 </html>

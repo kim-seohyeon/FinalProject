@@ -13,6 +13,7 @@
 <title>userForm</title>
 </head>
 <body>
+<jsp:include page="/views/header.jsp" />
 <form:form action = "userWrite" method="post" id="frm" modelAttribute="memberCommand">
 <table border=1 width=700>
 	<tr><td>아이디</td>
@@ -61,5 +62,6 @@
 		</td></tr>
 </table>
 </form:form>
+<%@ include file="/views/footer.jsp" %>
 </body>
 </html>

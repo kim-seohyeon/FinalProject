@@ -7,6 +7,7 @@
 <title>email</title>
 </head>
 <body>
+<jsp:include page="/views/header.jsp" />
 <form action="mailling" method="post" >
 <input type="submit" value="보내기"><br />
 보내는 사람 : <input type="text" name="fromEmail" /><br />
@@ -14,5 +15,6 @@
 제목 : <input type="text" name="subject"><br />
 내용 : <textarea rows="5" cols="50" name="contents"></textarea>
 </form>
+<%@ include file="/views/footer.jsp" %>
 </body>
 </html>

@@ -49,6 +49,8 @@ $(function(){
 </head>
 
 <body>
+<jsp:include page="/views/header.jsp" />
+
 hk shoppingmall<br/>
 <a href="mailling">메일링</a> | <a href="library">자료실</a> |
 <a href="/inquire/inquireList">문의하기</a>| <a href="/community/communityList">커뮤니티</a>
@@ -129,5 +131,6 @@ hk shoppingmall<br/>
 		</tr>
 	</table>
 </div>
+<%@ include file="/views/footer.jsp" %>
 </body>
 </html>
