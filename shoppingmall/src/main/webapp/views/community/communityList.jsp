@@ -5,26 +5,32 @@
 <head>
     <meta charset="UTF-8">
     <title>Community List</title>
+
     <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #f2f4f8;
-            margin: 0;
-            padding: 30px;
-        }
-
+        /* 주식 페이지 스타일과 통일된 컨테이너 스타일 */
         .container {
-            width: 90%;
-            max-width: 900px;
-            margin: auto;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+             /* background-color: white; */
+    /* border-radius: 8px; */
+    /* box-shadow: 0 4px 10px rgba(0,0,0,0.1); */
+            font-family: 'Segoe UI', sans-serif;
         }
 
+        /* 제목 스타일 */
         h2 {
-            text-align: center;
-            color: #2c3e50;
-            margin-bottom: 40px;
-        }
+    		font-size: 2rem;         /* 주식 제목 크기와 동일하게 */
+    		font-weight: 700;     /* 기본 굵기 */
+    		text-align: left;        /* 왼쪽 정렬 */
+    		color: #000;             /* 기본 검정색 */
+   			margin-bottom: 50px;     /* 주식 제목과 비슷한 간격 */
+    		/* 기존 강조 스타일 제거 */
+    		text-shadow: none;
+    		letter-spacing: normal;
+}
 
+        /* 버튼 스타일 (주식 페이지 스타일에 맞춤) */
         .write-button {
             display: inline-block;
             padding: 10px 20px;
@@ -37,71 +43,67 @@
             margin-bottom: 20px;
             transition: background-color 0.3s;
         }
-
         .write-button:hover {
             background-color: #2980b9;
         }
 
+        /* 테이블 스타일 (주식 페이지와 최대한 비슷하게) */
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 20px;
             background-color: white;
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 8px 16px rgba(0,0,0,0.05);
         }
-
         th, td {
             padding: 14px 18px;
             border-bottom: 1px solid #e0e0e0;
             text-align: center;
+            color: #2c3e50;
         }
-
         th {
             background-color: #3498db;
             color: white;
             font-weight: 600;
         }
-
-        tr:hover {
-            background-color: #f9fcff;
-        }
-
+       tr:hover {
+    background-color: #f1f8ff;
+    box-shadow: 0 2px 8px rgba(52, 152, 219, 0.2);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
         td a {
             color: #2c3e50;
             font-weight: 500;
+            text-decoration: none;
         }
-
         td a:hover {
             color: #3498db;
             text-decoration: underline;
         }
 
+        /* 반응형 모바일 대응 */
         @media (max-width: 600px) {
             .container {
                 width: 95%;
             }
-
             table, thead, tbody, th, td, tr {
                 display: block;
             }
-
             thead tr {
                 display: none;
             }
-
             tr {
                 margin-bottom: 15px;
                 border-bottom: 2px solid #eee;
                 padding-bottom: 10px;
             }
-
             td {
                 text-align: left;
                 padding: 10px;
                 position: relative;
             }
-
             td::before {
                 content: attr(data-label);
                 font-weight: bold;
@@ -113,8 +115,11 @@
     </style>
 </head>
 <body>
+
+<jsp:include page="/views/header.jsp" />
+
 <div class="container">
-    <h2>📋 커뮤니티 글 목록</h2>
+    <h2>커뮤니티 메인 페이지 📋 </h2>
 
     <a href="write" class="write-button">✏️ 게시글 작성</a>
 
@@ -143,5 +148,6 @@
         </tbody>
     </table>
 </div>
+
 </body>
 </html>

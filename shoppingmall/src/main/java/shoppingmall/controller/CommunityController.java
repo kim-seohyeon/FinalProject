@@ -172,4 +172,6 @@ public class CommunityController {
         commentRepository.deleteComment(commentNum);
         return "redirect:/community/communityDetail?communityNum=" + communityNum;
     }
+    
+    
 }

@@ -9,11 +9,29 @@
 <meta charset="UTF-8">
 <title>글 쓰기 폼</title>
 <style>
+    /* 상단 메인바 스타일 */
+    .main-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 50px;
+        background-color: white;
+        color: #333;
+        display: flex;
+        align-items: center;
+        padding-left: 20px;  /* 왼쪽 여백 */
+        font-weight: bold;
+        font-size: 18px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        z-index: 1000;
+    }
+
     body {
         font-family: 'Segoe UI', sans-serif;
         background-color: #f7f9fc;
         margin: 0;
-        padding: 40px;
+        padding: 50px 40px 40px 40px; /* 상단메인바 높이만큼 패딩 추가 */
         color: #333;
     }
 
@@ -102,10 +120,13 @@
 </head>
 <body>
 
+<div class="main-bar">
+    게시물 작성 페이지
+</div>
+
 <div class="form-container">
     <h2>글 등록</h2>
 
-    <!-- enctype 추가! -->
     <form name="communityForm" action="write" method="post" enctype="multipart/form-data">
         <table>
             <tr>
@@ -147,7 +168,7 @@
                 </td>
             </tr>
         </table>
-        <input type="submit" value="글 등록" />
+        <input type="submit" value="게시글 등록" />
     </form>
 
     <a href="${pageContext.request.contextPath}/community/communityList" class="back-link">← 목록으로 돌아가기</a>

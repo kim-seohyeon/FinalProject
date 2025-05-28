@@ -8,68 +8,81 @@
     <style>
         body {
             font-family: 'Segoe UI', sans-serif;
-            background-color: #f7f9fc;
+            background-color: #ffffff;
             margin: 0;
-            padding: 30px;
-            color: #333;
+            padding: 7px;
+            color: #2c3e50;
         }
         .container {
             width: 80%;
             max-width: 800px;
             margin: auto;
-            background: white;
-            padding: 30px 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 20px 0;
         }
         h2 {
-            color: #007BFF;
-            margin-bottom: 5px;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 20px;
         }
         p {
             margin: 5px 0;
+            color: #2c3e50;
+            font-weight: 500;
         }
         hr {
             border: none;
-            border-top: 1px solid #ddd;
+            border-top: 1px solid #e0e0e0;
             margin: 20px 0;
         }
-        /* 게시글 내용 스타일 */
         .content-area {
-            min-height: 100px; /* 최소 높이 */
+            min-height: 100px;
             padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
             background-color: #fafafa;
             font-size: 16px;
             line-height: 1.6;
-            white-space: pre-wrap; /* 줄바꿈 유지 */
+            white-space: pre-wrap;
             margin-bottom: 30px;
-            overflow-wrap: break-word; /* 긴 단어 줄바꿈 */
+            color: #2c3e50;
+            overflow-wrap: break-word;
+        }
+        .post-image {
+            max-width: 400px;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
         .comment {
-            border: 1px solid #ccc;
+            border: 1px solid #e0e0e0;
             padding: 12px;
             margin-bottom: 12px;
             border-radius: 6px;
             background: #fafafa;
+            color: #2c3e50;
+            font-weight: 500;
         }
-        button {
-            background-color: #007BFF;
+        button, input[type="submit"] {
+            background-color: #3498db;
             color: white;
             border: none;
-            padding: 8px 16px;
+            padding: 10px 20px;
             border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
-            margin-top: 8px;
-            margin-right: 6px;
             font-size: 14px;
+            margin-top: 10px;
+            margin-right: 6px;
+            transition: background-color 0.3s;
         }
-        button:hover {
-            background-color: #0056b3;
+        button:hover, input[type="submit"]:hover {
+            background-color: #2980b9;
         }
-        /* 댓글 수정/삭제 버튼 전용 */
         button.small-btn {
             padding: 4px 10px;
             font-size: 12px;
@@ -77,9 +90,8 @@
             margin-right: 4px;
         }
         button.small-btn:hover {
-            background-color: #0056b3;
+            background-color: #2980b9;
         }
-        /* 게시글 수정/삭제 버튼 전용 */
         button.post-btn {
             padding: 6px 12px;
             font-size: 12px;
@@ -87,7 +99,7 @@
             margin-right: 6px;
         }
         button.post-btn:hover {
-            background-color: #0056b3;
+            background-color: #2980b9;
         }
         #commentForm {
             margin-top: 20px;
@@ -95,56 +107,55 @@
         textarea {
             width: 100%;
             border-radius: 6px;
-            border: 1px solid #ccc;
+            border: 1px solid #e0e0e0;
             padding: 10px;
             font-size: 14px;
             resize: vertical;
-        }
-        input[type="submit"] {
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        input[type="submit"]:hover {
-            background-color: #0056b3;
+            color: #2c3e50;
         }
         a.back-link {
             display: inline-block;
             margin-top: 25px;
-            color: #007BFF;
+            color: #3498db;
             text-decoration: none;
             font-weight: bold;
         }
         a.back-link:hover {
             text-decoration: underline;
         }
-        /* 이미지 스타일 */
-        .post-image {
-            max-width: 400px;  /* 최대 너비 400px */
-            width: 100%;       /* 부모 너비에 맞게 줄어듦 */
-            height: auto;      /* 비율 유지 */
-            margin-bottom: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            display: block;
-            /* 가운데 정렬 */
-            margin-left: auto;
-            margin-right: auto;
+        .like-btn {
+            background-color: #e74c3c;
+            border-radius: 6px;
+            padding: 8px 16px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            color: white;
+            border: none;
+            transition: background-color 0.3s;
+        }
+        .like-btn:hover:not(:disabled) {
+            background-color: #c0392b;
+        }
+        .like-btn:disabled {
+            background-color: #bdc3c7;
+            cursor: default;
+        }
+        .like-info {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: 600;
+            color: #e74c3c;
+            vertical-align: middle;
+            font-size: 14px;
         }
     </style>
+
     <script>
-        // 댓글 작성 폼 토글
         function toggleCommentForm() {
             var form = document.getElementById("commentForm");
             form.style.display = (form.style.display === "none" || form.style.display === "") ? "block" : "none";
         }
-
-        // 댓글 수정 폼 토글
         function toggleEditForm(commentId) {
             var form = document.getElementById("editForm-" + commentId);
             form.style.display = (form.style.display === "none" || form.style.display === "") ? "block" : "none";
@@ -152,6 +163,9 @@
     </script>
 </head>
 <body>
+
+<jsp:include page="/views/header.jsp" />
+
 <div class="container">
     <h2>${community.communitySubject}</h2>
 
@@ -171,11 +185,35 @@
     <hr />
 
     <div class="content-area">${community.communityContent}</div>
-       
-    <!-- 이미지 경로 -->
+
     <c:if test="${not empty community.imagePath}">
         <img src="${pageContext.request.contextPath}/static/upload/community/${community.imagePath}" alt="이미지" class="post-image" />
     </c:if>
+
+    <hr />
+
+    <!-- 좋아요 버튼 및 개수 표시 (댓글 위로 이동) -->
+    <form action="<c:url value='/community/like' />" method="post" style="display:inline;">
+        <input type="hidden" name="communityNum" value="${community.communityNum}" />
+        <c:choose>
+            <c:when test="${auth != null}">
+                <button type="submit" class="like-btn">
+                    <c:choose>
+                        <c:when test="${userLiked}">
+                            ♥ 좋아요 취소
+                        </c:when>
+                        <c:otherwise>
+                            ♡ 좋아요
+                        </c:otherwise>
+                    </c:choose>
+                </button>
+            </c:when>
+            <c:otherwise>
+                <button type="button" class="like-btn" disabled title="로그인 후 이용 가능합니다">♡ 좋아요</button>
+            </c:otherwise>
+        </c:choose>
+        <span class="like-info">${likeCount}명</span>
+    </form>
 
     <hr />
 

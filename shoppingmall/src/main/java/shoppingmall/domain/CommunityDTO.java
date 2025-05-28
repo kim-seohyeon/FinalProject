@@ -21,6 +21,7 @@ public class CommunityDTO {
 	String replyComment; 
 	String imagePath;
 	
+	
 
 }
 	

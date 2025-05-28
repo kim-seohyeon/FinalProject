@@ -45,8 +45,8 @@ public class CommunityRepository {
     public List<CommunityDTO> communitySelectAll() {
         sql = "select COMMUNITY_NUM, COMMUNITY_SUBJECT, COMMUNITY_CONTENT, COMMUNITY_WRITER"
                 + ", COMMUNITY_DATE, COMMENT_COUNT, LIKE_COUNT, COMMUNITY_COMMENT, REPLY_COMMENT, IMAGE_PATH"
-                + " from COMMUNITY";
-        
+                + " from COMMUNITY"
+        		+ " ORDER BY COMMUNITY_DATE DESC";  // 이 줄 추가
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<CommunityDTO>(CommunityDTO.class));
     }
 
