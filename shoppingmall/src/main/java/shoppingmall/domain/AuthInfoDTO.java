@@ -15,4 +15,5 @@ public class AuthInfoDTO {
 	String grade;
 	String userEmail;
 	
+//D	
 }
