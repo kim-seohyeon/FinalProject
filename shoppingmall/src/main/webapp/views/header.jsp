@@ -51,6 +51,7 @@
             <a href="/community/communityList" class="nav-link">커뮤니티</a>
             <a href="/library" class="nav-link">자료실</a>
             <a href="/inquire/inquireList" class="nav-link">문의하기</a>
+            <a href="/stock/main" class="nav-link">주식</a>
         </div>
         <div class="nav-right">
             <c:choose>
