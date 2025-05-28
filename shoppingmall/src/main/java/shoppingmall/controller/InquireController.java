@@ -7,10 +7,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import shoppingmall.command.IcommentCommand;
 import shoppingmall.command.InquireCommand;
+import shoppingmall.service.icomment.IcommentDeleteService;
+import shoppingmall.service.icomment.IcommentUpdateService;
 import shoppingmall.service.icomment.IcommentWriteService;
 import shoppingmall.service.inquire.InquireAutoNumService;
 import shoppingmall.service.inquire.InquireDeleteService;
@@ -35,9 +36,15 @@ public class InquireController {
 	InquireUpdateService inquireUpdateService;
 	@Autowired
 	InquireDeleteService inquireDeleteService;
+	
 	@Autowired
 	IcommentWriteService icommentWriteService;
-
+	@Autowired
+	IcommentUpdateService icommentUpdateService;
+	@Autowired
+	IcommentDeleteService icommentDeleteService;
+	
+	
 	@GetMapping("/inquireList")
 	public String list(Model model){
 		inquireListService.execute(model);
@@ -89,6 +96,16 @@ public class InquireController {
 		return "redirect:/inquire/inquireDetail?inquireNum="+icommentCommand.getInquireNum();
 	}
 	
-	
+//    @GetMapping("/icommentUpdate")
+//    public String icommentUpdate(IcommentCommand icommentCommand, HttpSession session) {
+//        icommentUpdateService.execute(icommentCommand, session);
+//        return "redirect:/inquire/inquireDetail?inquireNum=" + icommentCommand.getInquireNum();
+//    }
+  
+    @GetMapping("/icommentDelete")
+    public String icommentDelete(String icommentId, String inquireNum, HttpSession session) {
+        icommentDeleteService.execute(icommentId, inquireNum, session);
+        return "redirect:/inquire/inquireDetail?inquireNum=" + inquireNum;
+    }
 	
 }

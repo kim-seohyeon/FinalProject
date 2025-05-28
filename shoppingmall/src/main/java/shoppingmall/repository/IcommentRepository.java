@@ -26,5 +26,17 @@ public class IcommentRepository {
 		return jdbcTemplate.update(sql, icommentNumAutoSelect(), icommentCommand.getInquireNum(), icommentCommand.getIcommentContent(), icommentCommand.getMemberNum());
 	}
 
+	public int updateComment(IcommentCommand icommentCommand) {
+		String sql = "UPDATE inquire_comment SET icomment_content = ? WHERE icomment_id = ?";
+	    return jdbcTemplate.update(sql, icommentCommand.getIcommentContent(), icommentCommand.getIcommentId());
+
+		
+	}
+
+	public int icommentDelete(String icommentId) {
+	    String sql = "DELETE FROM inquire_comment WHERE icomment_id = ?";
+	    return jdbcTemplate.update(sql, icommentId);
+	}
+
 	
 }

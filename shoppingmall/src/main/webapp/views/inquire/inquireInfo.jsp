@@ -43,17 +43,25 @@
     <!-- 댓글 목록 -->
     <c:if test="${not empty icommentList}">
         <h4>댓글 목록</h4>
-        <ul>
+
             <c:forEach var="icomment" items="${icommentList}">
-                <li>
+
                     <strong>${icomment.memberId}</strong> :
                     ${icomment.icommentContent}
                     <small>
                     <fmt:formatDate value="${icomment.icommentDate}" type="both"/>
                     </small>
-                </li>
+                    <!-- 댓글 수정 / 삭제 -->
+                    <c:if test="${auth != null && auth.userId == icomment.memberId}">
+                    
+                    	<!-- 
+                    	<a href="icommentUpdate?icommentId=${icomment.icommentId}&inquireNum=${icomment.inquireNum}">수정</a>
+						 -->
+						<a href="icommentDelete?icommentId=${icomment.icommentId}&inquireNum=${icomment.inquireNum}" 
+   								onclick="return confirm('댓글을 삭제하시겠어요?');">삭제</a>					</c:if>
+					<br>
             </c:forEach>
-        </ul>
+
     </c:if>
 
     <c:if test="${empty icommentList}">

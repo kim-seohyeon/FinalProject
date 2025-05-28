@@ -72,7 +72,7 @@ public class InquireRepository {
 	}
 
 	public List<IcommentDTO> icommentSelectAllByCommunityNum(String inquireNum) {
-		sql = " SELECT icomment_id AS icomment_Num, inquire_num, icomment_writer,  icomment_content, icomment_date "
+		sql = " SELECT icomment_id , inquire_num, icomment_writer,  icomment_content, icomment_date "
 				+ "       ,member_id, m.member_num"
 				+ " FROM inquire_comment i join members m "
 				+ " on i.member_num = m.member_num "
