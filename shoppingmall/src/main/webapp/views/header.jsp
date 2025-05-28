@@ -60,7 +60,7 @@
                     <a href="/login/logout" class="nav-link">로그아웃</a>
                 </c:when>
                 <c:otherwise>
-                    <a href="/memberJoin/agree" class="nav-link">회원가입</a>
+                    <a href="/register/userAgree" class="nav-link">회원가입</a>
                 </c:otherwise>
             </c:choose>
         </div>
