@@ -13,4 +13,5 @@ public class CommentDTO {
     private Date commentDate;         // 댓글 작성일
     private String memberNum;
     private String memberId;
+
 }

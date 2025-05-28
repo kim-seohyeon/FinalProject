@@ -3,6 +3,7 @@ package shoppingmall.command;
 import java.sql.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Data;
 
@@ -19,6 +20,6 @@ public class CommunityCommand {
 	int likeCount;            
 	String communityComment;
 	String replyComment; 
-	
-	
+	String imagePath;
+	MultipartFile uploadImage;
 }

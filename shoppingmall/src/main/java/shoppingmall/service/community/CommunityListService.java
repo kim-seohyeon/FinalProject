@@ -15,11 +15,11 @@ public class CommunityListService {
 	@Autowired
 	CommunityRepository communityRepository;
 	
-	public void execute(Model model) {
-		List<CommunityDTO> list = communityRepository.commnunitySelectAll();
-	    System.out.println("community List Size: " + list.size()); // 리스트 크기 확인
-		model.addAttribute("list", list);
-	}
-	
+	 public void execute(Model model) {
+	        // 메서드 이름 수정
+	        List<CommunityDTO> list = communityRepository.communitySelectAll();
+	        System.out.println("community List Size: " + list.size()); // 리스트 크기 확인
+	        model.addAttribute("list", list);
+	    }
 	
 }

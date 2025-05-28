@@ -52,7 +52,8 @@
     }
 
     input[type="text"],
-    textarea {
+    textarea,
+    input[type="file"] {
         width: 100%;
         padding: 10px;
         font-size: 14px;
@@ -91,6 +92,12 @@
     .back-link:hover {
         text-decoration: underline;
     }
+
+    small {
+        display: block;
+        margin-top: 4px;
+        color: gray;
+    }
 </style>
 </head>
 <body>
@@ -98,31 +105,46 @@
 <div class="form-container">
     <h2>글 등록</h2>
 
-    <form name="communityForm" action="write" method="post">
+    <!-- enctype 추가! -->
+    <form name="communityForm" action="write" method="post" enctype="multipart/form-data">
         <table>
             <tr>
                 <th>글번호</th>
                 <td>
                     <input type="text" name="communityNum" value="${communityCommand.communityNum}" readonly />
-                    <small style="color: gray;">번호 자동 부여</small>
+                    <small>번호 자동 부여</small>
                 </td>
             </tr>
             <tr>
-           <th>작성자</th>
-   			 <td><input type="text" value="${sessionScope.auth.userId}" readonly /></td>
-                
+                <th>작성자</th>
+                <td>
+                    <input type="text" value="${sessionScope.auth.userId}" readonly />
+                </td>
             </tr>
             <tr>
                 <th>제목</th>
-                <td><input type="text" name="communitySubject" required /></td>
+                <td>
+                    <input type="text" name="communitySubject" required />
+                </td>
             </tr>
             <tr>
                 <th>내용</th>
-                <td><textarea rows="10" name="communityContent" required></textarea></td>
+                <td>
+                    <textarea rows="10" name="communityContent" required></textarea>
+                </td>
+            </tr>
+            <tr>
+                <th>이미지</th>
+                <td>
+                    <input type="file" name="uploadImage" accept="image/*" />
+                    <small>이미지 파일을 선택하세요 (선택사항)</small>
+                </td>
             </tr>
             <tr>
                 <th>등록일</th>
-                <td><span style="color: gray;">자동 등록됩니다</span></td>
+                <td>
+                    <span style="color: gray;">자동 등록됩니다</span>
+                </td>
             </tr>
         </table>
         <input type="submit" value="글 등록" />

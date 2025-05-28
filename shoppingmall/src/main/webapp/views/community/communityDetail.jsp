@@ -36,7 +36,7 @@
         }
         /* 게시글 내용 스타일 */
         .content-area {
-            min-height: 200px; /* 최소 높이 */
+            min-height: 100px; /* 최소 높이 */
             padding: 20px;
             border: 1px solid #ddd;
             border-radius: 8px;
@@ -123,30 +123,38 @@
         a.back-link:hover {
             text-decoration: underline;
         }
+        /* 이미지 스타일 */
+        .post-image {
+            max-width: 400px;  /* 최대 너비 400px */
+            width: 100%;       /* 부모 너비에 맞게 줄어듦 */
+            height: auto;      /* 비율 유지 */
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: block;
+            /* 가운데 정렬 */
+            margin-left: auto;
+            margin-right: auto;
+        }
     </style>
     <script>
+        // 댓글 작성 폼 토글
         function toggleCommentForm() {
             var form = document.getElementById("commentForm");
-            if (form.style.display === "none") {
-                form.style.display = "block";
-            } else {
-                form.style.display = "none";
-            }
+            form.style.display = (form.style.display === "none" || form.style.display === "") ? "block" : "none";
         }
 
+        // 댓글 수정 폼 토글
         function toggleEditForm(commentId) {
             var form = document.getElementById("editForm-" + commentId);
-            if (form.style.display === "none") {
-                form.style.display = "block";
-            } else {
-                form.style.display = "none";
-            }
+            form.style.display = (form.style.display === "none" || form.style.display === "") ? "block" : "none";
         }
     </script>
 </head>
 <body>
 <div class="container">
     <h2>${community.communitySubject}</h2>
+
     <p>작성자: ${community.communityWriter}</p>
     <p>등록일: <fmt:formatDate value="${community.communityDate}" pattern="yyyy-MM-dd" /></p>
 
@@ -160,15 +168,27 @@
         </a>
     </c:if>
 
-    <hr>
-    <!-- 수정된 게시글 내용 영역 -->
+    <hr />
+
     <div class="content-area">${community.communityContent}</div>
-    <hr>
+       
+    <!-- 이미지 경로 -->
+    <c:if test="${not empty community.imagePath}">
+        <img src="${pageContext.request.contextPath}/static/upload/community/${community.imagePath}" alt="이미지" class="post-image" />
+    </c:if>
+
+    <hr />
+
     <h3>댓글</h3>
+
     <c:forEach var="comment" items="${commentList}">
         <div class="comment">
-            <p><strong>${comment.memberId}</strong> | <fmt:formatDate value="${comment.commentDate}" pattern="yyyy-MM-dd HH:mm" /></p>
+            <p>
+                <strong>${comment.memberId}</strong> | 
+                <fmt:formatDate value="${comment.commentDate}" pattern="yyyy-MM-dd HH:mm" />
+            </p>
             <p>${comment.content}</p>
+
             <c:if test="${auth != null && auth.userId == comment.memberId}">
                 <button class="small-btn" onclick="toggleEditForm('${comment.commentNum}')">수정</button>
                 <a href="<c:url value='/community/commentDelete?commentNum=${comment.commentNum}&communityNum=${community.communityNum}' />"
@@ -176,7 +196,6 @@
                     <button class="small-btn" style="background-color: #dc3545;">삭제</button>
                 </a>
 
-                <!-- 인라인 수정 폼 (숨겨진 상태) -->
                 <form id="editForm-${comment.commentNum}" action="<c:url value='/community/commentUpdate' />" method="post" style="display:none; margin-top: 10px;">
                     <input type="hidden" name="commentNum" value="${comment.commentNum}" />
                     <input type="hidden" name="communityNum" value="${community.communityNum}" />

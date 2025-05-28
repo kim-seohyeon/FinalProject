@@ -19,6 +19,7 @@ public class CommunityDTO {
 	int likeCount;            
 	String communityComment;
 	String replyComment; 
+	String imagePath;
 	
 
 }

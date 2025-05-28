@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpSession;
 import shoppingmall.command.CommunityCommand;
@@ -14,13 +15,19 @@ import shoppingmall.domain.CommentDTO;
 import shoppingmall.domain.CommunityDTO;
 import shoppingmall.repository.CommentRepository;
 import shoppingmall.repository.CommunityRepository;
-import shoppingmall.service.community.CommentWriteService;
 import shoppingmall.service.community.CommunityAutoNumService;
 import shoppingmall.service.community.CommunityDetailService;
 import shoppingmall.service.community.CommunityListService;
 import shoppingmall.service.community.CommunityUpdateService;
 import shoppingmall.service.community.CommunityWriteService;
-import shoppingmall.service.comment.CommentUpdateService;  // 새로 추가한 서비스
+import shoppingmall.service.comment.CommentUpdateService;
+import shoppingmall.service.comment.CommentWriteService;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.nio.file.Files;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/community")
@@ -40,7 +47,7 @@ public class CommunityController {
 
     @Autowired
     CommentWriteService commentWriteService;
-    
+
     @Autowired
     CommunityUpdateService communityUpdateService;
 
@@ -49,10 +56,9 @@ public class CommunityController {
 
     @Autowired
     CommentUpdateService commentUpdateService;
-    
+
     @Autowired
     CommentRepository commentRepository;
-
 
     // 커뮤니티 게시글 목록
     @GetMapping("/communityList")
@@ -68,9 +74,37 @@ public class CommunityController {
         return "community/communityForm";
     }
 
-    // 글 작성 저장 처리
     @PostMapping("/write")
     public String submitPost(CommunityCommand communityCommand, HttpSession session) {
+        MultipartFile uploadImage = communityCommand.getUploadImage();
+
+        if (uploadImage != null && !uploadImage.isEmpty()) {
+            try {
+                String originalFileName = uploadImage.getOriginalFilename();
+                String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
+                String storedFileName = UUID.randomUUID().toString().replace("-", "") + extension;
+
+                // 실제 파일 저장 경로 (static 아래)
+                String uploadDirPath = Paths.get("src/main/resources/static/upload/community").toString();
+                File uploadDir = new File(uploadDirPath);
+                if (!uploadDir.exists()) uploadDir.mkdirs();
+
+                File dest = new File(uploadDir, storedFileName);
+				uploadImage.transferTo(dest);
+
+                // DB에 저장할 상대 경로 (주의: /resources 빼고!)
+                String dbPath = "upload/community/" + storedFileName;
+                communityCommand.setImagePath(dbPath);
+
+                System.out.println("DB에 저장될 이미지 경로: " + dbPath);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("이미지 파일이 비어있음. null 저장 예정.");
+        }
+        
+
         communityWriteService.execute(communityCommand, session);
         return "redirect:/community/communityList";
     }
@@ -78,66 +112,54 @@ public class CommunityController {
     // 게시글 상세보기 + 댓글 목록 포함
     @GetMapping("/communityDetail")
     public String detail(String communityNum, Model model, HttpSession session) {
-        communityDetailService.execute(communityNum, model);  // 게시글 + 댓글 서비스 실행
-     // 세션에서 로그인 정보 가져와 model에 넣기 (auth는 JSP에서 사용됨)
+        communityDetailService.execute(communityNum, model);
         AuthInfoDTO auth = (AuthInfoDTO) session.getAttribute("auth");
         model.addAttribute("auth", auth);
-        
         return "community/communityDetail";
     }
 
-    // 루트로 접속하면 목록으로 리다이렉트
     @GetMapping("")
     public String redirectToList() {
         return "redirect:/community/communityList";
     }
 
-    // 댓글 작성 처리 (communityDetail.jsp 내의 form에서 이 경로로 POST 요청)
     @PostMapping("/commentWrite")
     public String commentWrite(CommentDTO commentDTO, HttpSession session) {
         commentWriteService.execute(commentDTO, session);
         return "redirect:/community/communityDetail?communityNum=" + commentDTO.getCommunityNum();
     }
-    
+
     @GetMapping("/update")
     public String showUpdateForm(String communityNum, HttpSession session, Model model) {
-        // 글 상세 정보 가져오기
         communityDetailService.execute(communityNum, model);
-        
-        // 글 정보 꺼내기
         CommunityDTO dto = (CommunityDTO) model.getAttribute("community");
         AuthInfoDTO auth = (AuthInfoDTO) session.getAttribute("auth");
 
         if (dto == null || auth == null || !dto.getCommunityWriter().equals(auth.getUserId())) {
-            // 작성자가 아니면 접근 불가 처리 (목록으로 돌리거나 에러페이지)
             return "redirect:/community/communityList";
         }
-        
-        return "community/communityUpdateForm";  // 수정 폼 JSP
+        return "community/communityUpdateForm";
     }
 
-    // 수정 처리
     @PostMapping("/update")
     public String submitUpdate(CommunityCommand communityCommand, HttpSession session) {
-    	communityUpdateService.execute(communityCommand, session);
+        communityUpdateService.execute(communityCommand, session);
         return "redirect:/community/communityDetail?communityNum=" + communityCommand.getCommunityNum();
     }
-    
+
     @GetMapping("/delete")
     public String deletePost(String communityNum, HttpSession session) {
         AuthInfoDTO auth = (AuthInfoDTO) session.getAttribute("auth");
         CommunityDTO dto = communityRepository.communitySelectOne(communityNum);
 
         if (dto == null || auth == null || !dto.getCommunityWriter().equals(auth.getUserId())) {
-            // 권한 없으면 목록으로 리다이렉트
             return "redirect:/community/communityList";
         }
 
         communityRepository.deleteCommunity(communityNum);
         return "redirect:/community/communityList";
     }
-    
-    // 댓글 수정 처리
+
     @PostMapping("/commentUpdate")
     public String commentUpdate(CommentDTO commentDTO, HttpSession session) {
         commentUpdateService.execute(commentDTO, session);
@@ -146,16 +168,8 @@ public class CommunityController {
 
     @GetMapping("/commentDelete")
     public String commentDelete(String commentNum, String communityNum, HttpSession session) {
-        // 권한 확인 (선택)
         AuthInfoDTO auth = (AuthInfoDTO) session.getAttribute("auth");
-        // 여기서 댓글 작성자와 로그인한 유저를 비교해도 좋아요
-        
-        // 실제 삭제 처리
         commentRepository.deleteComment(commentNum);
-        
-        // 삭제 후 다시 해당 게시글 상세보기로 리다이렉트
         return "redirect:/community/communityDetail?communityNum=" + communityNum;
     }
-
-    
 }
