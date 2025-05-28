@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import shoppingmall.command.IcommentCommand;
 import shoppingmall.command.InquireCommand;
+import shoppingmall.service.icomment.IcommentWriteService;
 import shoppingmall.service.inquire.InquireAutoNumService;
 import shoppingmall.service.inquire.InquireDeleteService;
 import shoppingmall.service.inquire.InquireDetailService;
@@ -33,6 +35,8 @@ public class InquireController {
 	InquireUpdateService inquireUpdateService;
 	@Autowired
 	InquireDeleteService inquireDeleteService;
+	@Autowired
+	IcommentWriteService icommentWriteService;
 
 	@GetMapping("/inquireList")
 	public String list(Model model){
@@ -52,28 +56,39 @@ public class InquireController {
 		return "redirect:/inquire/inquireList";
 	}
 	
+    // 게시글 상세보기 + 댓글 목록 포함
     @GetMapping("/inquireDetail")
-    public String detail(Model model, String inquireNum) {
-        inquireDetailService.execute(model, inquireNum);
+    public String detail(Model model, String inquireNum, HttpSession session) {
+        inquireDetailService.execute(model, inquireNum, session);
         return "inquire/inquireInfo";
     }
     
 	@GetMapping("/inquireUpdate")
-	public String update(Model model, String inquireNum) {
-        inquireDetailService.execute(model, inquireNum);
+	public String update(Model model, String inquireNum, HttpSession session) {
+        inquireDetailService.execute(model, inquireNum, session);
 		return "inquire/inquireModify";
 	}
 	
 	@PostMapping("/inquireModify")
-	public String Update(InquireCommand inquireCommand) {
-	    inquireUpdateService.execute(inquireCommand);
+	public String Update(InquireCommand inquireCommand, HttpSession session) {
+	    inquireUpdateService.execute(inquireCommand, session);
 		return "redirect:/inquire/inquireDetail?inquireNum=" + inquireCommand.getInquireNum();
 
 	}
 	
 	@GetMapping("/inquireDelete")
-	public String delete(String inquireNum) {
-		inquireDeleteService.execute(inquireNum);
+	public String delete(String inquireNum, HttpSession session) {
+		inquireDeleteService.execute(inquireNum, session);
 		return "redirect:/inquire/inquireList";
 	}
+	
+	//댓글
+	@PostMapping("/icommentWrite")
+	public String icommentWrite(IcommentCommand icommentCommand, HttpSession session) {
+		icommentWriteService.execute(icommentCommand, session);
+		return "redirect:/inquire/inquireDetail?inquireNum="+icommentCommand.getInquireNum();
+	}
+	
+	
+	
 }

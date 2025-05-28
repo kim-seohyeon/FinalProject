@@ -7,7 +7,9 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import shoppingmall.domain.CommentDTO;
 import shoppingmall.domain.GoodsDTO;
+import shoppingmall.domain.IcommentDTO;
 import shoppingmall.domain.InquireDTO;
 
 @Repository
@@ -67,6 +69,15 @@ public class InquireRepository {
 
 		sql = " delete from inquire where inquire_num = ?";
 		return jdbcTemplate.update(sql, inquireNum);
+	}
+
+	public List<IcommentDTO> icommentSelectAllByCommunityNum(String inquireNum) {
+		sql = " SELECT icomment_id AS icomment_Num, inquire_num, icomment_writer,  icomment_content, icomment_date "
+				+ "       ,member_id, m.member_num"
+				+ " FROM inquire_comment i join members m "
+				+ " on i.member_num = m.member_num "
+				+ " WHERE inquire_num = ? ORDER BY icomment_date DESC";
+			return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(IcommentDTO.class), inquireNum);
 	}
 	
 
