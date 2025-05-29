@@ -3,6 +3,7 @@ package shoppingmall.repository;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -99,5 +100,14 @@ public class CommunityRepository {
     public int deleteComment(String commentNum) {
         String sql = "DELETE FROM community_comment WHERE comment_id = ?";
         return jdbcTemplate.update(sql, commentNum);
+    }
+    
+    public String selectLike(String communityNum, String memberNum) {
+        String sql = "select '1' from community_like where COMMUNITY_NUM = ? and MEMBER_NUM = ? ";
+        try {
+            return jdbcTemplate.queryForObject(sql, String.class, communityNum, memberNum);
+        } catch (EmptyResultDataAccessException e) {
+            return null; // or return "0"; or return "";
+        }
     }
 }

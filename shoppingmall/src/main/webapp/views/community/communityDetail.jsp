@@ -199,7 +199,7 @@
             <c:when test="${auth != null}">
                 <button type="submit" class="like-btn">
                     <c:choose>
-                        <c:when test="${userLiked}">
+                        <c:when test="${!empty num}">
                             ♥ 좋아요 취소
                         </c:when>
                         <c:otherwise>
@@ -211,7 +211,7 @@
             <c:otherwise>
                 <button type="button" class="like-btn" disabled title="로그인 후 이용 가능합니다">♡ 좋아요</button>
             </c:otherwise>
-        </c:choose>
+        </c:choose>       
         <span class="like-info">${likeCount}명</span>
     </form>
 
@@ -252,6 +252,7 @@
             <label for="content">내용:</label><br/>
             <textarea id="content" name="content" rows="4" required></textarea><br/>
             <input type="submit" value="댓글 등록" />
+            
         </form>
     </div>
 

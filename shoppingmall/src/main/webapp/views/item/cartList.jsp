@@ -15,13 +15,11 @@
         padding: 0;
         color: #333;
     }
-
     .cart-container {
         max-width: 1100px;
         margin: 40px auto;
         padding: 0 20px;
     }
-
     .cart-header, .cart-item {
         display: grid;
         grid-template-columns: 40px 100px 1.5fr 100px 100px 120px 60px;
@@ -32,13 +30,11 @@
         border-radius: 12px;
         box-shadow: 0 2px 6px rgba(0,0,0,0.06);
     }
-
     .cart-header {
         font-weight: 600;
         background-color: #f0f2f5;
         border: 1px solid #ddd;
     }
-
     .cart-item img {
         max-width: 80px;
         max-height: 80px;
@@ -46,14 +42,12 @@
         border-radius: 8px;
         border: 1px solid #ccc;
         background-color: #fff;
-   		padding: 4px;
+        padding: 4px;
     }
-
     .cart-item .product-name {
         font-size: 16px;
         font-weight: 500;
     }
-
     .cart-qty input[type="number"] {
         width: 60px;
         padding: 6px;
@@ -62,14 +56,12 @@
         border-radius: 6px;
         text-align: center;
     }
-
     .cart-price, .cart-total {
         font-weight: 600;
         color: #e60023;
         font-size: 15px;
         text-align: center;
     }
-
     .cart-delete button {
         background-color: #ff4d4f;
         color: #fff;
@@ -80,11 +72,9 @@
         font-size: 13px;
         transition: background-color 0.3s ease;
     }
-
     .cart-delete button:hover {
         background-color: #d9363e;
     }
-
     .total-summary {
         text-align: right;
         font-size: 18px;
@@ -93,12 +83,10 @@
         color: #111;
         padding: 10px;
     }
-
     .cart-actions {
         text-align: right;
         margin: 30px 0;
     }
-
     .cart-actions input {
         background-color: #111;
         color: white;
@@ -110,7 +98,6 @@
         margin-left: 12px;
         transition: background-color 0.3s ease;
     }
-
     .cart-actions input:hover {
         background-color: #333;
     }
@@ -119,10 +106,13 @@
 <script src="https://code.jquery.com/jquery-1.8.1.js"></script>
 <script>
 $(function(){
+    // 전체선택 체크박스 클릭 시
     $("#checkAll").click(function(){
         $("input[name='prodCk']").prop("checked", this.checked);
         updateTotalSummary();
     });
+
+    // 개별 체크박스 클릭 시 전체선택 체크박스 상태 업데이트 및 총액 갱신
     $("input[name='prodCk']").click(function(){
         const total = $("input[name='prodCk']").length;
         const checked = $("input[name='prodCk']:checked").length;
@@ -130,6 +120,7 @@ $(function(){
         updateTotalSummary();
     });
 
+    // 수량 변경 시 AJAX로 수량 업데이트 요청 및 총액 갱신
     $(document).on('change', '.qtyInput', function(){
         const $row = $(this).closest('.cart-item');
         const goodsNum = $row.data('goodsnum');
@@ -144,7 +135,6 @@ $(function(){
                 cartQty: cartQty
             },
             success: function(result){
-            	console.log(result)
                 if(result){
                     $row.find('.totalPrice').text(result.toLocaleString() + "원");
                     updateTotalSummary();
@@ -158,9 +148,11 @@ $(function(){
         });
     });
 
+    // 페이지 로드 시 총액 계산
     updateTotalSummary();
 });
 
+// 총 결제 예상금액 업데이트 함수
 function updateTotalSummary(){
     let sum = 0;
     $("input[name='prodCk']:checked").each(function(){
@@ -171,25 +163,32 @@ function updateTotalSummary(){
     $('.total-summary').text("총 결제 예상금액: " + sum.toLocaleString() + "원");
 }
 
+// 선택한 상품 삭제 처리 함수
 function deleteSelectedItems() {
     var chk_arr = [];
     $("input:checkbox[name='prodCk']:checked").each(function(){
         chk_arr.push($(this).val());
     });
+    if(chk_arr.length === 0){
+        alert("삭제할 상품을 선택해주세요.");
+        return;
+    }
+
     $.ajax({
         type : "post",
         url : "deleteCart",
+        traditional: true,
         data : {goodsNums : chk_arr},
         dataType: "text",
         success:function(result){
             if(result){
                 location.reload();
             }else{
-                location.href="/";
+                alert("삭제 실패했습니다.");
             }
         },
         error:function(){
-            alert("서버오류");
+            alert("서버 오류");
         }
     });
 }

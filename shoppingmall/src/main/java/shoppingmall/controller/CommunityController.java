@@ -1,5 +1,9 @@
 package shoppingmall.controller;
 
+import java.io.File;
+import java.nio.file.Paths;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,19 +19,14 @@ import shoppingmall.domain.CommentDTO;
 import shoppingmall.domain.CommunityDTO;
 import shoppingmall.repository.CommentRepository;
 import shoppingmall.repository.CommunityRepository;
+import shoppingmall.service.comment.CommentUpdateService;
+import shoppingmall.service.comment.CommentWriteService;
 import shoppingmall.service.community.CommunityAutoNumService;
 import shoppingmall.service.community.CommunityDetailService;
+import shoppingmall.service.community.CommunityLikeService;
 import shoppingmall.service.community.CommunityListService;
 import shoppingmall.service.community.CommunityUpdateService;
 import shoppingmall.service.community.CommunityWriteService;
-import shoppingmall.service.comment.CommentUpdateService;
-import shoppingmall.service.comment.CommentWriteService;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.nio.file.Files;
-import java.util.UUID;
 
 @Controller
 @RequestMapping("/community")
@@ -59,7 +58,8 @@ public class CommunityController {
 
     @Autowired
     CommentRepository commentRepository;
-
+    @Autowired
+    CommunityLikeService communityLikeService;
     // 커뮤니티 게시글 목록
     @GetMapping("/communityList")
     public String list(Model model) {
@@ -112,17 +112,25 @@ public class CommunityController {
     // 게시글 상세보기 + 댓글 목록 포함
     @GetMapping("/communityDetail")
     public String detail(String communityNum, Model model, HttpSession session) {
-        communityDetailService.execute(communityNum, model);
+        communityDetailService.execute(communityNum, model, session);
         AuthInfoDTO auth = (AuthInfoDTO) session.getAttribute("auth");
-        model.addAttribute("auth", auth);
+        if (auth != null) {
+            String memberNum = auth.getUserId();
+            boolean userLiked = communityLikeService.hasUserLiked(communityNum, session); // ⭐ 사용자가 좋아요 눌렀는지
+            model.addAttribute("userLiked", userLiked);
+        }
+
+        int likeCount = communityLikeService.getLikeCount(communityNum); // ⭐ 좋아요 수
+        model.addAttribute("likeCount", likeCount);
+
         return "community/communityDetail";
     }
-
+/*
     @GetMapping("")
     public String redirectToList() {
         return "redirect:/community/communityList";
     }
-
+*/
     @PostMapping("/commentWrite")
     public String commentWrite(CommentDTO commentDTO, HttpSession session) {
         commentWriteService.execute(commentDTO, session);
@@ -131,7 +139,7 @@ public class CommunityController {
 
     @GetMapping("/update")
     public String showUpdateForm(String communityNum, HttpSession session, Model model) {
-        communityDetailService.execute(communityNum, model);
+        communityDetailService.execute(communityNum, model,  session);
         CommunityDTO dto = (CommunityDTO) model.getAttribute("community");
         AuthInfoDTO auth = (AuthInfoDTO) session.getAttribute("auth");
 
@@ -173,5 +181,9 @@ public class CommunityController {
         return "redirect:/community/communityDetail?communityNum=" + communityNum;
     }
     
-    
+    @PostMapping("/like")
+    public String like(String communityNum, HttpSession session) {
+    	communityLikeService.toggleLike(communityNum, session);
+    	return "redirect:communityDetail?communityNum="+communityNum;
+    }
 }

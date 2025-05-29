@@ -18,26 +18,29 @@
     }
 
     .container {
-        display: flex;
-        justify-content: space-between;
+        position: relative; /* 위치 기준 잡기 */
         padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+        /* flex 제거, 대신 content-area에 margin-right 적용 */
     }
 
     .content-area {
-        flex: 1;
-        margin-right: 280px; /* 로그인 폼 공간 확보 */
+        /* 로그인 박스 너비 + 여유공간만큼 마진 줘서 겹치지 않게 */
+        margin-right: 300px;
     }
 
     .login-box {
         position: fixed;
         top: 80px;
         right: 20px;
-        width: 250px;
+        width: 260px;
         background: white;
         padding: 20px;
         border: 1px solid #ccc;
         border-radius: 10px;
         box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+        z-index: 1000;
     }
 
     .product-grid {
@@ -75,7 +78,6 @@
     ul li {
         margin: 5px 0;
     }
-
 </style>
 
 <script type="text/javascript">

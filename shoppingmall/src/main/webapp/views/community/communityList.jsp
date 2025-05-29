@@ -7,10 +7,11 @@
     <title>Community List</title>
 
     <style>
+    
         /* 주식 페이지 스타일과 통일된 컨테이너 스타일 */
         .container {
             max-width: 1000px;
-            margin: 0 auto;
+            margin: 0 auto 20px auto;
             padding: 20px;
              /* background-color: white; */
     /* border-radius: 8px; */

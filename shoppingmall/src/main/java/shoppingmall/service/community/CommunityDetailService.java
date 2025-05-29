@@ -6,23 +6,36 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import jakarta.servlet.http.HttpSession;
+import shoppingmall.domain.AuthInfoDTO;
 import shoppingmall.domain.CommentDTO;
 import shoppingmall.domain.CommunityDTO;
+import shoppingmall.domain.MemberDTO;
 import shoppingmall.repository.CommentRepository;
 import shoppingmall.repository.CommunityRepository;
+import shoppingmall.repository.MemberRepository;
 
 @Service
 public class CommunityDetailService {
 
     @Autowired
     CommunityRepository communityRepository;
-
-    public void execute(String communityNum, Model model) {
+    @Autowired
+    MemberRepository memberRepository;
+    public void execute(String communityNum, Model model, HttpSession session) {
         CommunityDTO dto = communityRepository.communitySelectOne(communityNum);
         model.addAttribute("community", dto);
         
+        // 댓글
         List<CommentDTO> commentList = communityRepository.commentSelectAllByCommunityNum(communityNum);
         model.addAttribute("commentList", commentList);
+        
+        // 좋아요
+        AuthInfoDTO auth = (AuthInfoDTO) session.getAttribute("auth");
+        MemberDTO mdto = memberRepository.memberSelectOne(auth.getUserId());
+        String num = communityRepository.selectLike(communityNum, mdto.getMemberNum());
+        
+        model.addAttribute("num", num);
     }
     @Autowired
     CommentRepository commentRepository;
