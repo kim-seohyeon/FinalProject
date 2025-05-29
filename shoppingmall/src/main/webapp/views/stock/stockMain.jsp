@@ -1,161 +1,202 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>주식 메인 페이지</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f0f4f8;
-            color: #333;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #ffffff;
             margin: 0;
             padding: 0;
         }
 
-        .stock-container {
-            max-width: 1200px;
-            margin: 30px auto;
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
             padding: 20px;
-            background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
 
-        h1 {
-            text-align: center;
-            color: #34495e;
-            margin-bottom: 20px;
+        h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            text-align: left;
+            color: #000;
+            margin-bottom: 40px;
         }
 
-        .stock-table {
+        table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-top: 10px;
+            background-color: white;
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.05);
         }
 
-        .stock-table th, .stock-table td {
-            padding: 15px;
-            border: 1px solid #ddd;
+        th, td {
+            padding: 14px 18px;
+            border-bottom: 1px solid #e0e0e0;
             text-align: center;
-            transition: background-color 0.3s;
+            color: #2c3e50;
         }
 
-        .stock-table th {
+        th {
             background-color: #3498db;
             color: white;
+            font-weight: 600;
         }
 
-        .stock-table tr:hover {
-            background-color: #ecf0f1;
+        tr:hover {
+            background-color: #f1f8ff;
+            box-shadow: 0 2px 8px rgba(52, 152, 219, 0.2);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
 
         .toggle-wish {
             background: none;
             border: none;
-            font-size: 28px;
+            font-size: 22px;
             cursor: pointer;
             transition: transform 0.2s;
         }
 
         .toggle-wish:hover {
-            transform: scale(1.2);
-        }
-
-        canvas {
-            margin-top: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transform: scale(1.3);
         }
 
         .wish-stock-list {
-            margin-top: 40px;
+            margin-top: 50px;
             padding: 20px;
-            background: #ecf0f1;
+            background: #ffffff;
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
         }
 
         .wish-stock-list h3 {
-            color: #34495e;
+            font-size: 1.3rem;
             margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .wish-stock-list a {
+            color: #3498db;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .wish-stock-list a:hover {
+            text-decoration: underline;
         }
 
         .wish-stock-list ul {
-            list-style-type: none;
+            list-style: none;
             padding: 0;
+            margin-top: 10px;
         }
 
         .wish-stock-list li {
             padding: 10px 0;
-            border-bottom: 1px solid #ddd;
-            transition: background-color 0.3s;
+            border-bottom: 1px solid #eaeaea;
         }
 
-        .wish-stock-list li:hover {
-            background-color: #dfe6e9;
-        }
-
-        .wish-stock-list li:last-child {
-            border-bottom: none;
+        canvas {
+            margin-top: 40px;
+            width: 100%;
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
         }
 
         .footer {
             text-align: center;
-            margin-top: 30px;
+            margin: 60px 0 20px 0;
+            font-size: 14px;
             color: #7f8c8d;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: 95%;
+            }
+
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+
+            thead tr {
+                display: none;
+            }
+
+            tr {
+                margin-bottom: 15px;
+                border-bottom: 2px solid #eee;
+                padding-bottom: 10px;
+            }
+
+            td {
+                text-align: left;
+                padding: 10px;
+                position: relative;
+            }
+
+            td::before {
+                content: attr(data-label);
+                font-weight: bold;
+                display: inline-block;
+                width: 100px;
+                color: #555;
+            }
         }
     </style>
 </head>
 <body>
 <jsp:include page="/views/header.jsp" />
 
-<div class="stock-container">
-    <h1>주식 정보 메인 페이지</h1>
+<div class="container">
+    <h2>주식 정보 메인 페이지 📈</h2>
 
-    <table class="stock-table">
+    <table>
         <thead>
             <tr>
                 <th>종목명</th>
                 <th>현재가</th>
-                <th>찜 상태</th>
+                <th>찜</th>
             </tr>
         </thead>
         <tbody>
             <tr data-stock-code="001">
-                <td>삼성전자</td>
-                <td>78,400원</td>
-                <td><button class="toggle-wish">❤️</button></td>
+                <td data-label="종목명">삼성전자</td>
+                <td data-label="현재가">78,400원</td>
+                <td data-label="찜"><button class="toggle-wish">❤️</button></td>
             </tr>
             <tr data-stock-code="002">
-                <td>LG에너지솔루션</td>
-                <td>408,000원</td>
-                <td><button class="toggle-wish">❤️</button></td>
+                <td data-label="종목명">LG에너지솔루션</td>
+                <td data-label="현재가">408,000원</td>
+                <td data-label="찜"><button class="toggle-wish">❤️</button></td>
             </tr>
-            <!-- 추가 종목 예시 -->
             <tr data-stock-code="003">
-                <td>카카오</td>
-                <td>105,000원</td>
-                <td><button class="toggle-wish">❤️</button></td>
+                <td data-label="종목명">카카오</td>
+                <td data-label="현재가">105,000원</td>
+                <td data-label="찜"><button class="toggle-wish">❤️</button></td>
             </tr>
             <tr data-stock-code="004">
-                <td>네이버</td>
-                <td>360,000원</td>
-                <td><button class="toggle-wish">❤️</button></td>
+                <td data-label="종목명">네이버</td>
+                <td data-label="현재가">360,000원</td>
+                <td data-label="찜"><button class="toggle-wish">❤️</button></td>
             </tr>
         </tbody>
     </table>
 
     <div class="wish-stock-list">
         <h3>⭐ 내 관심 주식</h3>
-        <a href="/stock/wishlist">관심주식</a>
+        <a href="/stock/wishlist">→ 관심주식 페이지로 이동</a>
         <ul id="wishStockList">
             <c:forEach var="wish" items="${wishStocks}">
                 <li>${wish.stockNum}</li>
@@ -163,28 +204,21 @@
         </ul>
     </div>
 
-    <canvas id="stockChart" width="800" height="400"></canvas>
+    <canvas id="stockChart" height="400"></canvas>
 </div>
 
 <script>
     $(document).ready(function () {
-        // 찜 상태 목록을 가져옵니다.
         const wishStocks = new Set();
         <c:forEach var="wish" items="${wishStocks}">
             wishStocks.add('${wish.stockNum}');
         </c:forEach>
 
-        // 각 버튼의 상태를 초기화합니다.
         $(".toggle-wish").each(function () {
             const stockCode = $(this).closest("tr").data("stock-code");
-            if (wishStocks.has(stockCode)) {
-                $(this).text("❤️"); // 찜 상태
-            } else {
-                $(this).text("💔"); // 찜 아님
-            }
+            $(this).text(wishStocks.has(stockCode) ? "❤️" : "💔");
         });
 
-        // 찜 상태 토글 기능
         $(".toggle-wish").on("click", function () {
             const row = $(this).closest("tr");
             const stockCode = row.data("stock-code");
@@ -197,13 +231,12 @@
                 success: function (res) {
                     alert(res.message);
                     refreshWishList(res.wishStocks);
-                    
-                    // 버튼 상태 변경
+
                     if (wishStocks.has(stockCode)) {
-                        btn.text("💔"); // 찜에서 제거됨
+                        btn.text("💔");
                         wishStocks.delete(stockCode);
                     } else {
-                        btn.text("❤️"); // 찜 추가됨
+                        btn.text("❤️");
                         wishStocks.add(stockCode);
                     }
                 },
@@ -222,7 +255,6 @@
         }
     });
 
-    // 차트
     const ctx = document.getElementById('stockChart').getContext('2d');
     const stockChart = new Chart(ctx, {
         type: 'line',
@@ -241,7 +273,6 @@
             responsive: true,
             plugins: {
                 legend: {
-                    display: true,
                     labels: {
                         color: '#34495e'
                     }
@@ -255,6 +286,6 @@
     <p>© 2025 주식 정보 시스템. 모든 권리 보유.</p>
 </div>
 
-<%@ include file="/views/footer.jsp" %>
+<jsp:include page="/views/footer.jsp" />
 </body>
 </html>
