@@ -58,8 +58,10 @@ public class CommunityController {
 
     @Autowired
     CommentRepository commentRepository;
+
     @Autowired
     CommunityLikeService communityLikeService;
+
     // 커뮤니티 게시글 목록
     @GetMapping("/communityList")
     public String list(Model model) {
@@ -84,15 +86,13 @@ public class CommunityController {
                 String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
                 String storedFileName = UUID.randomUUID().toString().replace("-", "") + extension;
 
-                // 실제 파일 저장 경로 (static 아래)
                 String uploadDirPath = Paths.get("src/main/resources/static/upload/community").toString();
                 File uploadDir = new File(uploadDirPath);
                 if (!uploadDir.exists()) uploadDir.mkdirs();
 
                 File dest = new File(uploadDir, storedFileName);
-				uploadImage.transferTo(dest);
+                uploadImage.transferTo(dest);
 
-                // DB에 저장할 상대 경로 (주의: /resources 빼고!)
                 String dbPath = "upload/community/" + storedFileName;
                 communityCommand.setImagePath(dbPath);
 
@@ -103,7 +103,6 @@ public class CommunityController {
         } else {
             System.out.println("이미지 파일이 비어있음. null 저장 예정.");
         }
-        
 
         communityWriteService.execute(communityCommand, session);
         return "redirect:/community/communityList";
@@ -115,22 +114,16 @@ public class CommunityController {
         communityDetailService.execute(communityNum, model, session);
         AuthInfoDTO auth = (AuthInfoDTO) session.getAttribute("auth");
         if (auth != null) {
-            String memberNum = auth.getUserId();
-            boolean userLiked = communityLikeService.hasUserLiked(communityNum, session); // ⭐ 사용자가 좋아요 눌렀는지
+            boolean userLiked = communityLikeService.hasUserLiked(communityNum, session);
             model.addAttribute("userLiked", userLiked);
         }
 
-        int likeCount = communityLikeService.getLikeCount(communityNum); // ⭐ 좋아요 수
+        int likeCount = communityLikeService.getLikeCount(communityNum);
         model.addAttribute("likeCount", likeCount);
 
         return "community/communityDetail";
     }
-/*
-    @GetMapping("")
-    public String redirectToList() {
-        return "redirect:/community/communityList";
-    }
-*/
+
     @PostMapping("/commentWrite")
     public String commentWrite(CommentDTO commentDTO, HttpSession session) {
         commentWriteService.execute(commentDTO, session);
@@ -139,7 +132,7 @@ public class CommunityController {
 
     @GetMapping("/update")
     public String showUpdateForm(String communityNum, HttpSession session, Model model) {
-        communityDetailService.execute(communityNum, model,  session);
+        communityDetailService.execute(communityNum, model, session);
         CommunityDTO dto = (CommunityDTO) model.getAttribute("community");
         AuthInfoDTO auth = (AuthInfoDTO) session.getAttribute("auth");
 
@@ -174,16 +167,18 @@ public class CommunityController {
         return "redirect:/community/communityDetail?communityNum=" + commentDTO.getCommunityNum();
     }
 
-    @GetMapping("/commentDelete")
+    // 여기서 GET -> POST 변경
+    @PostMapping("/commentDelete")
     public String commentDelete(String commentNum, String communityNum, HttpSession session) {
         AuthInfoDTO auth = (AuthInfoDTO) session.getAttribute("auth");
+        // 필요시 인증 체크 추가 가능
         commentRepository.deleteComment(commentNum);
         return "redirect:/community/communityDetail?communityNum=" + communityNum;
     }
-    
+
     @PostMapping("/like")
     public String like(String communityNum, HttpSession session) {
-    	communityLikeService.toggleLike(communityNum, session);
-    	return "redirect:communityDetail?communityNum="+communityNum;
+        communityLikeService.toggleLike(communityNum, session);
+        return "redirect:communityDetail?communityNum=" + communityNum;
     }
 }

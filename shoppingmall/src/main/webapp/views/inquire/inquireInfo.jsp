@@ -21,16 +21,16 @@
         margin: 50px auto;
         background: #fff;
         padding: 40px;
-        border-radius: none;
+        border-radius: 0;
         box-shadow: none;
     }
     h2 {
-        font-size: 1.6rem;
-        margin-bottom: 30px;
-        border-bottom: 2px solid #0077cc;
-        padding-bottom: 10px;
-        color: #2c3e50;
-        text-align: left;
+            font-size: 1.6rem;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #0077cc;
+            padding-bottom: 10px;
+            color: #2c3e50;
+            font-weight: 700;
     }
     table.detail-table {
         width: 100%;
@@ -51,7 +51,7 @@
     }
     .action-links {
         text-align: center;
-        margin-top: 20px;
+        margin-top: 50px;
     }
     .action-links a {
         display: inline-block;
@@ -59,20 +59,27 @@
         color: #0077cc;
         text-decoration: none;
         font-weight: 500;
+        font-size: 15px;
     }
     .action-links a:hover {
         text-decoration: underline;
     }
+    p {
+        margin: 8px 0;
+        font-weight: 500;
+    }
+    hr {
+        border: none;
+        border-top: 1px solid #ddd;
+        margin: 30px 0;
+    }
 
     .comment-section {
-        margin-top: 40px;
+        margin-top: 10px;
+        display: none;
     }
-    .comment-section h4 {
-        font-size: 1.2rem;
-        margin-bottom: 15px;
-        color: #0077cc;
-        border-bottom: 1px solid #ddd;
-        padding-bottom: 5px;
+    h3 {
+        margin-top: 0;
     }
     textarea {
         width: 100%;
@@ -84,14 +91,17 @@
         margin-bottom: 10px;
     }
     .btn-submit {
-        padding: 10px 20px;
-        background: #0077cc;
+        background-color: #0077cc;
         color: white;
         border: none;
+        padding: 5px 10px;
         border-radius: 6px;
-        font-weight: 600;
         cursor: pointer;
-        transition: background 0.3s;
+        font-weight: 600;
+        font-size: 10px;
+        margin-top: 10px;
+        margin-right: 6px;
+        transition: background-color 0.3s;
     }
     .btn-submit:hover {
         background: #005fa3;
@@ -103,28 +113,69 @@
         border-radius: 6px;
         border: 1px solid #e1e4e8;
     }
+    .comment p {
+        margin: 4px 0;
+    }
     .comment strong {
-        color: #2c3e50;
+        font-weight: 700;
     }
-    .comment small {
-        color: #888;
-        margin-left: 10px;
-    }
-    .comment a {
-        color: #cc0000;
+
+    .delete-link {
+        color: #0077cc;
         text-decoration: none;
+        font-weight: 500;
+        cursor: pointer;
         margin-left: 10px;
+        font-size: 12px;
+        vertical-align: middle;
     }
-    .comment a:hover {
+    .delete-link:hover {
         text-decoration: underline;
     }
+    .delete-link .icon {
+        margin-right: 4px;
+        vertical-align: middle;
+    }
+    #toggleCommentBtn {
+        background: none;
+        border: none;
+        color: #0077cc;
+        font-weight: 600;
+        cursor: pointer;
+        font-size: 14px;
+        margin-top: 10px;
+        display: inline-flex;
+        align-items: center;
+        padding: 0;
+        transition: color 0.3s;
+    }
+    #toggleCommentBtn:hover {
+        color: #005fa3;
+        text-decoration: underline;
+    }
+    #toggleCommentBtn .icon {
+        margin-right: 6px;
+        font-size: 16px;
+    }
 </style>
+<script>
+    function toggleCommentForm() {
+        var form = document.getElementById("comment-section");
+        if (!form) return;
+        form.style.display = (form.style.display === "none" || form.style.display === "") ? "block" : "none";
+    }
+    function toggleEditForm(commentId) {
+        var form = document.getElementById("editForm-" + commentId);
+        if (!form) return;
+        form.style.display = (form.style.display === "none" || form.style.display === "") ? "block" : "none";
+    }
+</script>
 </head>
 <body>
 <jsp:include page="/views/header.jsp" />
 
 <div class="container">
-    <h2>글 상세보기</h2>
+    <h2>문의내역 확인</h2>
     <table class="detail-table">
         <tr><th>글 번호</th><td>${dto.inquireNum}</td></tr>
         <tr><th>작성자</th><td>${dto.inquireWriter}</td></tr>
@@ -137,38 +188,47 @@
         <a href="inquireDelete?inquireNum=${dto.inquireNum}" onclick="return confirm('글을 삭제하시겠습니까?');">글 삭제</a> |
         <a href="inquireList">글 목록</a>
     </div>
+    <hr>
 
-    <div class="comment-section">
-        <h4>댓글 작성</h4>
+    <button id="toggleCommentBtn" onclick="toggleCommentForm()">
+        <span class="icon">✏️</span> 댓글 작성
+    </button>
+
+    <div id="comment-section" class="comment-section">
         <form action="icommentWrite" method="post">
             <input type="hidden" name="inquireNum" value="${dto.inquireNum}" />
-            <textarea name="icommentContent" rows="3" placeholder="댓글을 입력하세요" required></textarea>
-            <br>
-            <button type="submit" class="btn-submit">댓글 작성</button>
+            <textarea id="icommentContent" name="icommentContent" rows="4" required></textarea><br/>
+            <input type="submit" value="댓글 등록" class="btn-submit" />
         </form>
-
-        <br>
-
-        <c:choose>
-            <c:when test="${not empty icommentList}">
-                <h4>댓글 목록</h4>
-                <c:forEach var="icomment" items="${icommentList}">
-                    <div class="comment">
-                        <strong>${icomment.memberId}</strong>
-                        ${icomment.icommentContent}
-                        <small><fmt:formatDate value="${icomment.icommentDate}" type="both"/></small>
-                        <c:if test="${auth != null && auth.userId == icomment.memberId}">
-                            <a href="icommentDelete?icommentId=${icomment.icommentId}&inquireNum=${icomment.inquireNum}" 
-                               onclick="return confirm('댓글을 삭제하시겠어요?');">삭제</a>
-                        </c:if>
-                    </div>
-                </c:forEach>
-            </c:when>
-            <c:otherwise>
-                <p>작성된 댓글이 없습니다.</p>
-            </c:otherwise>
-        </c:choose>
     </div>
+    <hr>
+    <br>
+    <h3>댓글</h3>
+    <c:choose>
+        <c:when test="${not empty icommentList}">
+            <c:forEach var="icomment" items="${icommentList}">
+                <div class="comment">
+                <p>
+                    <strong>${icomment.memberId}</strong> |
+                    <fmt:formatDate value="${icomment.icommentDate}" pattern="yyyy-MM-dd HH:mm"/>
+                    <c:if test="${auth != null && auth.userId == icomment.memberId}">
+                        <span class="icon">
+                        <a href="icommentDelete?icommentId=${icomment.icommentId}&inquireNum=${icomment.inquireNum}" 
+                           class="delete-link"
+                           onclick="return confirm('댓글을 삭제하시겠어요?');">
+                            🗑️삭제
+                        </a>
+                        </span>
+                    </c:if>
+                    </p>
+                    <p>${icomment.icommentContent}</p>
+                </div>
+            </c:forEach>
+        </c:when>
+        <c:otherwise>
+            <p>작성된 댓글이 없습니다.</p>
+        </c:otherwise>
+    </c:choose>
 </div>
 
 <%@ include file="/views/footer.jsp" %>

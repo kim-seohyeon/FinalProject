@@ -28,11 +28,17 @@
         text-decoration: none;
         color: #333;
         font-weight: bold;
-        transition: color 0.2s;
+        transition: color 0.2s, border-bottom 0.2s;
+        padding-bottom: 4px;
     }
 
     .nav-link:hover {
         color: #007bff;
+    }
+
+    .nav-link.active {
+        color: #007bff;
+        border-bottom: 2px solid #007bff;
     }
 
     .logo {
@@ -47,20 +53,20 @@
     <div class="nav-bar">
         <div class="nav-left">
             <a href="/" class="logo">홈</a>
-            <a href="/item/cartList" class="nav-link">장바구니</a>
-            <a href="/community/communityList" class="nav-link">커뮤니티</a>
-            <a href="/library" class="nav-link">자료실</a>
-            <a href="/inquire/inquireList" class="nav-link">문의하기</a>
-            <a href="/stock/main" class="nav-link">주식</a>
+            <a href="/item/cartList" class="nav-link ${pageName == 'cart' ? 'active' : ''}">장바구니</a>
+            <a href="/community/communityList" class="nav-link ${pageName == 'community' ? 'active' : ''}">커뮤니티</a>
+            <a href="/library" class="nav-link ${pageName == 'library' ? 'active' : ''}">자료실</a>
+            <a href="/inquire/inquireList" class="nav-link ${pageName == 'inquire' ? 'active' : ''}">문의하기</a>
+            <a href="/stock/main" class="nav-link ${pageName == 'stock' ? 'active' : ''}">주식</a>
         </div>
         <div class="nav-right">
             <c:choose>
                 <c:when test="${not empty sessionScope.auth}">
-                    <a href="/myPage/memberMyPage" class="nav-link">마이페이지</a>
+                    <a href="/myPage/memberMyPage" class="nav-link ${pageName == 'mypage' ? 'active' : ''}">마이페이지</a>
                     <a href="/login/logout" class="nav-link">로그아웃</a>
                 </c:when>
                 <c:otherwise>
-                    <a href="/register/userAgree" class="nav-link">회원가입</a>
+                    <a href="/register/userAgree" class="nav-link ${pageName == 'register' ? 'active' : ''}">회원가입</a>
                 </c:otherwise>
             </c:choose>
         </div>

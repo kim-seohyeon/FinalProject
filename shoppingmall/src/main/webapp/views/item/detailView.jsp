@@ -12,7 +12,7 @@
 <style>
     body {
         font-family: 'Segoe UI', sans-serif;
-        background-color: #f5f5f5;
+        background-color: #ffffff;
         margin: 0;
         padding: 0;
     }

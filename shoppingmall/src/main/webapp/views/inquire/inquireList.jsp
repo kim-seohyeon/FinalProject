@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -25,16 +26,10 @@
             font-weight: 700;
             text-align: left;
             color: #000;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
         }
 
-        .top-bar {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 20px;
-        }
-
-        .top-bar a {
+        .write-button {
             display: inline-block;
             padding: 10px 20px;
             background-color: #3498db;
@@ -43,10 +38,11 @@
             text-decoration: none;
             border-radius: 6px;
             font-weight: bold;
+            margin-bottom: 20px;
             transition: background-color 0.3s;
         }
 
-        .top-bar a:hover {
+        .write-button:hover {
             background-color: #2980b9;
         }
 
@@ -90,22 +86,6 @@
             text-decoration: underline;
         }
 
-        .pagination {
-            text-align: center;
-            padding: 30px 0;
-        }
-
-        .pagination a, .pagination span {
-            margin: 0 5px;
-            text-decoration: none;
-            color: #2980b9;
-            font-weight: bold;
-        }
-
-        .pagination span {
-            color: #7f8c8d;
-        }
-
         .footer {
             text-align: center;
             margin: 60px 0 20px 0;
@@ -147,12 +127,7 @@
                 color: #555;
             }
 
-            .top-bar {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .top-bar a {
+            .write-button {
                 width: 100%;
                 margin-bottom: 10px;
             }
@@ -163,11 +138,9 @@
 <jsp:include page="/views/header.jsp" />
 
 <div class="container">
-    <h2>문의글 목록 ✉️</h2>
+    <h2>문의내역 목록 ✉️</h2>
 
-    <div class="top-bar">
-        <a href="write">문의글 쓰기</a>
-    </div>
+    <a href="write" class="write-button">✏️ 문의 하기</a>
 
     <table>
         <thead>
@@ -175,32 +148,26 @@
             <th>번호</th>
             <th>작성자</th>
             <th>제목</th>
+            <th>등록일</th>
         </tr>
         </thead>
         <tbody>
         <c:forEach items="${list}" var="dto" varStatus="idx">
             <tr>
                 <td data-label="번호">${idx.count}</td>
-                <td data-label="작성자">
+                <td data-label="작성자">${dto.inquireWriter}</td>
+                <td data-label="제목">
                     <a href="<c:url value='/inquire/inquireDetail?inquireNum=${dto.inquireNum}' />">
-                        ${dto.inquireWriter}
+                        ${dto.inquireSubject}
                     </a>
                 </td>
-                <td data-label="제목">${dto.inquireSubject}</td>
+                <td data-label="등록일">
+                    <fmt:formatDate value="${dto.inquireDate}" pattern="yyyy-MM-dd" />
+                </td>
             </tr>
         </c:forEach>
         </tbody>
     </table>
-
-    <!-- 페이징 처리가 필요할 경우 아래 영역 추가 -->
-    <%-- 
-    <div class="pagination">
-        <a href="#">[이전]</a>
-        <a href="#">1</a>
-        <a href="#">2</a>
-        <span>[다음]</span>
-    </div>
-    --%>
 </div>
 
 <div class="footer">

@@ -10,7 +10,7 @@
 <style>
     body {
         font-family: 'Inter', sans-serif;
-        background-color: #f5f6f8;
+        background-color: #ffffff;
         margin: 0;
         padding: 0;
         color: #333;

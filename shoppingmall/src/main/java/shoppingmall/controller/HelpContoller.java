@@ -57,7 +57,14 @@ public class HelpContoller {
 	
 	@PostMapping("/findId")
 	public String findId(String userPhone, Model model) {
+		try {
 		findIdService.execute(userPhone, model);
+		
+		}
+		catch (Exception e) {
+			model.addAttribute("msg", "오류가 발생되었습니다.");
+			e.printStackTrace();
+		}
 		return "help/findIdOk";
 	}
 }
