@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
@@ -34,38 +33,38 @@
     }
 
     .section-title {
-       		font-size: 2rem;
-            font-weight: 700;
-            text-align: center;
-    		margin-left: -730px; /* 추가, 값은 조정 가능 */
-            color: #000;
-            margin-bottom: 50px;
-            text-shadow: none;
-            letter-spacing: normal;
-        }
+        font-size: 2rem;
+        font-weight: 700;
+        text-align: center;
+        margin-left: -730px;
+        color: #000;
+        margin-bottom: 50px;
+        text-shadow: none;
+        letter-spacing: normal;
+    }
 
     .button-group {
         display: flex;
         justify-content: center;
-        margin-left: -800px; 
+        margin-left: -800px;
         gap: 10px;
         margin-bottom: 30px;
     }
 
-   .button-group a {
-    display: inline-block;
-    padding: 6px 14px;        /* 기존 10px 20px에서 작게 조절 */
-    background-color: #ADD8E6;; /* 연한 블루색 */
-    color: white;
-    border-radius: 6px;
-    font-size: 12px;          /* 기존 14px에서 작게 */
-    transition: background-color 0.3s;
-}
+    .button-group a {
+        display: inline-block;
+        padding: 6px 14px;
+        background-color: #ADD8E6;
+        color: white;
+        border-radius: 6px;
+        font-size: 12px;
+        transition: background-color 0.3s;
+    }
 
-.button-group a:hover {
-    background-color: #7FBFEF; /* 살짝 진한 블루로 호버 */
-    color: white;
-}
+    .button-group a:hover {
+        background-color: #7FBFEF;
+        color: white;
+    }
 
     .product-grid {
         display: flex;
@@ -81,23 +80,41 @@
         border-radius: 12px;
         box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         overflow: hidden;
-        transition: transform 0.2s;
+        transition: all 0.3s ease-in-out;
     }
 
     .product-item:hover {
-        transform: translateY(-5px);
+        transform: translateY(-6px);
+        box-shadow: 0 6px 15px rgba(0,0,0,0.12);
     }
 
     .product-item img {
         width: 100%;
         height: 180px;
-        object-fit: cover;
+        object-fit: contain;
+        background-color: #ffffff;
+        padding: 10px;
     }
 
-    .product-item div {
-        padding: 10px;
+    .product-name {
+        padding: 8px 6px 4px;
         font-size: 14px;
+        font-weight: 500;
         text-align: center;
+        word-break: keep-all;
+        height: 36px;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+
+    .product-price {
+        font-size: 16px;
+        color: #e74c3c;
+        font-weight: bold;
+        text-align: center;
+        padding-bottom: 10px;
     }
 
     #more {
@@ -159,30 +176,30 @@
 
 <script type="text/javascript">
 $(function(){
-	page = 1;
-	$("#load-more").click(function(){
-		page++;
-		$.ajax({
-			url:"loadMore",
-			type: "post",
-			data: {"page":page},
-			dataType: "json",
-			success: function(model){
-				var item = "";
-				$.each(model.list , function(idx, dto){
-					item += '<div class="product-item">';
-					item += '<a href="goodsDetail?goodsNum='+dto.goodsNum+'">';
-					item += '<img src="/static/goodsUpload/'+dto.goodsImageStoreName+'" />';
-					item += '<div>'+dto.goodsSubject+'</div>';
-					item += '<div>'+dto.goodsWriter+'</div>';
-					item += '</a>';
-					item += '</div>';
-				});
-				$("#product-list").append(item);
-				if(model.maxPage <= page) $("#more").hide();
-			}
-		});
-	});
+    page = 1;
+    $("#load-more").click(function(){
+        page++;
+        $.ajax({
+            url:"loadMore",
+            type: "post",
+            data: {"page":page},
+            dataType: "json",
+            success: function(model){
+                var item = "";
+                $.each(model.list , function(idx, dto){
+                    item += '<div class="product-item">';
+                    item += '<a href="goodsDetail?goodsNum='+dto.goodsNum+'">';
+                    item += '<img src="/static/goodsUpload/'+dto.goodsImageStoreName+'" />';
+                    item += '<div class="product-name">'+dto.goodsSubject+'</div>';
+                    item += '<div class="product-price">'+dto.goodsPrice+'원</div>';
+                    item += '</a>';
+                    item += '</div>';
+                });
+                $("#product-list").append(item);
+                if(model.maxPage <= page) $("#more").hide();
+            }
+        });
+    });
 });
 </script>
 </head>
@@ -205,8 +222,8 @@ $(function(){
                 <div class="product-item">
                     <a href="/item/detailView?goodsNum=${dto.goodsNum}">
                         <img src="/static/goodsUpload/${dto.goodsMainStoreImage}" />
-                        <div>${dto.goodsName}</div>
-                        <div><strong>${dto.goodsPrice}원</strong></div>
+                        <div class="product-name">${dto.goodsName}</div>
+                        <div class="product-price">${dto.goodsPrice}원</div>
                     </a>
                 </div>
             </c:forEach>
