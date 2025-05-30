@@ -92,5 +92,10 @@ public class StockController {
         response.put("wishStocks", stockService.getWishStocks(memberNum));
         return response;
     }
+    
+    @GetMapping("/timeseries")
+    public String showTimeseriesPage() {
+        return "stock/timeseries"; // → /WEB-INF/views/stock/timeseries.jsp 로 이동
+    }
 
 }

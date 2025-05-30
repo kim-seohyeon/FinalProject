@@ -114,12 +114,12 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.05);
         }
 
-        .footer {
+/*         .footer {
             text-align: center;
             margin: 60px 0 20px 0;
             font-size: 14px;
             color: #7f8c8d;
-        }
+        } */
 
         @media (max-width: 600px) {
             .container {
@@ -280,12 +280,27 @@
             }
         }
     });
+    
 </script>
 
-<div class="footer">
-    <p>© 2025 주식 정보 시스템. 모든 권리 보유.</p>
+<div class="chart-navigation" style="text-align:center; margin-top: 20px;">
+    <a href="/stock/timeseries" style="
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #3498db;
+        color: white;
+        font-weight: 600;
+        text-decoration: none;
+        border-radius: 6px;
+        transition: background-color 0.3s ease;">
+        📅 일별/실시간 시세 보기
+    </a>
 </div>
 
+<!-- <div class="footer">
+    <p>© 2025 주식 정보 시스템. 모든 권리 보유.</p>
+</div>
+ -->
 <jsp:include page="/views/footer.jsp" />
 </body>
 </html>
