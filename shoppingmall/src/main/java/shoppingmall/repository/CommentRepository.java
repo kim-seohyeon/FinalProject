@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import shoppingmall.domain.CommentDTO;
+import shoppingmall.domain.CommunityDTO;
 
 @Repository
 public class CommentRepository {
@@ -51,5 +52,4 @@ public class CommentRepository {
 	    String sql = "DELETE FROM community_comment WHERE comment_id = ?";
 	    return jdbcTemplate.update(sql, commentNum);
 	}
-
 }

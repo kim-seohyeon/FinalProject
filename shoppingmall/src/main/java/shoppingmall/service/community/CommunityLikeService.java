@@ -1,10 +1,13 @@
 package shoppingmall.service.community;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.servlet.http.HttpSession;
 import shoppingmall.domain.AuthInfoDTO;
+import shoppingmall.domain.CommunityDTO;
 import shoppingmall.domain.MemberDTO;
 import shoppingmall.repository.LikeRepository;
 import shoppingmall.repository.MemberRepository;
@@ -45,4 +48,8 @@ public class CommunityLikeService {
         String memberNum = dto.getMemberNum();
         return likeRepository.hasUserLiked(communityNum, memberNum);
     }
+    public List<CommunityDTO> getLikedPosts(String memberNum) {
+        return likeRepository.findLikedPostsByMember(memberNum);
+    }
+
 }

@@ -25,4 +25,5 @@ public class CommentWriteService {
     	commentDTO.setMemberNum(dto.getMemberNum());
         commentRepository.commentInsert(commentDTO);
     }
+    
 }

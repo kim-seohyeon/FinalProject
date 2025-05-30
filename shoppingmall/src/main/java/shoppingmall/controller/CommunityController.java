@@ -2,6 +2,7 @@ package shoppingmall.controller;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,10 @@ import shoppingmall.command.CommunityCommand;
 import shoppingmall.domain.AuthInfoDTO;
 import shoppingmall.domain.CommentDTO;
 import shoppingmall.domain.CommunityDTO;
+import shoppingmall.domain.MemberDTO;
 import shoppingmall.repository.CommentRepository;
 import shoppingmall.repository.CommunityRepository;
+import shoppingmall.repository.MemberRepository;
 import shoppingmall.service.comment.CommentUpdateService;
 import shoppingmall.service.comment.CommentWriteService;
 import shoppingmall.service.community.CommunityAutoNumService;
@@ -61,6 +64,9 @@ public class CommunityController {
 
     @Autowired
     CommunityLikeService communityLikeService;
+    
+    @Autowired
+    MemberRepository memberRepository;
 
     // 커뮤니티 게시글 목록
     @GetMapping("/communityList")
@@ -181,4 +187,18 @@ public class CommunityController {
         communityLikeService.toggleLike(communityNum, session);
         return "redirect:communityDetail?communityNum=" + communityNum;
     }
+    @GetMapping("/myActivity")
+    public String myActivity() {
+        // 내 활동 페이지 (버튼만 있는 페이지)
+        return "community/myActivity"; 
+    }
+    @GetMapping("/myLikesPosts")
+    public String myLikedPosts(Model model, HttpSession session) {
+        AuthInfoDTO auth = (AuthInfoDTO)session.getAttribute("auth");
+        MemberDTO member = memberRepository.memberSelectOne(auth.getUserId());
+        List<CommunityDTO> likedPosts = communityLikeService.getLikedPosts(member.getMemberNum());
+        model.addAttribute("likedPosts", likedPosts);
+        return "community/myLikedPosts";
+    }
+
 }

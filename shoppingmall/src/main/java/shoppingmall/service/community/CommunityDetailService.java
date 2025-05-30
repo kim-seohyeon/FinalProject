@@ -22,6 +22,8 @@ public class CommunityDetailService {
     CommunityRepository communityRepository;
     @Autowired
     MemberRepository memberRepository;
+    @Autowired
+    CommentRepository commentRepository;
     public void execute(String communityNum, Model model, HttpSession session) {
         CommunityDTO dto = communityRepository.communitySelectOne(communityNum);
         model.addAttribute("community", dto);
@@ -32,13 +34,13 @@ public class CommunityDetailService {
         
         // 좋아요
         AuthInfoDTO auth = (AuthInfoDTO) session.getAttribute("auth");
+        if (auth != null) {
         MemberDTO mdto = memberRepository.memberSelectOne(auth.getUserId());
         String num = communityRepository.selectLike(communityNum, mdto.getMemberNum());
         
         model.addAttribute("num", num);
+        }else {
+            model.addAttribute("num", null);
     }
-    @Autowired
-    CommentRepository commentRepository;
-    
-    
+  }
 }
