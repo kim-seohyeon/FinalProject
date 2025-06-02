@@ -198,6 +198,7 @@
 
     <p>작성자: ${community.communityWriter}</p>
     <p>등록일: <fmt:formatDate value="${community.communityDate}" pattern="yyyy-MM-dd" /></p>
+    <p>조회수: ${community.viewCount}</p>
 
     <c:if test="${auth != null && auth.userId == community.communityWriter}">
         <div class="action-links">

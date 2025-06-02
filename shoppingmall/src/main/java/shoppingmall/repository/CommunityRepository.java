@@ -42,20 +42,26 @@ public class CommunityRepository {
                 dto.getCommunityComment(), dto.getReplyComment(), dto.getMemberNum(), dto.getImagePath());
     }
 
-    // 전체 게시글 조회 (메서드명 오타 수정)
+    // 전체 게시글 조회
     public List<CommunityDTO> communitySelectAll() {
         sql = "select COMMUNITY_NUM, COMMUNITY_SUBJECT, COMMUNITY_CONTENT, COMMUNITY_WRITER"
                 + ", COMMUNITY_DATE, COMMENT_COUNT, LIKE_COUNT, COMMUNITY_COMMENT, REPLY_COMMENT, IMAGE_PATH"
                 + " from COMMUNITY"
-        		+ " ORDER BY COMMUNITY_DATE DESC";  // 이 줄 추가
+        		+ " ORDER BY COMMUNITY_DATE DESC";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<CommunityDTO>(CommunityDTO.class));
     }
 
-    // 단일 게시글 조회
+    // 단일 게시글 조회 (조회수 포함)
     public CommunityDTO communitySelectOne(String communityNum) {
-        sql = "SELECT COMMUNITY_NUM, COMMUNITY_WRITER, COMMUNITY_SUBJECT, COMMUNITY_CONTENT, COMMUNITY_DATE, COMMENT_COUNT, LIKE_COUNT, COMMUNITY_COMMENT, REPLY_COMMENT, MEMBER_NUM, IMAGE_PATH "
+        sql = "SELECT COMMUNITY_NUM, COMMUNITY_WRITER, COMMUNITY_SUBJECT, COMMUNITY_CONTENT, COMMUNITY_DATE, COMMENT_COUNT, LIKE_COUNT, COMMUNITY_COMMENT, REPLY_COMMENT, MEMBER_NUM, IMAGE_PATH, NVL(VIEW_COUNT,0) AS VIEW_COUNT "
                 + "FROM COMMUNITY WHERE COMMUNITY_NUM = ?";
         return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(CommunityDTO.class), communityNum);
+    }
+    
+    // 조회수 1 증가
+    public int incrementViewCount(String communityNum) {
+        sql = "UPDATE community SET view_count = NVL(view_count, 0) + 1 WHERE community_num = ?";
+        return jdbcTemplate.update(sql, communityNum);
     }
     
     // 댓글 등록
@@ -102,12 +108,13 @@ public class CommunityRepository {
         return jdbcTemplate.update(sql, commentNum);
     }
     
+    // 좋아요 체크
     public String selectLike(String communityNum, String memberNum) {
         String sql = "select '1' from community_like where COMMUNITY_NUM = ? and MEMBER_NUM = ? ";
         try {
             return jdbcTemplate.queryForObject(sql, String.class, communityNum, memberNum);
         } catch (EmptyResultDataAccessException e) {
-            return null; // or return "0"; or return "";
-        }
+            return null;
+        }    
     }
 }

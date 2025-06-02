@@ -20,7 +20,7 @@ public class CommunityDTO {
 	String communityComment;
 	String replyComment; 
 	String imagePath;
-	
+	int viewCount;
 	
 
 }

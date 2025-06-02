@@ -2,6 +2,7 @@ package shoppingmall.controller;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,6 +30,7 @@ import shoppingmall.service.community.CommunityAutoNumService;
 import shoppingmall.service.community.CommunityDetailService;
 import shoppingmall.service.community.CommunityLikeService;
 import shoppingmall.service.community.CommunityListService;
+import shoppingmall.service.community.CommunityService;
 import shoppingmall.service.community.CommunityUpdateService;
 import shoppingmall.service.community.CommunityWriteService;
 
@@ -71,6 +73,9 @@ public class CommunityController {
     
     @Autowired
     CommentService commentService;
+    
+    @Autowired
+    CommunityService communityService;
     
     // 커뮤니티 게시글 목록
     @GetMapping("/communityList")
@@ -118,10 +123,30 @@ public class CommunityController {
         return "redirect:/community/communityList";
     }
 
-    // 게시글 상세보기 + 댓글 목록 포함
+    // 게시글 상세보기 + 댓글 목록 포함 (기존 기능 모두 포함)
     @GetMapping("/communityDetail")
     public String detail(String communityNum, Model model, HttpSession session) {
+    	
+    	 @SuppressWarnings("unchecked")
+    	    List<String> viewedPosts = (List<String>) session.getAttribute("viewedPosts");
+    	    if (viewedPosts == null) {
+    	        viewedPosts = new ArrayList<>();
+    	    }
+
+    	    if (!viewedPosts.contains(communityNum)) {
+    	        // 조회한 적 없으면 조회수 증가
+    	        communityService.incrementViewCount(communityNum);
+
+    	        // 세션에 추가해서 중복 조회 막기
+    	        viewedPosts.add(communityNum);
+    	        session.setAttribute("viewedPosts", viewedPosts);
+    	    }
+    	
+    
+        // 상세 게시글 데이터 받아오기 (댓글 목록도 모델에 담겨야 함)
         communityDetailService.execute(communityNum, model, session);
+
+        // 좋아요 관련 처리
         AuthInfoDTO auth = (AuthInfoDTO) session.getAttribute("auth");
         if (auth != null) {
             boolean userLiked = communityLikeService.hasUserLiked(communityNum, session);
@@ -133,6 +158,7 @@ public class CommunityController {
 
         return "community/communityDetail";
     }
+
 
     @PostMapping("/commentWrite")
     public String commentWrite(CommentDTO commentDTO, HttpSession session) {
@@ -177,7 +203,7 @@ public class CommunityController {
         return "redirect:/community/communityDetail?communityNum=" + commentDTO.getCommunityNum();
     }
 
-    // 여기서 GET -> POST 변경
+    // POST 방식으로 변경한 댓글 삭제
     @PostMapping("/commentDelete")
     public String commentDelete(String commentNum, String communityNum, HttpSession session) {
         AuthInfoDTO auth = (AuthInfoDTO) session.getAttribute("auth");
@@ -189,13 +215,15 @@ public class CommunityController {
     @PostMapping("/like")
     public String like(String communityNum, HttpSession session) {
         communityLikeService.toggleLike(communityNum, session);
-        return "redirect:communityDetail?communityNum=" + communityNum;
+        return "redirect:/community/communityDetail?communityNum=" + communityNum;
     }
+
     @GetMapping("/myActivity")
     public String myActivity() {
         // 내 활동 페이지 (버튼만 있는 페이지)
         return "community/myActivity"; 
     }
+
     @GetMapping("/myLikesPosts")
     public String myLikedPosts(Model model, HttpSession session) {
         AuthInfoDTO auth = (AuthInfoDTO)session.getAttribute("auth");
@@ -204,6 +232,7 @@ public class CommunityController {
         model.addAttribute("likedPosts", likedPosts);
         return "community/myLikedPosts";
     }
+
     @GetMapping("/myCommentedPosts")
     public String myCommentedPosts(Model model, HttpSession session) {
         AuthInfoDTO auth = (AuthInfoDTO) session.getAttribute("auth");
@@ -211,13 +240,18 @@ public class CommunityController {
             return "redirect:/login";  // 로그인 안 됐으면 로그인 페이지로
         }
         MemberDTO member = memberRepository.memberSelectOne(auth.getUserId());
-        System.out.println("memberNum: '" + member.getMemberNum() + "'");  // 공백 확인용 로그
-        String memberNum = member.getMemberNum().trim();
 
         List<CommunityDTO> commentedPosts = commentService.getCommunityByMemberNum(member.getMemberNum());
         model.addAttribute("list", commentedPosts);
         return "community/myCommentedPosts";
-    }
+    }  
 
-
+    // 아래 메서드 제거 -> 경로 충돌 및 기능 중복 방지
+    // @GetMapping("/community/{communityNum}")
+    // public String getCommunityDetail(@PathVariable String communityNum, Model model) {
+    //     communityService.incrementViewCount(communityNum); // 조회수 증가
+    //     CommunityDTO post = communityService.getPostById(communityNum);
+    //     model.addAttribute("post", post);
+    //     return "communityDetail";
+    // }
 }
