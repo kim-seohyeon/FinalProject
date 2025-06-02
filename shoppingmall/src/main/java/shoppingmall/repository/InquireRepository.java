@@ -27,8 +27,8 @@ public class InquireRepository {
 	
 	public int inquireInsert(InquireDTO dto) {
 		sql = " insert into inquire(INQUIRE_NUM, INQUIRE_WRITER, INQUIRE_SUBJECT"
-				+ ", INQUIRE_CONTENTS, MEMBER_NUM )"
-				+ " values(?, ?, ?, ?, ?)";
+				+ ", INQUIRE_CONTENTS, MEMBER_NUM, inquire_date )"
+				+ " values(?, ?, ?, ?, ?, sysdate)";
 		
 		return jdbcTemplate.update(sql, inquireNumAutoSelect(),dto.getInquireWriter(), dto.getInquireSubject()
 				, dto.getInquireContents(), dto.getMemberNum());

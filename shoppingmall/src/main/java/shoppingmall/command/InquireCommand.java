@@ -1,5 +1,7 @@
 package shoppingmall.command;
 
+import java.util.Date;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Data;
@@ -14,7 +16,7 @@ public class InquireCommand {
 	String inquireContents;
 	String inquireKind;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	String inquireDate;
+	Date inquireDate;
 	String inquireAnswer;
 	String inquireAnswerDate;
 	String empNum;

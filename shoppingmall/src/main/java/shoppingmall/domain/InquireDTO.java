@@ -1,5 +1,7 @@
 package shoppingmall.domain;
 
+import java.util.Date;
+
 import lombok.Data;
 
 @Data
@@ -11,7 +13,7 @@ public class InquireDTO {
 	String inquireSubject;
 	String inquireContents;
 	String inquireKind;
-	String inquireDate;
+	Date inquireDate;
 	String inquireAnswer;
 	String inquireAnswerDate;
 	String empNum;
