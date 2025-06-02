@@ -49,9 +49,9 @@ public class EmployeeRepository {
 		sql = " select EMP_NUM, EMP_ID, EMP_PW, EMP_NAME"
 				+ "  , EMP_ADDR, EMP_ADDR_DETAIL, EMP_POST, EMP_PHONE"
 				+ "  , EMP_JUMIN, EMP_EMAIL, EMP_HIRE_DATE"
-				+ " from employees where EMP_NUM = ?";
+				+ " from employees where EMP_NUM = ? or emp_id = ?";
 		
-		return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<EmployeeDTO>(EmployeeDTO.class), empNum);
+		return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<EmployeeDTO>(EmployeeDTO.class), empNum, empNum);
 	}
 
 	public int empUpdate(EmployeeDTO dto) {

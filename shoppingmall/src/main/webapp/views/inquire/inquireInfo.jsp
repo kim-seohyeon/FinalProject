@@ -203,33 +203,43 @@
     </div>
     <hr>
     <br>
-    <h3>댓글</h3>
-    <c:choose>
-        <c:when test="${not empty icommentList}">
-            <c:forEach var="icomment" items="${icommentList}">
-                <div class="comment">
+<h3>댓글</h3>
+<c:choose>
+    <c:when test="${not empty icommentList}">
+        <c:forEach var="icomment" items="${icommentList}">
+            <div class="comment">
                 <p>
-                    <strong>${icomment.memberId}</strong> |
+                    <strong>
+                        <c:choose>
+                            <c:when test="${not empty icomment.empId}">
+                                ${icomment.empId} <span style="color: blue;">[직원]</span>
+                            </c:when>
+                            <c:otherwise>
+                                ${icomment.memberId} <span style="color: green;">[회원]</span>
+                            </c:otherwise>
+                        </c:choose>
+                    </strong> |
                     <fmt:formatDate value="${icomment.icommentDate}" pattern="yyyy-MM-dd HH:mm"/>
-                    <c:if test="${auth != null && auth.userId == icomment.memberId}">
-                        <span class="icon">
+
+                    <c:if test="${auth != null 
+                                && ((not empty icomment.memberId && auth.userId eq icomment.memberId) 
+                                     || (not empty icomment.empId && auth.userId eq icomment.empId))}">
                         <a href="icommentDelete?icommentId=${icomment.icommentId}&inquireNum=${icomment.inquireNum}" 
                            class="delete-link"
                            onclick="return confirm('댓글을 삭제하시겠어요?');">
                             🗑️삭제
                         </a>
-                        </span>
                     </c:if>
-                    </p>
-                    <p>${icomment.icommentContent}</p>
+                </p>
+                <p>${icomment.icommentContent}</p>
+            </div>
+        </c:forEach>
+    </c:when>
+    <c:otherwise>
+        <p>작성된 댓글이 없습니다.</p>
+    </c:otherwise>
+</c:choose>
 
-                </div>
-            </c:forEach>
-        </c:when>
-        <c:otherwise>
-            <p>작성된 댓글이 없습니다.</p>
-        </c:otherwise>
-    </c:choose>
 </div>
 
 <%@ include file="/views/footer.jsp" %>

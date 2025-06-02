@@ -15,4 +15,5 @@ public class IcommentCommand {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	Date icommentDate;
 	String memberNum;
+	String empNum;
 }

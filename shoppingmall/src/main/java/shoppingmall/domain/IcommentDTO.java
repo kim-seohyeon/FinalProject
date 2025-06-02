@@ -13,5 +13,6 @@ public class IcommentDTO {
 	String icommentContent;
 	Date icommentDate;
 	String memberId;
+	String empId;
 	
 }

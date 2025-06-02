@@ -73,9 +73,10 @@ public class InquireRepository {
 
 	public List<IcommentDTO> icommentSelectAllByCommunityNum(String inquireNum) {
 		sql = " SELECT icomment_id , inquire_num, icomment_writer,  icomment_content, icomment_date "
-				+ "       ,member_id, m.member_num"
-				+ " FROM inquire_comment i join members m "
-				+ " on i.member_num = m.member_num "
+				+ "       ,member_id, m.member_num, emp_id "
+				+ " FROM members m  right outer join inquire_comment i  "
+				+ " on i.member_num = m.member_num left outer join employees e"
+				+ " on e.emp_num = i.emp_num "
 				+ " WHERE inquire_num = ? ORDER BY icomment_date DESC";
 			return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(IcommentDTO.class), inquireNum);
 	}
