@@ -20,5 +20,4 @@ public class ReviewListService {
     	List<ReviewDTO> list =  reviewRepository.getReviewsByGoodsNum(goodsNum);
     	model.addAttribute("reviewList", list);
     }
-
 }

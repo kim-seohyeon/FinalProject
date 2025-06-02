@@ -192,35 +192,150 @@ $(function(){
     
     <!-- 후기 작성 폼 -->
     <div class="review-section">
-        <h3>상품 후기 작성</h3>
-        <c:if test="${empty auth}">
-            <p>로그인 후 후기를 작성하실 수 있습니다.</p>
-        </c:if>
-        <c:if test="${!empty auth}">
-            <form action="/review/write" method="post">
-                <input type="hidden" name="goodsNum" value="${dto.goodsNum}">
-                <textarea name="reviewContent" rows="4" cols="60" placeholder="후기를 입력해 주세요" required></textarea><br>
-                <button type="submit">후기 등록</button>
-            </form>
-        </c:if>
-    </div>
+    <h3>상품 후기 작성</h3>
+    <c:if test="${empty auth}">
+        <p>로그인 후 후기를 작성하실 수 있습니다.</p>
+    </c:if>
+    <c:if test="${!empty auth}">
+        <form action="/review/write" method="post" class="review-form">
+            <input type="hidden" name="goodsNum" value="${dto.goodsNum}">
+            <textarea name="reviewContent" rows="4" cols="60" placeholder="후기를 입력해 주세요" required></textarea>
+            <div class="review-form-buttons">
+                <button type="submit" class="review-submit-btn">후기 등록</button>
+            </div>
+        </form>
+    </c:if>
+</div>
+
+<style>
+.review-section {
+    margin-top: 40px;
+    padding: 20px;
+    border-top: 1px solid #ddd;
+}
+
+.review-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.review-form textarea {
+    width: 100%;
+    padding: 10px;
+    resize: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.review-form-buttons {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.review-submit-btn {
+    padding: 8px 16px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.review-submit-btn:hover {
+    background-color: #555;
+}
+</style>
 
     <!-- 후기 목록 출력 -->
     <div class="review-list">
-        <h3>상품 후기</h3>
-        <c:if test="${not empty reviewList}">
+    <h3>상품 후기</h3>
+    <c:if test="${not empty reviewList}">
+        <div class="review-container">
             <c:forEach var="review" items="${reviewList}">
                 <div class="single-review">
-                    <strong>${review.memberId}</strong> - 
-                    <fmt:formatDate value="${review.reviewDate}" pattern="yyyy-MM-dd HH:mm" /><br>
-                    <p>${review.reviewContent}</p>
+                    <div class="review-header">
+                        <div class="review-author">${review.memberId}</div>
+                        <div class="review-date">
+                            <fmt:formatDate value="${review.reviewDate}" pattern="yyyy-MM-dd HH:mm" />
+                        </div>
+                    </div>
+                    <div class="review-content">${review.reviewContent}</div>
+                    <c:if test="${auth != null && auth.userId == review.memberId}">
+                        <div class="review-actions">
+                            <form id="deleteReviewForm-${review.reviewNum}" action="<c:url value='/item/deleteReview' />" method="post" style="display:inline;">
+                                <input type="hidden" name="reviewNum" value="${review.reviewNum}" />
+                                <input type="hidden" name="goodsNum" value="${dto.goodsNum}" />
+                                <a href="javascript:void(0);" onclick="if(confirm('이 후기를 삭제하시겠습니까?')) { document.getElementById('deleteReviewForm-${review.reviewNum}').submit(); }" class="review-delete-btn">🗑️ 삭제</a>
+                            </form>
+                        </div>
+                    </c:if>
                 </div>
             </c:forEach>
-        </c:if>
-        <c:if test="${empty reviewList}">
-            <p>작성된 후기가 없습니다.</p>
-        </c:if>
-    </div>
+        </div>
+    </c:if>
+    <c:if test="${empty reviewList}">
+        <p>작성된 후기가 없습니다.</p>
+    </c:if>
+</div>
+
+<style>
+.review-list {
+    margin-top: 40px;
+    padding: 20px;
+    border-top: 1px solid #ddd;
+}
+
+.review-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.single-review {
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.review-author {
+    font-weight: bold;
+}
+
+.review-date {
+    color: #777;
+    font-size: 14px;
+}
+
+.review-content {
+    line-height: 1.5;
+}
+
+.review-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+.review-delete-btn {
+    color: #d00;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.review-delete-btn:hover {
+    color: #a00;
+}
+</style>
     
 </div>
 

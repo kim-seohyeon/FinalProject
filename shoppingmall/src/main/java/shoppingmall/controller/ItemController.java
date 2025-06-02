@@ -6,7 +6,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -25,6 +27,7 @@ import shoppingmall.service.item.GoodsWishService;
 import shoppingmall.service.item.INIstdpayPcReturnService;
 import shoppingmall.service.item.IniPayReqService;
 import shoppingmall.service.item.PurchaseListService;
+import shoppingmall.service.item.ReviewDeleteService;
 import shoppingmall.service.item.ReviewListService;
 import shoppingmall.service.item.ReviewWriteService;
 import shoppingmall.service.item.UpdateCartQtyService;
@@ -58,12 +61,12 @@ public class ItemController {
     ItemRepository itemRepository;
     @Autowired
     ReviewWriteService reviewWriteService; //리뷰
-
     @Autowired
     CartInsertService cartInsertService ;
-    
     @Autowired
     ReviewListService reviewListService;
+    @Autowired
+    ReviewDeleteService reviewDeleteService;
     
     // 장바구니 목록
     @GetMapping("/cartList")
@@ -158,4 +161,10 @@ public class ItemController {
         return updateCartQtyService.execute(auth.getUserId(), goodsNum, cartQty);
     }
     
+	@PostMapping("/deleteReview")
+	public String delete(String goodsNum, String reviewNum) {
+		reviewDeleteService.execute(reviewNum);
+		return "redirect:/item/detailView?goodsNum="+goodsNum;
+	}
+
 }

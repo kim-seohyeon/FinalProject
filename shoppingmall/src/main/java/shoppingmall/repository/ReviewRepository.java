@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import shoppingmall.domain.ReviewDTO;
@@ -24,12 +25,23 @@ public class ReviewRepository {
         jdbcTemplate.update(sql, dto.getGoodsNum(), dto.getMemberNum(), dto.getReviewContent());
     }
 
-    // 후기 조회
+    // 후기 목록 조회
     public List<ReviewDTO> getReviewsByGoodsNum(String goodsNum) {
-        sql = " SELECT REVIEW_NUM, GOODS_NUM, M.MEMBER_ID, REVIEW_CONTENT, REVIEW_DATE"
-            + " FROM REVIEW R JOIN MEMBERS M "
-            + " ON R.MEMBER_NUM = M.MEMBER_Num "
-            + " WHERE GOODS_NUM = ? ORDER BY REVIEW_DATE DESC ";
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<ReviewDTO>(ReviewDTO.class), goodsNum);
+        sql = "SELECT REVIEW_NUM, GOODS_NUM, M.MEMBER_ID, REVIEW_CONTENT, REVIEW_DATE "
+            + "FROM REVIEW R JOIN MEMBERS M ON R.MEMBER_NUM = M.MEMBER_NUM "
+            + "WHERE GOODS_NUM = ? ORDER BY REVIEW_DATE DESC";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(ReviewDTO.class), goodsNum);
     }
+    
+    // 리뷰 삭제
+    public void deleteById(Long reviewNum) {
+        sql = "DELETE FROM REVIEW WHERE REVIEW_NUM = ?";
+        jdbcTemplate.update(sql, reviewNum);
+    }
+
+	public int reviewDelete(String reviewNum) {
+
+		sql = " delete from review where review_Num = ?";
+		return jdbcTemplate.update(sql, reviewNum);		
+	}
 }
