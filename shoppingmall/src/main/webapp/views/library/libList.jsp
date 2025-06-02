@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -176,7 +179,8 @@
                         <td>${dto.libNum}</td>
                         <td><a href="libInfo?libNum=${dto.libNum}">${dto.libWriter}</a></td>
                         <td><a href="libInfo?libNum=${dto.libNum}">${dto.libSubject}</a></td>
-                        <td>등록일</td>
+                        <td><fmt:formatDate value="${dto.libRegist}" pattern="yyyy-MM-dd" /></td>
+
                     </tr>
                 </c:forEach>
             </tbody>
