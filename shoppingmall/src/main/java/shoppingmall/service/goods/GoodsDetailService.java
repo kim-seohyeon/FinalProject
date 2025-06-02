@@ -11,16 +11,11 @@ import shoppingmall.repository.GoodsRepository;
 @Service
 public class GoodsDetailService {
 
-	@Autowired
-	GoodsRepository goodsRepository;
-	
-	public void execute(HttpServletRequest request, Model model, String goodsNum) {
-		
-		GoodsDTO dto = goodsRepository.goodsSelectOne(goodsNum);
-		model.addAttribute("dto", dto);
-		
-		
-		
-	}
-	
+    @Autowired
+    GoodsRepository goodsRepository;
+
+    public void execute(HttpServletRequest request, Model model, String goodsNum) {
+        GoodsDTO dto = goodsRepository.goodsSelectOne(goodsNum);
+        model.addAttribute("dto", dto);
+    }
 }

@@ -14,7 +14,7 @@
     <script src="/static/js/checkBox.js"></script>
     <style>
         body {
-            font-family: 'Noto Sans KR', sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             background-color: #ffffff;
             margin: 0;
             padding: 0;
@@ -22,18 +22,16 @@
 
         .container {
             max-width: 1000px;
-            margin: 40px auto;
-            padding: 30px;
-            background-color: #fff;
-            border-radius: none;
-            box-shadow: none;
+            margin: 0 auto;
+            padding: 20px;
         }
 
         h1 {
+            font-size: 2rem;
+            font-weight: 700;
             text-align: left;
-            color: #2c3e50;
-            margin-bottom: 30px;
-            font-size: 28px;
+            color: #000;
+            margin-bottom: 50px;
         }
 
         .top-bar {
@@ -148,7 +146,7 @@
 <jsp:include page="/views/header.jsp" />
 
 <div class="container">
-    <h1>📂 자료실 목록</h1>
+    <h1>자료실 목록 📂</h1>
     <p>총 검색 결과 수: <strong>${count}</strong>건</p>
 
     <form class="search-form" action="library" method="get">

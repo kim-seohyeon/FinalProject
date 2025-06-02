@@ -13,18 +13,20 @@ import jakarta.servlet.http.HttpSession;
 import shoppingmall.command.PurchaseCommand;
 import shoppingmall.domain.AuthInfoDTO;
 import shoppingmall.domain.MemberDTO;
+import shoppingmall.domain.ReviewDTO;
 import shoppingmall.repository.ItemRepository;
 import shoppingmall.repository.MemberRepository;
 import shoppingmall.service.goods.GoodsDetailService;
 import shoppingmall.service.item.CartInsertService;
 import shoppingmall.service.item.CartListService;
-import shoppingmall.service.item.CartdeletService;
 import shoppingmall.service.item.GoodsItemService;
 import shoppingmall.service.item.GoodsOrderService;
 import shoppingmall.service.item.GoodsWishService;
 import shoppingmall.service.item.INIstdpayPcReturnService;
 import shoppingmall.service.item.IniPayReqService;
 import shoppingmall.service.item.PurchaseListService;
+import shoppingmall.service.item.ReviewListService;
+import shoppingmall.service.item.ReviewWriteService;
 import shoppingmall.service.item.UpdateCartQtyService;
 import shoppingmall.service.item.WishListService;
 
@@ -54,11 +56,14 @@ public class ItemController {
     UpdateCartQtyService updateCartQtyService;
     @Autowired
     ItemRepository itemRepository;
+    @Autowired
+    ReviewWriteService reviewWriteService; //리뷰
 
-
-    
     @Autowired
     CartInsertService cartInsertService ;
+    
+    @Autowired
+    ReviewListService reviewListService;
     
     // 장바구니 목록
     @GetMapping("/cartList")
@@ -80,9 +85,12 @@ public class ItemController {
     
     // 상품 상세 페이지
     @GetMapping("/detailView")
-    public String detail(HttpServletRequest request, Model model, String goodsNum, HttpSession session) {
+    public String detail(HttpServletRequest request, ReviewDTO reviewDTO, Model model, String goodsNum, HttpSession session) {
         goodsDetailService.execute(request, model, goodsNum);
         goodsWishService.execute(session, goodsNum, model);
+        //리뷰
+        reviewListService.getReviews(goodsNum, model);
+        
         return "item/detailView";
     }
 
@@ -149,5 +157,5 @@ public class ItemController {
         }
         return updateCartQtyService.execute(auth.getUserId(), goodsNum, cartQty);
     }
-
+    
 }

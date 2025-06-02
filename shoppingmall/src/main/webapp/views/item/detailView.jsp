@@ -21,8 +21,8 @@
         margin: 50px auto;
         padding: 20px;
         background-color: #fff;
-        border-radius: 12px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        border-radius: none;
+        box-shadow: none;
     }
     .product {
         display: flex;
@@ -87,6 +87,23 @@
         width: 100%;
         margin-top: 20px;
         border-radius: 10px;
+    }
+    
+    .review-section, .review-list {
+        margin-top: 40px;
+        padding: 20px;
+        border-top: 1px solid #ddd;
+    }
+    textarea {
+        width: 100%;
+        padding: 10px;
+        resize: none;
+    }    
+    .single-review {
+        margin-bottom: 20px;
+        padding: 10px;
+        background-color: #f9f9f9;
+        border-radius: 6px;
     }
 </style>
 
@@ -172,6 +189,39 @@ $(function(){
             <img src="/static/goodsUpload/${image}" alt="상품 상세 이미지">
         </c:forTokens>
     </div>
+    
+    <!-- 후기 작성 폼 -->
+    <div class="review-section">
+        <h3>상품 후기 작성</h3>
+        <c:if test="${empty auth}">
+            <p>로그인 후 후기를 작성하실 수 있습니다.</p>
+        </c:if>
+        <c:if test="${!empty auth}">
+            <form action="/review/write" method="post">
+                <input type="hidden" name="goodsNum" value="${dto.goodsNum}">
+                <textarea name="reviewContent" rows="4" cols="60" placeholder="후기를 입력해 주세요" required></textarea><br>
+                <button type="submit">후기 등록</button>
+            </form>
+        </c:if>
+    </div>
+
+    <!-- 후기 목록 출력 -->
+    <div class="review-list">
+        <h3>상품 후기</h3>
+        <c:if test="${not empty reviewList}">
+            <c:forEach var="review" items="${reviewList}">
+                <div class="single-review">
+                    <strong>${review.memberId}</strong> - 
+                    <fmt:formatDate value="${review.reviewDate}" pattern="yyyy-MM-dd HH:mm" /><br>
+                    <p>${review.reviewContent}</p>
+                </div>
+            </c:forEach>
+        </c:if>
+        <c:if test="${empty reviewList}">
+            <p>작성된 후기가 없습니다.</p>
+        </c:if>
+    </div>
+    
 </div>
 
 <%@ include file="/views/footer.jsp" %>
