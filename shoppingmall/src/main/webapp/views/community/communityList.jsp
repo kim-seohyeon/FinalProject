@@ -205,9 +205,9 @@
     <jsp:include page="/views/header.jsp" />
 
     <div class="container">
-        <h2>커뮤니티 메인 페이지 📋</h2>
+        <h2>커뮤니티 메인 페이지📢</h2>
 
-        <a href="write" class="write-button">✏️ 게시글 작성</a>
+        <a href="write" class="write-button">📝 게시글 작성</a>
 
         <div class="table-activity-wrapper">
             <table>

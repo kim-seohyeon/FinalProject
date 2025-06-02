@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -18,17 +19,24 @@ public class CommentRepository {
     String sql;
 
     // 댓글 번호 자동 생성 (예: c_10001, c_10002 처럼)
-    public String commentNumAutoSelect() {
-        sql = "SELECT NVL(MAX(comment_id),0) + 1 FROM community_comment";
-        return jdbcTemplate.queryForObject(sql, String.class);
+ // 숫자형 댓글 ID 자동 생성
+    public int commentNumAutoSelect() {
+        String sql = "SELECT NVL(MAX(comment_id), 0) + 1 FROM community_comment";
+        Integer nextNum = jdbcTemplate.queryForObject(sql, Integer.class);
+        return nextNum;
     }
+
+
+
 
     // 댓글 저장
     public int commentInsert(CommentDTO dto) {
-        sql = "INSERT INTO community_comment (comment_id, community_num, content, comment_date, MEMBER_NUM) "
-            + "VALUES (?, ?, ?, SYSDATE,?)";
-        return jdbcTemplate.update(sql, commentNumAutoSelect(), dto.getCommunityNum(), dto.getContent(), dto.getMemberNum());
+        sql = "INSERT INTO community_comment (comment_id, community_num, writer, content, comment_date, member_num) "
+            + "VALUES (?, ?, ?, ?, SYSDATE, ?)";
+        return jdbcTemplate.update(sql, commentNumAutoSelect(), dto.getCommunityNum(), dto.getWriter(), dto.getContent(), dto.getMemberNum());
     }
+
+
     @Autowired
     SqlSession sqlSession;
 	public List<CommentDTO> selectByCommunityNum(String communityNum) {
@@ -51,5 +59,29 @@ public class CommentRepository {
 	public int deleteComment(String commentNum) {
 	    String sql = "DELETE FROM community_comment WHERE comment_id = ?";
 	    return jdbcTemplate.update(sql, commentNum);
+	}
+	public List<CommunityDTO> selectCommunityByMemberNum(String memberNum) {
+	    String sql = "SELECT c.* FROM community c JOIN community_comment cc ON c.community_num = cc.community_num WHERE cc.member_num = ?";
+	    return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(CommunityDTO.class), memberNum);
+	}
+	public List<CommunityDTO> findCommunityByMemberNum(String memberNum) {
+	    String sql = "SELECT DISTINCT c.* " +
+	                 "FROM community c JOIN community_comment cc ON c.community_num = cc.community_num " +
+	                 "WHERE cc.member_num = ? " +
+	                 "ORDER BY c.community_date DESC";
+	    return jdbcTemplate.query(sql,
+	            (rs, rowNum) -> {
+	                CommunityDTO dto = new CommunityDTO();
+	                dto.setCommunityNum(rs.getString("community_num"));
+	                dto.setCommunityWriter(rs.getString("community_writer"));
+	                dto.setCommunitySubject(rs.getString("community_subject"));
+	                dto.setCommunityContent(rs.getString("community_content"));
+	                dto.setCommunityDate(rs.getDate("community_date"));
+	                dto.setLikeCount(rs.getInt("like_count"));
+	                dto.setImagePath(rs.getString("image_path"));
+	                return dto;
+	            },
+	            memberNum
+	        );
 	}
 }

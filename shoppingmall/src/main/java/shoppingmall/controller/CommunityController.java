@@ -22,6 +22,7 @@ import shoppingmall.domain.MemberDTO;
 import shoppingmall.repository.CommentRepository;
 import shoppingmall.repository.CommunityRepository;
 import shoppingmall.repository.MemberRepository;
+import shoppingmall.service.comment.CommentService;
 import shoppingmall.service.comment.CommentUpdateService;
 import shoppingmall.service.comment.CommentWriteService;
 import shoppingmall.service.community.CommunityAutoNumService;
@@ -67,7 +68,10 @@ public class CommunityController {
     
     @Autowired
     MemberRepository memberRepository;
-
+    
+    @Autowired
+    CommentService commentService;
+    
     // 커뮤니티 게시글 목록
     @GetMapping("/communityList")
     public String list(Model model) {
@@ -200,5 +204,20 @@ public class CommunityController {
         model.addAttribute("likedPosts", likedPosts);
         return "community/myLikedPosts";
     }
+    @GetMapping("/myCommentedPosts")
+    public String myCommentedPosts(Model model, HttpSession session) {
+        AuthInfoDTO auth = (AuthInfoDTO) session.getAttribute("auth");
+        if (auth == null) {
+            return "redirect:/login";  // 로그인 안 됐으면 로그인 페이지로
+        }
+        MemberDTO member = memberRepository.memberSelectOne(auth.getUserId());
+        System.out.println("memberNum: '" + member.getMemberNum() + "'");  // 공백 확인용 로그
+        String memberNum = member.getMemberNum().trim();
+
+        List<CommunityDTO> commentedPosts = commentService.getCommunityByMemberNum(member.getMemberNum());
+        model.addAttribute("list", commentedPosts);
+        return "community/myCommentedPosts";
+    }
+
 
 }
