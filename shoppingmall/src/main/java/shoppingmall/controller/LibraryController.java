@@ -43,34 +43,33 @@ public class LibraryController {
 	public String form(@RequestParam(value = "page", defaultValue = "1", required = false) 
 							int page, Model model, @RequestParam(value="searchWord", required = false, defaultValue = "") String searchWord) {
 		libraryListService.execute(model, page, searchWord);
-		//return "library/libList";
 		return "library/libList";
 	}
 	
 	@GetMapping("/libWrite")
-	public String write(LibraryCommand libraryCommand) {
+	public String write(LibraryCommand libraryCommand, HttpSession session) {
 		return "library/libForm";
 	}
 	
 	@PostMapping("/libWrite")
 	public String write(@Validated LibraryCommand libraryCommand
-						, BindingResult result) {
+						, BindingResult result, HttpSession session) {
 		if(result.hasErrors()) {
 			return "library/libForm";
 		}
-		librarInsertService.execute(libraryCommand);
+		librarInsertService.execute(libraryCommand, session);
 		return "redirect:library";
 	}
 	
 	@GetMapping("/libInfo")
-	public String info(Model model, int libNum) {
-		libraryDetailService.execute(model, libNum);
+	public String info(Model model, int libNum, HttpSession session) {
+		libraryDetailService.execute(model, libNum, session);
 		return "library/libDetail";
 	}
 
 	@GetMapping("/libUpdate")
-	public String update(Model model, int libNum) {
-		libraryDetailService.execute(model, libNum);
+	public String update(Model model, int libNum, HttpSession session) {
+		libraryDetailService.execute(model, libNum, session);
 		return "library/libModify";
 	}
 	
@@ -81,9 +80,9 @@ public class LibraryController {
 	}
 	
 	@GetMapping("/libDelete")
-	public String delete(int libNum) {
+	public String delete(int libNum, HttpSession session) {
 		
-		libraryDeleteService.execute(libNum);
+		libraryDeleteService.execute(libNum, session);
 		return "redirect:/library";
 	}
 	

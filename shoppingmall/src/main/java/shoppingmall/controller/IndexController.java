@@ -75,4 +75,10 @@ public class IndexController {
 		libraryListService.execute(model, page, "");
 		return mav;
 	}
+	
+	@GetMapping("/realStock")
+	public String realStock() {
+		return "/socket/chattingClient";
+	}
+	
 }

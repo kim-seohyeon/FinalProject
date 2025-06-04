@@ -211,6 +211,7 @@ $(function(){
     <c:if test="${!empty auth}">
         <div class="section-title">SJD 판매상품!!🛍️</div>
         <div class="button-group">
+        	<a href="/realStock">실시간데이터</a>
             <a href="/item/wishList">찜 목록</a>
             <a href="/item/purchaseList">구매 목록</a>
         </div>

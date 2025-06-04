@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import jakarta.servlet.http.HttpSession;
+import shoppingmall.domain.AuthInfoDTO;
 import shoppingmall.domain.LibraryDTO;
 import shoppingmall.mapper.LibraryMapper;
 
@@ -13,8 +15,9 @@ public class LibraryDetailService {
 
 	@Autowired
 	LibraryMapper libraryMapper;
-	public void execute(Model model, int libNum) {
-		
+	public void execute(Model model, int libNum, HttpSession session) {
+    	AuthInfoDTO auth = (AuthInfoDTO) session.getAttribute("auth");
+
 		LibraryDTO dto = libraryMapper.libSelectOne(libNum);
 		model.addAttribute("libraryCommand", dto);
 		

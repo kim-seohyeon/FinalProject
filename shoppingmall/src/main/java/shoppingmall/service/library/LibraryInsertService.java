@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.servlet.http.HttpSession;
 import shoppingmall.command.LibraryCommand;
+import shoppingmall.domain.AuthInfoDTO;
 import shoppingmall.domain.LibraryDTO;
 import shoppingmall.mapper.LibraryMapper;
 
@@ -19,7 +21,12 @@ public class LibraryInsertService {
 	@Autowired
 	LibraryMapper libraryMapper;
 	
-	public void execute(LibraryCommand libraryCommand) {
+	public void execute(LibraryCommand libraryCommand, HttpSession session) {
+		
+    	AuthInfoDTO auth = (AuthInfoDTO) session.getAttribute("auth");
+    	if (auth == null || auth.getGrade() == null || !auth.getGrade().equals("emp")) {
+    	    return; // 비직원이거나 로그인하지 않은 경우 등록 중단
+    	}
 		
 		LibraryDTO dto = new LibraryDTO();
 		

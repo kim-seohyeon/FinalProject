@@ -6,6 +6,8 @@ import java.net.URL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jakarta.servlet.http.HttpSession;
+import shoppingmall.domain.AuthInfoDTO;
 import shoppingmall.domain.LibraryDTO;
 import shoppingmall.mapper.LibraryMapper;
 
@@ -14,8 +16,11 @@ public class LibraryDeleteService {
 
 	@Autowired
 	LibraryMapper libraryMapper;
-	public void execute(int libNum) {
-		
+	public void execute(int libNum, HttpSession session) {
+    	AuthInfoDTO auth = (AuthInfoDTO) session.getAttribute("auth");
+    	if (auth == null || auth.getGrade() == null || !auth.getGrade().equals("emp")) {
+    	    return; // 비직원이거나 로그인하지 않은 경우 등록 중단
+    	}
 		LibraryDTO dto = libraryMapper.libSelectOne(libNum);
 		int i = libraryMapper.libraryDelete(libNum);
 
