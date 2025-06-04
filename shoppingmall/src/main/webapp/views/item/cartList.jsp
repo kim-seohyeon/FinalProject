@@ -192,6 +192,27 @@ function deleteSelectedItems() {
         }
     });
 }
+
+//개별 상품 삭제 처리 함수
+function deleteSingleItem(goodsNum) {
+    $.ajax({
+        type : "post",
+        url : "deleteCart",
+        data : { goodsNums : [goodsNum] },
+        traditional: true,
+        dataType: "text",
+        success:function(result){
+            if(result){
+                location.reload();
+            } else {
+                alert("삭제 실패했습니다.");
+            }
+        },
+        error:function(){
+            alert("서버 오류");
+        }
+    });
+}
 </script>
 </head>
 <body>
@@ -224,8 +245,8 @@ function deleteSelectedItems() {
                     <fmt:formatNumber value="${dto.cartQty * dto.goodsPrice}" pattern="###,###" />원
                 </div>
                 <div class="cart-delete">
-                    <button type="button" onclick="$(this).closest('.cart-item').find('input[type=checkbox]').prop('checked', true); deleteSelectedItems();">X</button>
-                </div>
+				    <button type="button" onclick="deleteSingleItem('${dto.goodsNum}')">X</button>
+				</div>
             </div>
         </c:forEach>
 
