@@ -1,6 +1,11 @@
 package shoppingmall.repository;
 
+import java.sql.ResultSet;
 import java.util.List;
+
+import org.springframework.jdbc.core.RowMapper;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -116,5 +121,27 @@ public class CommunityRepository {
         } catch (EmptyResultDataAccessException e) {
             return null;
         }    
-    }
+        
+     // 내가 쓴 글 목록 조회
+ 
+        }
+	public List<CommunityDTO> findPostsByWriter(String writerId) {
+		sql = "SELECT * FROM community WHERE community_writer = ? ORDER BY community_date DESC";
+        return jdbcTemplate.query(sql, new RowMapper<CommunityDTO>() {
+            @Override
+            public CommunityDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+                CommunityDTO dto = new CommunityDTO();
+                dto.setCommunityNum(rs.getString("community_num"));
+                dto.setCommunityWriter(rs.getString("community_writer"));
+                dto.setCommunitySubject(rs.getString("community_subject"));
+                dto.setCommunityContent(rs.getString("community_content"));
+                dto.setCommunityDate(rs.getDate("community_date"));
+                dto.setCommentCount(rs.getInt("comment_count"));
+                dto.setLikeCount(rs.getInt("like_count"));
+                dto.setImagePath(rs.getString("image_path"));
+                dto.setViewCount(rs.getInt("view_count"));
+                return dto;
+            }
+        }, writerId);
+	}
 }

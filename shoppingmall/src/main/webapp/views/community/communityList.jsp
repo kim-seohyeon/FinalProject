@@ -238,7 +238,7 @@
             </table>
 
             <ul class="activity-list">
-                <li><a href="/community/myWrittenPosts">✍️ 내가 쓴 글</a></li>
+                <li><a href="/community/myPosts">✍️ 내가 쓴 글</a></li>
                 <li><a href="/community/myCommentedPosts">💬 댓글 단 글</a></li>
                 <li><a href="/community/myLikesPosts">👍 좋아요 누른 글</a></li>
             </ul>

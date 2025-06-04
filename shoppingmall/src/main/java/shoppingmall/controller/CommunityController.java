@@ -245,13 +245,20 @@ public class CommunityController {
         model.addAttribute("list", commentedPosts);
         return "community/myCommentedPosts";
     }  
+    
+    @GetMapping("/myPosts")
+    public String myPosts(Model model, HttpSession session) {
+        AuthInfoDTO auth = (AuthInfoDTO) session.getAttribute("auth");
+        if (auth == null) {
+            return "redirect:/login";
+        }
 
-    // 아래 메서드 제거 -> 경로 충돌 및 기능 중복 방지
-    // @GetMapping("/community/{communityNum}")
-    // public String getCommunityDetail(@PathVariable String communityNum, Model model) {
-    //     communityService.incrementViewCount(communityNum); // 조회수 증가
-    //     CommunityDTO post = communityService.getPostById(communityNum);
-    //     model.addAttribute("post", post);
-    //     return "communityDetail";
-    // }
+        String writerId = auth.getUserId(); // ← 로그인된 사용자 ID
+        List<CommunityDTO> myPosts = communityService.getPostsByWriter(writerId);
+
+        model.addAttribute("list", myPosts);
+
+        return "community/myPosts";
+    }
+
 }
