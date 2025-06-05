@@ -155,12 +155,14 @@
             <img src="/static/libUpload/${libraryCommand.libImageStoreName}" alt="첨부 이미지" />
         </div>
     </c:if>
+	<c:if test="${sessionScope.auth.grade == 'emp'}">
 
-    <div class="btn-group">
-        <a href="libUpdate?libNum=${libraryCommand.libNum}" class="btn">자료실 수정</a>
-        <a href="libDelete?libNum=${libraryCommand.libNum}" class="btn btn-secondary">자료실 삭제</a>
-        <a href="library" class="btn btn-secondary">목록으로</a>
-    </div>
+	    <div class="btn-group">
+	        <a href="libUpdate?libNum=${libraryCommand.libNum}" class="btn">자료실 수정</a>
+	        <a href="libDelete?libNum=${libraryCommand.libNum}" class="btn btn-secondary">자료실 삭제</a>
+	        <a href="library" class="btn btn-secondary">목록으로</a>
+	    </div>
+	</c:if>
 </div>
 
 <%@ include file="/views/footer.jsp" %>

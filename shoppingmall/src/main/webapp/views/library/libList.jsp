@@ -155,10 +155,12 @@
     </form>
 
     <form action="libDelete" method="post">
-        <div class="top-bar">
-            <a href="libWrite">자료 등록</a>
-            <input type="submit" value="선택 삭제" />
-        </div>
+		<c:if test="${sessionScope.auth.grade == 'emp'}">
+		    <div class="top-bar">
+		        <a href="libWrite">자료 등록</a>
+		        <input type="submit" value="선택 삭제" />
+		    </div>
+		</c:if>
 
         <table>
             <thead>
