@@ -21,8 +21,8 @@ public class ReviewRepository {
 
     // 후기 작성
     public void insertReview(ReviewDTO dto) {
-        sql = "INSERT INTO REVIEW (REVIEW_NUM, GOODS_NUM, MEMBER_NUM, REVIEW_CONTENT) VALUES (REVIEW_SEQ.NEXTVAL, ?, ?, ?)";
-        jdbcTemplate.update(sql, dto.getGoodsNum(), dto.getMemberNum(), dto.getReviewContent());
+        sql = "INSERT INTO REVIEW (REVIEW_NUM, GOODS_NUM, MEMBER_NUM, REVIEW_CONTENT , purchase_num, REVIEW_DATE) VALUES (REVIEW_SEQ.NEXTVAL, ?, ?, ?,?, sysdate)";
+        jdbcTemplate.update(sql, dto.getGoodsNum(), dto.getMemberNum(), dto.getReviewContent(), dto.getPurchaseNum());
     }
 
     // 후기 목록 조회

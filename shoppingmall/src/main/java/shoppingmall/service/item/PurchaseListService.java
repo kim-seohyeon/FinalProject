@@ -18,8 +18,10 @@ public class PurchaseListService {
 
 	@Autowired
 	PurchaseRepository purchaseRepository;
+	
 	@Autowired
 	MemberRepository memberRepository;
+	
 	public void execute(Model model, HttpSession session) {
 		
         AuthInfoDTO auth = (AuthInfoDTO) session.getAttribute("auth");
@@ -29,5 +31,12 @@ public class PurchaseListService {
 		model.addAttribute("list", list);
 		
 	}
+	
+	public void hasPurchased( HttpSession session, String goodsNum, Model model) {
+		AuthInfoDTO auth = (AuthInfoDTO)session.getAttribute("auth");
+		MemberDTO dto = memberRepository.memberSelectOne(auth.getUserId());
+		List<PurchaseListDTO> list =  purchaseRepository.countByMemberAndGoods(dto.getMemberNum(), goodsNum);
+		model.addAttribute("list", list);
+    }
 
 }

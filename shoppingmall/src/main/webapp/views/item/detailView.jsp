@@ -191,20 +191,28 @@ $(function(){
     </div>
     
     <!-- 후기 작성 폼 -->
-    <div class="review-section">
+<div class="review-section">
     <h3>상품 후기 작성</h3>
-    <c:if test="${empty auth}">
-        <p>로그인 후 후기를 작성하실 수 있습니다.</p>
-    </c:if>
-    <c:if test="${!empty auth}">
-        <form action="/review/write" method="post" class="review-form">
-            <input type="hidden" name="goodsNum" value="${dto.goodsNum}">
-            <textarea name="reviewContent" rows="4" cols="60" placeholder="후기를 입력해 주세요" required></textarea>
-            <div class="review-form-buttons">
-                <button type="submit" class="review-submit-btn">후기 등록</button>
-            </div>
-        </form>
-    </c:if>
+    <c:choose>
+        <c:when test="${empty auth}">
+            <p>로그인 후 후기를 작성하실 수 있습니다.</p>
+        </c:when>
+        <c:when test="${not empty list }">
+        	<c:forEach items="${list }" var="dto">
+	            <form action="/review/write" method="post" class="review-form">
+	                <input type="hidden" name="goodsNum" value="${dto.goodsNum}">
+	                <input type="hidden" name="purchaseNum" value="${dto.purchaseNum}">
+	                <textarea name="reviewContent" rows="4" cols="60" placeholder="후기를 입력해 주세요" required></textarea>
+	                <div class="review-form-buttons">
+	                    <button type="submit" class="review-submit-btn">후기 등록</button>
+	                </div>
+	            </form>
+            </c:forEach>	
+        </c:when>
+        <c:otherwise>
+            <p>이 상품을 구매한 경우에만 후기를 작성할 수 있습니다.</p>
+        </c:otherwise>
+    </c:choose>
 </div>
 
 <style>

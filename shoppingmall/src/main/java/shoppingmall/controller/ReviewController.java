@@ -23,11 +23,12 @@ public class ReviewController {
     private ReviewWriteService reviewService;
 
     @PostMapping("/write")
-    public String writeReview(String goodsNum, String reviewContent, HttpSession session, Model model) {
+    public String writeReview(String goodsNum, String purchaseNum ,String reviewContent, HttpSession session, Model model) {
         AuthInfoDTO auth = (AuthInfoDTO) session.getAttribute("auth");
         if (auth == null) return "redirect:/login/loginCk";
 
         ReviewDTO dto = new ReviewDTO();
+        dto.setPurchaseNum(purchaseNum);
         dto.setGoodsNum(goodsNum);
         dto.setMemberNum(auth.getUserId());
         dto.setReviewContent(reviewContent);

@@ -6,6 +6,7 @@ import lombok.Data;
 
 @Data
 public class ReviewDTO {
+	private String purchaseNum;
     private String reviewNum;
     private String goodsNum;
     private String memberNum;

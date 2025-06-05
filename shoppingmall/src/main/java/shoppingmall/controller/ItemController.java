@@ -91,11 +91,15 @@ public class ItemController {
     public String detail(HttpServletRequest request, ReviewDTO reviewDTO, Model model, String goodsNum, HttpSession session) {
         goodsDetailService.execute(request, model, goodsNum);
         goodsWishService.execute(session, goodsNum, model);
-        //리뷰
         reviewListService.getReviews(goodsNum, model);
         
+        AuthInfoDTO auth = (AuthInfoDTO) session.getAttribute("auth");
+        if (auth != null) {
+            purchaseListService.hasPurchased(session, goodsNum, model);
+        }
         return "item/detailView";
     }
+
 
     // 상품 구매 페이지
     @RequestMapping("/itemBuy")
@@ -166,5 +170,5 @@ public class ItemController {
 		reviewDeleteService.execute(reviewNum);
 		return "redirect:/item/detailView?goodsNum="+goodsNum;
 	}
-
+	
 }
