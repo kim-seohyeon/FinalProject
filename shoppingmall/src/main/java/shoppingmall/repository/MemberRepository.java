@@ -169,8 +169,14 @@ public class MemberRepository {
 
 	//전화번호로 아이디 찾기
 	public String findUserIdByPhone(String userPhone) {
-        String sql = "SELECT MEMBER_ID FROM members WHERE MEMBER_PHONE1 = ? or member_phone2 = ?";
+        sql = "SELECT MEMBER_ID FROM members WHERE MEMBER_PHONE1 = ? or member_phone2 = ? ";
         return jdbcTemplate.queryForObject(sql, String.class, userPhone, userPhone);
+	}
+
+	//아이디 + 전화번호로 비밀번호 찾기
+	public String findUserPwByIdPhone(String userId, String userPhone) {
+		sql = " select MEMBER_PW from members where member_id = ? and (member_phone1 = ? or member_phone2 = ?)";
+        return jdbcTemplate.queryForObject(sql, String.class, userId, userPhone, userPhone);
 	}
 
 }

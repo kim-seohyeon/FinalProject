@@ -41,14 +41,6 @@ public class HelpContoller {
 	    findPwService.updatePassword(userId, newPassword, model);
 	    return "help/resetPwResult";
 	}
-
-	
-//	@PostMapping("/findPassword")
-//	public String findPassword(String userId, String userPhone, Model model) {
-//		findPwService.execute(userId, userPhone, model);
-//		return "help/findPwOk";
-//	}
-
 	
 	@GetMapping("/findId")
 	public String findId() {

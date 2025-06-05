@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -94,6 +96,11 @@
 
 <div class="container">
   <h2>비밀번호 찾기</h2>
+  
+    <!-- ✅ 오류 메시지 출력 영역 -->
+  <c:if test="${not empty message}">
+    <p style="color:red; font-weight:bold; margin-bottom: 20px;">${message}</p>
+  </c:if>
   
   <form action="findPassword" name="frm" id="frm" method="post" novalidate>
     <table>
