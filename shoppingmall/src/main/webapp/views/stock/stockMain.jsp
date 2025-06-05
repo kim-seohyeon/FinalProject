@@ -293,7 +293,7 @@
         text-decoration: none;
         border-radius: 6px;
         transition: background-color 0.3s ease;">
-        📅 일별/실시간 시세 보기
+        📅 일별/실시간 시세 보기!
     </a>
 </div>
 
