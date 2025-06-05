@@ -6,7 +6,6 @@
 <head>
 <meta charset="UTF-8">
 <title>Index</title>
-<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1.min.js"></script>
 
 <style>
     body {
@@ -16,22 +15,18 @@
         background-color: #ffffff;
         color: #333;
     }
-
     a {
         text-decoration: none;
         color: #333;
     }
-
     a:hover {
         color: #007BFF;
     }
-
     .container {
         padding: 40px 20px;
         max-width: 1200px;
         margin: 0 auto;
     }
-
     .section-title {
         font-size: 2rem;
         font-weight: 700;
@@ -42,7 +37,6 @@
         text-shadow: none;
         letter-spacing: normal;
     }
-
     .button-group {
         display: flex;
         justify-content: center;
@@ -50,7 +44,6 @@
         gap: 10px;
         margin-bottom: 30px;
     }
-
     .button-group a {
         display: inline-block;
         padding: 6px 14px;
@@ -60,19 +53,16 @@
         font-size: 12px;
         transition: background-color 0.3s;
     }
-
     .button-group a:hover {
         background-color: #7FBFEF;
         color: white;
     }
-
     .product-grid {
         display: flex;
         flex-wrap: wrap;
         gap: 20px;
         justify-content: center;
     }
-
     .product-item {
         width: calc(20% - 20px);
         background: #fff;
@@ -82,12 +72,10 @@
         overflow: hidden;
         transition: all 0.3s ease-in-out;
     }
-
     .product-item:hover {
         transform: translateY(-6px);
         box-shadow: 0 6px 15px rgba(0,0,0,0.12);
     }
-
     .product-item img {
         width: 100%;
         height: 180px;
@@ -95,7 +83,6 @@
         background-color: #ffffff;
         padding: 10px;
     }
-
     .product-name {
         padding: 8px 6px 4px;
         font-size: 14px;
@@ -108,7 +95,6 @@
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
     }
-
     .product-price {
         font-size: 16px;
         color: #e74c3c;
@@ -116,12 +102,10 @@
         text-align: center;
         padding-bottom: 10px;
     }
-
     #more {
         text-align: center;
         margin: 40px 0;
     }
-
     #load-more {
         padding: 10px 20px;
         background-color: #007BFF;
@@ -132,11 +116,9 @@
         cursor: pointer;
         transition: background-color 0.3s;
     }
-
     #load-more:hover {
         background-color: #0056b3;
     }
-
     .login-box {
         position: fixed;
         top: 120px;
@@ -148,7 +130,6 @@
         border-radius: 12px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
-
     .login-box input[type="text"],
     .login-box input[type="password"],
     .login-box input[type="submit"] {
@@ -160,7 +141,6 @@
         box-sizing: border-box;
         font-size: 14px;
     }
-
     .login-box input[type="submit"] {
         background-color: #007BFF;
         color: white;
@@ -168,40 +148,104 @@
         border: none;
         transition: background-color 0.3s;
     }
-
     .login-box input[type="submit"]:hover {
         background-color: #0056b3;
     }
 </style>
 
-<script type="text/javascript">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+/*
+    $(function() {
+        let currentPage = ${currentPage};
+        const maxPage = ${maxPage};
+
+        $("#load-more").on("click", function(e) {
+            e.preventDefault();
+            if(currentPage >= maxPage) {
+                alert("더 이상 상품이 없습니다.");
+                $(this).hide();
+                return;
+            }
+            currentPage++;
+            $.ajax({
+                url: "/goods/page",
+                data: { page: currentPage },
+                method: "GET",
+                dataType: "json",
+                success: function(data) {
+                    let list = data.list;
+                    let html = "";
+                    list.forEach(function(dto) {
+                    	 html = 
+                    		  '<div class="product-item">' +
+                    		    '<a href="/item/detailView?goodsNum=' + dto.goodsNum + '">' +
+                    		      '<img src="/static/goodsUpload/' + dto.goodsMainStoreImage + '" alt="' + dto.goodsName + '" />' +
+                    		      '<div class="product-name">' + dto.goodsName + '</div>' +
+                    		      '<div class="product-price">' + dto.goodsPrice + '원</div>' +
+                    		    '</a>' +
+                    		  '</div>';
+                    });
+                    $("#product-list").append(html);
+
+                    if(currentPage >= data.maxPage) {
+                        $("#load-more").hide();
+                    }
+                },
+                error: function() {
+                    alert("상품을 불러오는 데 실패했습니다.");
+                    currentPage--;
+                }
+            });
+        });
+
+        // 초기 페이지가 마지막 페이지면 버튼 숨기기
+        if(currentPage >= maxPage) {
+            $("#load-more").hide();
+        }
+    });
+*/
 $(function(){
-    page = 1;
+    let currentPage = 1;
+
     $("#load-more").click(function(){
-        page++;
+        currentPage++;
         $.ajax({
-            url:"loadMore",
-            type: "post",
-            data: {"page":page},
+            url: "/goods/page",
+            method: "GET",
+            data: { page: currentPage },
             dataType: "json",
-            success: function(model){
-                var item = "";
-                $.each(model.list , function(idx, dto){
-                    item += '<div class="product-item">';
-                    item += '<a href="goodsDetail?goodsNum='+dto.goodsNum+'">';
-                    item += '<img src="/static/goodsUpload/'+dto.goodsImageStoreName+'" />';
-                    item += '<div class="product-name">'+dto.goodsSubject+'</div>';
-                    item += '<div class="product-price">'+dto.goodsPrice+'원</div>';
-                    item += '</a>';
-                    item += '</div>';
+            success: function(model) {
+                console.log(model);
+                let html = "";
+                $.each(model.list, function(idx, dto){
+                    html += 
+                        '<div class="product-item">' +
+                            '<a href="/item/detailView?goodsNum=' + dto.goodsNum + '">' +
+                                '<img src="/static/goodsUpload/' + dto.goodsMainStoreImage + '" alt="' + dto.goodsName + '" />' +
+                                '<div class="product-name">' + dto.goodsName + '</div>' +
+                                '<div class="product-price">' + dto.goodsPrice + '원</div>' +
+                            '</a>' +
+                        '</div>';
                 });
-                $("#product-list").append(item);
-                if(model.maxPage <= page) $("#more").hide();
+
+                $("#product-list").append(html);
+
+                if (model.maxPage <= currentPage) {
+                    $("#more").hide();
+                }
+            },
+            error: function() {
+                alert("상품을 불러오는 데 실패했습니다.");
+                currentPage--;
             }
         });
     });
 });
+
 </script>
+
 </head>
 
 <body>
@@ -211,7 +255,7 @@ $(function(){
     <c:if test="${!empty auth}">
         <div class="section-title">SJD 판매상품!!🛍️</div>
         <div class="button-group">
-        	<a href="/realStock">실시간데이터</a>
+            <a href="/realStock">실시간데이터</a>
             <a href="/item/wishList">찜 목록</a>
             <a href="/item/purchaseList">구매 목록</a>
         </div>
@@ -222,7 +266,7 @@ $(function(){
             <c:forEach items="${list}" var="dto">
                 <div class="product-item">
                     <a href="/item/detailView?goodsNum=${dto.goodsNum}">
-                        <img src="/static/goodsUpload/${dto.goodsMainStoreImage}" />
+                        <img src="/static/goodsUpload/${dto.goodsMainStoreImage}" alt="${dto.goodsName}" />
                         <div class="product-name">${dto.goodsName}</div>
                         <div class="product-price">${dto.goodsPrice}원</div>
                     </a>
@@ -230,8 +274,7 @@ $(function(){
             </c:forEach>
         </div>
     </div>
-
-    <div id="more">
+    <div id="more" style="text-align:center; margin:40px 0;">
         <button id="load-more">더보기</button>
     </div>
 
