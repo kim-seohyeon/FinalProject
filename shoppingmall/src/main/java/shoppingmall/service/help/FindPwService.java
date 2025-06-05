@@ -66,15 +66,15 @@ public class FindPwService {
 
     // 사용자 존재 확인 (아이디 + 전화번호)
     public boolean verifyUser(String userId, String userPhone, Model model) {
-        String foundUserId = memberRepository.findUserIdByPhone(userPhone);
-
-        if (foundUserId == null || !foundUserId.equals(userId)) {
+        try {
+        	String foundUserId = memberRepository.findUserPwByIdPhone(userId, userPhone);
+        	model.addAttribute("userId", foundUserId); // 다음 페이지에서 사용할 수 있도록 전달
+            return true;
+        }catch(Exception e){
             model.addAttribute("message", "입력한 정보에 해당하는 회원이 없습니다.");
             return false;
         }
 
-        model.addAttribute("userId", userId); // 다음 페이지에서 사용할 수 있도록 전달
-        return true;
     }
 
     // 비밀번호 변경
