@@ -47,7 +47,7 @@ public class PurchaseRepository {
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(PurchaseListDTO.class), memberNum);
     }
 
-    // 구매 이력 확인 메서드 (memberNum, goodsNum으로 구매여부 확인)
+    // 구매 이력 확인 메서드 (memberNum, goodsNum으로 구매여부 확인)ㅇ
     public List<PurchaseListDTO> countByMemberAndGoods(String memberNum, String goodsNum) {
     	sql = " SELECT * FROM ( " +
     		      "SELECT pl.purchase_num, pl.goods_num, REVIEW_CONTENT " + // ← 공백 추가
@@ -61,7 +61,7 @@ public class PurchaseRepository {
             new BeanPropertyRowMapper<PurchaseListDTO>(PurchaseListDTO.class), 
             memberNum, goodsNum
         );
-        return list;
+        return list; 
     }
 
 }

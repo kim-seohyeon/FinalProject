@@ -286,7 +286,7 @@ $(function(){
         <p>작성된 후기가 없습니다.</p>
     </c:if>
 </div>
-
+<!-- ㅇㅇ -->
 <style>
 .review-list {
     margin-top: 40px;

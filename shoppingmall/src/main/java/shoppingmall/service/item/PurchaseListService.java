@@ -38,5 +38,5 @@ public class PurchaseListService {
 		List<PurchaseListDTO> list =  purchaseRepository.countByMemberAndGoods(dto.getMemberNum(), goodsNum);
 		model.addAttribute("list", list);
     }
-
+//ㅇ
 }

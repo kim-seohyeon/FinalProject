@@ -25,7 +25,7 @@ public class ReviewRepository {
         jdbcTemplate.update(sql, dto.getGoodsNum(), dto.getMemberNum(), dto.getReviewContent(), dto.getPurchaseNum());
     }
 
-    // 후기 목록 조회
+    // 후기 목록 조회ㅇ
     public List<ReviewDTO> getReviewsByGoodsNum(String goodsNum) {
         sql = "SELECT REVIEW_NUM, GOODS_NUM, M.MEMBER_ID, REVIEW_CONTENT, REVIEW_DATE "
             + "FROM REVIEW R JOIN MEMBERS M ON R.MEMBER_NUM = M.MEMBER_NUM "

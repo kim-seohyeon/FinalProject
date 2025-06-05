@@ -25,6 +25,6 @@ public class ReviewWriteService {
     	MemberDTO dto = memberRepository.memberSelectOne(auth.getUserId());
     	reviewDTO.setMemberNum(dto.getMemberNum());
     	reviewRepository.insertReview(reviewDTO);
-		
+		//ㄴ
 	}
 }

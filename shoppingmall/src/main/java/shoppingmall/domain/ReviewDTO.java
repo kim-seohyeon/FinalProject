@@ -10,7 +10,7 @@ public class ReviewDTO {
     private String reviewNum;
     private String goodsNum;
     private String memberNum;
-    private String memberId; // 작성자 표시용
+    private String memberId; // 작성자 표시용ㄴ
     private String reviewContent;
     private Date reviewDate;
 }

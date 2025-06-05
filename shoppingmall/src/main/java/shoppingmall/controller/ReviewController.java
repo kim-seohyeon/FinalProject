@@ -43,6 +43,6 @@ public class ReviewController {
         List<ReviewDTO> reviewList = reviewService.execute(new ReviewDTO(),  goodsNum, model,session );
         model.addAttribute("reviewList", reviewList);
         return "items/detail";
-    }
+    }ㅇ
     */
 }
