@@ -98,10 +98,4 @@ public class StockController {
         return "stock/timeseries"; // → /WEB-INF/views/stock/timeseries.jsp 로 이동
     }
 
-    @GetMapping("/realStock")
-    public String showRealStockPage() {
-        return "stock/realStock"; // realStock.jsp ( /WEB-INF/views/realStock.jsp )
-    }
-    
-
 }

@@ -72,6 +72,12 @@
             font-weight: bold;
             color: #34495e;
         }
+        
+         .stock-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #34495e;
+        }
 
         .stock-date {
             font-size: 0.95em;
@@ -130,6 +136,7 @@
                 <div class="stock-card">
                     <div class="stock-info">
                         <span class="stock-num">종목 번호: ${stock.stockNum}</span>
+                        <span class="stock-name">종목명: ${stock.stockName}</span>
                         <span class="stock-date">등록일: ${stock.wishStockDate}</span>
                     </div>
                     <div class="stock-price-placeholder">

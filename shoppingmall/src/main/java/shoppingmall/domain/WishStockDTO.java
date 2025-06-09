@@ -2,32 +2,12 @@ package shoppingmall.domain;
 
 import java.util.Date;
 
+import lombok.Data;
+
+@Data
 public class WishStockDTO {
     private String memberNum;
     private String stockNum;
+    private String stockName; 
     private Date wishStockDate;
-
-    public String getMemberNum() {
-        return memberNum;
-    }
-
-    public void setMemberNum(String memberNum) {
-        this.memberNum = memberNum;
-    }
-
-    public String getStockNum() {
-        return stockNum;
-    }
-
-    public void setStockNum(String stockNum) {
-        this.stockNum = stockNum;
-    }
-
-    public Date getWishStockDate() {
-        return wishStockDate;
-    }
-
-    public void setWishStockDate(Date wishStockDate) {
-        this.wishStockDate = wishStockDate;
-    }
 }

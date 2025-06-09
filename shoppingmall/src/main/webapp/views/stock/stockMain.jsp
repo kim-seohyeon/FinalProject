@@ -197,11 +197,11 @@
     <div class="wish-stock-list">
         <h3>⭐ 내 관심 주식</h3>
         <a href="/stock/wishlist">→ 관심주식 페이지로 이동</a>
-        <ul id="wishStockList">
-            <c:forEach var="wish" items="${wishStocks}">
-                <li>${wish.stockNum}</li>
-            </c:forEach>
-        </ul>
+		<ul id="wishStockList">
+		    <c:forEach var="wish" items="${wishStocks}">
+		        <li>${wish.stockName} (${wish.stockNum})</li>
+		    </c:forEach>
+		</ul>
     </div>
 
     <canvas id="stockChart" height="400"></canvas>
