@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.http.HttpSession;
 import shoppingmall.domain.AuthInfoDTO;
+import shoppingmall.domain.MemberDTO;
 import shoppingmall.domain.WishStockDTO;
+import shoppingmall.repository.MemberRepository;
 import shoppingmall.service.StockService;
 
 @Controller
@@ -34,8 +36,6 @@ public class StockController {
         }
         return "stock/stockMain";
     }
-
-
 
     @GetMapping("/wishlist")
     public String stockWishlist(HttpSession session, Model model) {

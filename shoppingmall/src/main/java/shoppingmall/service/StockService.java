@@ -17,7 +17,12 @@ public class StockService {
     private JdbcTemplate jdbcTemplate;
 
     public List<WishStockDTO> getWishStocks(String memberNum) {
-        String sql = "SELECT * FROM WISHSTOCK WHERE MEMBER_NUM = ?";
+        // WISHSTOCK 테이블과 STOCKS 테이블을 조인하여 종목명을 가져옵니다.
+        String sql = "SELECT WISHSTOCK.*, STOCK.stock_name "
+        		   + "FROM WISHSTOCK JOIN STOCK "
+                   + "ON WISHSTOCK.STOCK_NUM = STOCK.stock_num " +
+                     "WHERE MEMBER_NUM = ?";
+        
         return jdbcTemplate.query(sql, new Object[]{memberNum}, new WishStockRowMapper());
     }
 
@@ -37,6 +42,7 @@ public class StockService {
             WishStockDTO wishStock = new WishStockDTO();
             wishStock.setMemberNum(rs.getString("MEMBER_NUM"));
             wishStock.setStockNum(rs.getString("STOCK_NUM"));
+            wishStock.setStockName(rs.getString("stock_name")); // stock_name을 매핑
             wishStock.setWishStockDate(rs.getDate("WISHSTOCK_DATE"));
             return wishStock;
         }
