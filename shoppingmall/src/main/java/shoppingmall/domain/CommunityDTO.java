@@ -22,7 +22,6 @@ public class CommunityDTO {
 	String imagePath;
 	int viewCount;
 	
-
 }
 	
 	
