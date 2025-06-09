@@ -97,5 +97,19 @@ public class StockController {
     public String showTimeseriesPage() {
         return "stock/timeseries"; // → /WEB-INF/views/stock/timeseries.jsp 로 이동
     }
-
+    
+    @GetMapping("/realStock")
+    public String realStock(Model model) {
+       List<StockA3> list =  stockRepository.stockSelect();
+       model.addAttribute("list", list);
+       return "stock/realStock";
+    }
+    
+    @GetMapping("/stockCurrent")
+    public @ResponseBody List<StockA3> currentDate(){
+       //System.out.println("q21341414");
+       List<StockA3> list = stockRepository.stockCurrentSelect();
+       System.out.println(list.size());
+       return list;
+    }
 }
