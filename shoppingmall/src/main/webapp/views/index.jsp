@@ -156,56 +156,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-/*
-    $(function() {
-        let currentPage = ${currentPage};
-        const maxPage = ${maxPage};
 
-        $("#load-more").on("click", function(e) {
-            e.preventDefault();
-            if(currentPage >= maxPage) {
-                alert("더 이상 상품이 없습니다.");
-                $(this).hide();
-                return;
-            }
-            currentPage++;
-            $.ajax({
-                url: "/goods/page",
-                data: { page: currentPage },
-                method: "GET",
-                dataType: "json",
-                success: function(data) {
-                    let list = data.list;
-                    let html = "";
-                    list.forEach(function(dto) {
-                    	 html = 
-                    		  '<div class="product-item">' +
-                    		    '<a href="/item/detailView?goodsNum=' + dto.goodsNum + '">' +
-                    		      '<img src="/static/goodsUpload/' + dto.goodsMainStoreImage + '" alt="' + dto.goodsName + '" />' +
-                    		      '<div class="product-name">' + dto.goodsName + '</div>' +
-                    		      '<div class="product-price">' + dto.goodsPrice + '원</div>' +
-                    		    '</a>' +
-                    		  '</div>';
-                    });
-                    $("#product-list").append(html);
-
-                    if(currentPage >= data.maxPage) {
-                        $("#load-more").hide();
-                    }
-                },
-                error: function() {
-                    alert("상품을 불러오는 데 실패했습니다.");
-                    currentPage--;
-                }
-            });
-        });
-
-        // 초기 페이지가 마지막 페이지면 버튼 숨기기
-        if(currentPage >= maxPage) {
-            $("#load-more").hide();
-        }
-    });
-*/
 $(function(){
     let currentPage = 1;
 
@@ -255,7 +206,7 @@ $(function(){
     <c:if test="${!empty auth}">
         <div class="section-title">SJD 판매상품!!🛍️</div>
         <div class="button-group">
-            <a href="/realStock">실시간데이터</a>
+            <a href="/stock/realStock">실시간데이터</a>
             <a href="/item/wishList">찜 목록</a>
             <a href="/item/purchaseList">구매 목록</a>
         </div>
