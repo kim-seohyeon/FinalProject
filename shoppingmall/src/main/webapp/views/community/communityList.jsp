@@ -217,6 +217,7 @@
                         <th>작성자</th>
                         <th>제목</th>
                         <th>등록일</th>
+                        <th>조회수</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -232,6 +233,7 @@
                             <td data-label="등록일">
                                 <fmt:formatDate value="${dto.communityDate}" pattern="yyyy-MM-dd" />
                             </td>
+                            <td data-label="조회수">${dto.viewCount}</td>
                         </tr>
                     </c:forEach>
                 </tbody>

@@ -50,7 +50,7 @@ public class CommunityRepository {
     // 전체 게시글 조회
     public List<CommunityDTO> communitySelectAll() {
         sql = "select COMMUNITY_NUM, COMMUNITY_SUBJECT, COMMUNITY_CONTENT, COMMUNITY_WRITER"
-                + ", COMMUNITY_DATE, COMMENT_COUNT, LIKE_COUNT, COMMUNITY_COMMENT, REPLY_COMMENT, IMAGE_PATH"
+                + ", COMMUNITY_DATE, COMMENT_COUNT, LIKE_COUNT, COMMUNITY_COMMENT, REPLY_COMMENT, IMAGE_PATH, view_count"
                 + " from COMMUNITY"
         		+ " ORDER BY COMMUNITY_DATE DESC";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<CommunityDTO>(CommunityDTO.class));
