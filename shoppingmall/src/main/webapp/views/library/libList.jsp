@@ -170,6 +170,7 @@
                     <th>글쓴이</th>
                     <th>제목</th>
                     <th>등록일</th>
+                    <th>조회수</th>
                 </tr>
             </thead>
             <tbody>
@@ -180,7 +181,7 @@
                         <td><a href="libInfo?libNum=${dto.libNum}">${dto.libWriter}</a></td>
                         <td><a href="libInfo?libNum=${dto.libNum}">${dto.libSubject}</a></td>
                         <td><fmt:formatDate value="${dto.libRegist}" pattern="yyyy-MM-dd" /></td>
-
+						<td>${dto.libReadCount}</td> <!-- ✅ 추가 -->
                     </tr>
                 </c:forEach>
             </tbody>
@@ -197,6 +198,8 @@
             <c:forEach begin="${startPageNum}" end="${endPageNum}" var="i">
                 <a href="library?page=${i}">[${i}]</a>
             </c:forEach>
+            
+            
 
             <c:if test="${page < maxPage}">
                 <a href="library?page=${page + 1}">[다음]</a>

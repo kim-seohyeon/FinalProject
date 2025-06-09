@@ -135,6 +135,12 @@
         <div class="detail-title">제목</div>
         <div class="detail-content">${libraryCommand.libSubject}</div>
     </div>
+    
+    <div class="detail-section">
+    <div class="detail-title">조회수</div>
+    <div class="detail-content">${libraryCommand.libReadCount}</div>
+	</div>
+    
 
     <div class="detail-section">
         <div class="detail-title">내용</div>

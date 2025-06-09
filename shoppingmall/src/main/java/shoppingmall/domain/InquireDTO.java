@@ -18,5 +18,5 @@ public class InquireDTO {
 	String inquireAnswerDate;
 	String empNum;
 	String inquireWriter;
-	
+	int viewCount;
 }

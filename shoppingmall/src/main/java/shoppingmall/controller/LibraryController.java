@@ -37,6 +37,7 @@ public class LibraryController {
 	FileDownloadService fileDownloadService;
 	@Autowired
 	LibraryCheckDeleteService libraryCheckDeleteService;
+
 	
 	
 	@GetMapping("/library")
@@ -96,4 +97,5 @@ public class LibraryController {
 		libraryCheckDeleteService.execute(nums);
 		return "redirect:library";
 	}
+	
 }

@@ -18,6 +18,9 @@ public class LibraryDetailService {
 	public void execute(Model model, int libNum, HttpSession session) {
     	AuthInfoDTO auth = (AuthInfoDTO) session.getAttribute("auth");
 
+    	 // 조회수 증가
+        libraryMapper.incrementReadCount(libNum);
+    	
 		LibraryDTO dto = libraryMapper.libSelectOne(libNum);
 		model.addAttribute("libraryCommand", dto);
 		

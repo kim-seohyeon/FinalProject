@@ -36,6 +36,7 @@ from (select row_number() over (order by lib_num desc) as rn
     	, lib_num, lib_writer, lib_subject, lib_content
     	, LIB_ORIGINAL_NAME, LIB_STORE_NAME, LIB_IMAGE_ORIGINAL_NAME, LIB_IMAGE_STORE_NAME
     	, lib_regist
+    	, lib_read_count
 	  from libraries
 	  where lib_writer like '%' || #{searchWord} || '%'
 	  		or lib_subject like '%' || #{searchWord} || '%'
@@ -45,7 +46,7 @@ where rn between #{startRow} and #{endRow}
 </select>
 
 <select id="libSelectOne" parameterType="integer" resultType="lib">
-	select lib_num, lib_writer, lib_subject, lib_content
+	select lib_num, lib_writer, lib_subject, lib_content, lib_read_count
 			, LIB_ORIGINAL_NAME, LIB_STORE_NAME, LIB_IMAGE_ORIGINAL_NAME, LIB_IMAGE_STORE_NAME
 			, lib_regist
 	from libraries
@@ -99,6 +100,12 @@ where rn between #{startRow} and #{endRow}
 			#{libNum}
 		</foreach>
 </delete>
+
+<update id="incrementReadCount" parameterType="int">
+    UPDATE libraries
+    SET lib_read_count = lib_read_count + 1
+    WHERE lib_num = #{libNum}
+</update>
 
 
 </mapper>

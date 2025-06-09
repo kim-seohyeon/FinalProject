@@ -18,4 +18,5 @@ public class LibraryDTO {
 	String libOriginalName;
 	String libStoreName;
 	Date libRegist;
+	int libReadCount;
 }

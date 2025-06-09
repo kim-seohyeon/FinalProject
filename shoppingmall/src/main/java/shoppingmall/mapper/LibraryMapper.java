@@ -26,5 +26,6 @@ public interface LibraryMapper {
 
 	public void libraryNumsDelete(int[] nums);
 
-	
+	// 조회수 증가 메서드 추가
+    public int incrementReadCount(int libNum);
 }

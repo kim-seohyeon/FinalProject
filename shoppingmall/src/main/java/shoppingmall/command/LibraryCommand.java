@@ -18,4 +18,6 @@ public class LibraryCommand {
 	MultipartFile [] libFile;
 	MultipartFile libImageFile;
 	
+	int libReadCount;
+	
 }

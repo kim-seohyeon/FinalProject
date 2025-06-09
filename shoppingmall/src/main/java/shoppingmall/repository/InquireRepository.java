@@ -80,6 +80,5 @@ public class InquireRepository {
 				+ " WHERE inquire_num = ? ORDER BY icomment_date DESC";
 			return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(IcommentDTO.class), inquireNum);
 	}
-	
 
 }

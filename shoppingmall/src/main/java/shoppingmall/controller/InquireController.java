@@ -107,5 +107,5 @@ public class InquireController {
         icommentDeleteService.execute(icommentId, inquireNum, session);
         return "redirect:/inquire/inquireDetail?inquireNum=" + inquireNum;
     }
-	
+    
 }
