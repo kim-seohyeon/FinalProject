@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.http.HttpSession;
 import shoppingmall.domain.AuthInfoDTO;
-import shoppingmall.domain.MemberDTO;
+import shoppingmall.domain.StockA3;
 import shoppingmall.domain.WishStockDTO;
-import shoppingmall.repository.MemberRepository;
+import shoppingmall.repository.StockRepository;
 import shoppingmall.service.StockService;
 
 @Controller
@@ -26,6 +26,8 @@ public class StockController {
 
     @Autowired
     private StockService stockService;
+    @Autowired
+    StockRepository stockRepository ;
 
     @GetMapping("/main")
     public String stockMain(HttpSession session, Model model) {

@@ -113,9 +113,4 @@ public class IndexController {
         emailService.execute(mailCommand);
         return "redirect:/";
     }
-
-    @GetMapping("/realStock")
-    public String realStock() {
-        return "/socket/chattingClient";
-    }
 }
