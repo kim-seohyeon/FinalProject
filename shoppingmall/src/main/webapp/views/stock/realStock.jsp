@@ -188,7 +188,7 @@ const yyyy = today.getFullYear();
 const mm = String(today.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1
 const dd = String(today.getDate()).padStart(2, '0');
 function connect() {
-	ws = new WebSocket("ws://localhost:1234");
+	ws = new WebSocket("ws://192.168.22.5:1234");
 	ws.onopen = onOpen;
 	ws.onmessage = onMessage;
 	ws.onclose = onClose;
