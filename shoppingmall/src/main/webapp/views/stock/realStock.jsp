@@ -242,6 +242,7 @@ $(function(){
 
 </head>
 <body>
+<jsp:include page="/views/header.jsp" />
 <div id="chartContainer">
   <canvas id="myChart" width="800" height="400"></canvas>
 </div>
@@ -267,5 +268,6 @@ $(function(){
     </tbody>
   </table>
 </div>
+<jsp:include page="/views/footer.jsp" />
 </body>
 </html>

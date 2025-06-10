@@ -123,4 +123,10 @@ public class StockController {
        System.out.println(list.size());
        return list;
     }
+    
+    @GetMapping("/stockX")
+    public String stockXPage() {
+        return "stock/stockX"; // → /WEB-INF/views/stock/stockX.jsp
+    }
+
 }

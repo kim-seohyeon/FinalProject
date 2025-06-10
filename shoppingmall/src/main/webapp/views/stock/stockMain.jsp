@@ -6,7 +6,6 @@
     <meta charset="UTF-8">
     <title>주식 메인 페이지</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         body {
@@ -106,21 +105,6 @@
             border-bottom: 1px solid #eaeaea;
         }
 
-        canvas {
-            margin-top: 40px;
-            width: 100%;
-            max-width: 100%;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-        }
-
-/*         .footer {
-            text-align: center;
-            margin: 60px 0 20px 0;
-            font-size: 14px;
-            color: #7f8c8d;
-        } */
-
         @media (max-width: 600px) {
             .container {
                 width: 95%;
@@ -171,27 +155,54 @@
             </tr>
         </thead>
         <tbody>
-        	<c:forEach items="${list }" var="dto" varStatus="idx">
-            <tr data-stock-code="00${idx.count }">
-                <td data-label="종목명">${dto.stockName }</td>
-                <td data-label="현재가">${dto.price }</td>
-                <td data-label="찜"><button class="toggle-wish">❤️</button></td>
-            </tr>
+            <c:forEach items="${list }" var="dto" varStatus="idx">
+                <tr data-stock-code="00${idx.count }">
+                    <td data-label="종목명">
+                        <c:choose>
+                            <c:when test="${dto.stockName == '삼성전자'}">
+                                <a href="/stock/realStock" style="color: #2980b9; font-weight: bold; text-decoration: none;">
+                                    ${dto.stockName}
+                                </a>
+                            </c:when>
+                            <c:when test="${dto.stockName == '네이버'}">
+                                <a href="/stock/stockX" style="color: #2980b9; font-weight: bold; text-decoration: none;">
+                                    ${dto.stockName}
+                                </a>
+                            </c:when>
+                            <c:when test="${dto.stockName == 'LG에너지솔루션'}">
+                                <a href="/stock/stockX" style="color: #2980b9; font-weight: bold; text-decoration: none;">
+                                    ${dto.stockName}
+                                </a>
+                            </c:when>
+                            <c:when test="${dto.stockName == '카카오'}">
+                                <a href="/stock/stockX" style="color: #2980b9; font-weight: bold; text-decoration: none;">
+                                    ${dto.stockName}
+                                </a>
+                            </c:when>
+                            <c:otherwise>
+                                ${dto.stockName}
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
+                    <td data-label="현재가">${dto.price }</td>
+                    <td data-label="찜"><button class="toggle-wish">❤️</button></td>
+                </tr>
             </c:forEach>
         </tbody>
     </table>
 
     <div class="wish-stock-list">
-        <h3>⭐ 내 관심 주식</h3>
+        <h3>내 관심 주식 목록</h3>
         <a href="/stock/wishlist">→ 관심주식 페이지로 이동</a>
-		<ul id="wishStockList">
-		    <c:forEach var="wish" items="${wishStocks}">
-		        <li>${wish.stockName} (${wish.stockNum})</li>
-		    </c:forEach>
-		</ul>
+        <ul id="wishStockList">
+            <c:forEach var="wish" items="${wishStocks}">
+                <li>
+                    ${wish.stockName} <br/>
+                    <span style="color:#888; font-size:0.9rem;">(${wish.stockNum})</span>
+                </li>
+            </c:forEach>
+        </ul>
     </div>
-
-    <canvas id="stockChart" height="400"></canvas>
 </div>
 
 <script>
@@ -226,11 +237,6 @@
                         btn.text("❤️");
                         wishStocks.add(stockCode);
                     }
-                    item = "";
-                    $.each(res.wishStocks, function(idx, dto){
-                    	item += "<li>"+ dto.stockName + "(" + dto.stockNum + ")</li>";
-                    });
-                    $("#wishStockList").html(item);
                 },
                 error: function () {
                     alert("로그인이 필요합니다.");
@@ -246,53 +252,8 @@
             });
         }
     });
-
-    const ctx = document.getElementById('stockChart').getContext('2d');
-    const stockChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ['10:00', '11:00', '12:00', '13:00', '14:00', '15:00'],
-            datasets: [{
-                label: '삼성전자 주가',
-                data: [77400, 77600, 77500, 77800, 78300, 78400],
-                borderColor: '#3498db',
-                backgroundColor: 'rgba(52, 152, 219, 0.2)',
-                tension: 0.3,
-                fill: true
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    labels: {
-                        color: '#34495e'
-                    }
-                }
-            }
-        }
-    });
-    
 </script>
 
-<div class="chart-navigation" style="text-align:center; margin-top: 20px;">
-    <a href="/stock/timeseries" style="
-        display: inline-block;
-        padding: 10px 20px;
-        background-color: #3498db;
-        color: white;
-        font-weight: 600;
-        text-decoration: none;
-        border-radius: 6px;
-        transition: background-color 0.3s ease;">
-        📅 일별/실시간 시세 보기!
-    </a>
-</div>
-
-<!-- <div class="footer">
-    <p>©d 2025 주식 정보 시스템. 모든 권리 보유</p>
-</div>
- -->
 <jsp:include page="/views/footer.jsp" />
 </body>
 </html>
