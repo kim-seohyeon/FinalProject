@@ -34,8 +34,6 @@
         margin-left: -730px;
         color: #000;
         margin-bottom: 50px;
-        text-shadow: none;
-        letter-spacing: normal;
     }
     .button-group {
         display: flex;
@@ -152,20 +150,35 @@
     .login-box input[type="submit"]:hover {
         background-color: #0056b3;
     }
-    /* CSS 스타일만 들어가야 함 */
-    .main-banner {
+
+    /* 슬라이더용 스타일 */
+    .slider-container {
+    	width: 1200px;           /* 원하는 배너 너비 */
+    	height: 300px;         /* 원하는 배너 높이 */
+    	overflow: hidden;
+    	position: relative;
+    }
+    
+    .slider-container img{
         width: 100%;
-        height: auto;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        margin-bottom: 50px;
+    	height: 100%;
+    	object-fit: contain
+        max-height: 400px;
+        position: absolute;
+        overflow: hidden;
+        margin-bottom: 40px;
+        border-radius: 12px;
+    }
+
+    .slider-container img.active {
+        opacity: 1;
+        z-index: 1;
     }
 </style>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-
 $(function(){
     let currentPage = 1;
 
@@ -177,7 +190,6 @@ $(function(){
             data: { page: currentPage },
             dataType: "json",
             success: function(model) {
-                console.log(model);
                 let html = "";
                 $.each(model.list, function(idx, dto){
                     html += 
@@ -189,7 +201,6 @@ $(function(){
                             '</a>' +
                         '</div>';
                 });
-
                 $("#product-list").append(html);
 
                 if (model.maxPage <= currentPage) {
@@ -204,6 +215,23 @@ $(function(){
     });
 });
 
+// 슬라이더 전환 기능
+
+        $(function(){
+            interval = setInterval(up_content, 4000);
+            $("#content").hover(function(){
+                clearInterval(interval);
+            },function(){
+                interval = setInterval(up_content, 4000);
+            });
+        });
+        function up_content(){
+            $("#content img:last").after($("#content img:first"));
+        }
+        function down_content(){
+            $("#content img:first").before($("#content img:last"));
+        }
+
 </script>
 
 </head>
@@ -213,10 +241,13 @@ $(function(){
 
 <div class="container">
     <c:if test="${!empty auth}">
-       <img src="/static/images/aaaa.jpg" alt="배너" style="max-width:100%; height:auto;" />
-        <!--<div class="section-title">SJD 판매상품!!🛍️</div>
-        !-->
-        
+        <!-- 슬라이더 이미지 영역 -->
+        <div class="slider-container" id="content">
+            <img src="<c:url value='/static/images/aaaa.jpg' />" alt="배너1" />
+            <img src="<c:url value='/static/images/aaaa1.jpg' />" alt="배너2" />
+            <img src="<c:url value='/static/images/aaaa2.jpg' />" alt="배너3" />
+        </div>
+
         <div class="button-group">
             <a href="/stock/realStock">실시간데이터</a>
             <a href="/item/wishList">찜 목록</a>
@@ -237,7 +268,8 @@ $(function(){
             </c:forEach>
         </div>
     </div>
-    <div id="more" style="text-align:center; margin:40px 0;">
+
+    <div id="more">
         <button id="load-more">더보기</button>
     </div>
 
