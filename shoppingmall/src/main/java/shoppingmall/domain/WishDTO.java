@@ -12,3 +12,4 @@ public class WishDTO {
 	String stockName;
 	String goodsMainStoreImage;
 }
+//s

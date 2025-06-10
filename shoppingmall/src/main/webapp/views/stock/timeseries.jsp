@@ -203,7 +203,7 @@
 
     <a href="/stock/main" class="back-link">← 주식 메인 페이지로 돌아가기</a>
 </div>
-
+<!-- dd -->
 <jsp:include page="/views/footer.jsp" />
 </body>
 </html>

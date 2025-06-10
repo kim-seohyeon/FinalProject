@@ -298,7 +298,7 @@
 </div>
 
 <!-- <div class="footer">
-    <p>©d 2025 주식 정보 시스템. 모든 권리 보유.</p>
+    <p>©d 2025 주식 정보 시스템. 모든 권리 보유</p>
 </div>
  -->
 <jsp:include page="/views/footer.jsp" />

@@ -58,3 +58,4 @@ public class StockRepository {
 				, new BeanPropertyRowMapper<StockA3>(StockA3.class));
 	}
 }
+//s
