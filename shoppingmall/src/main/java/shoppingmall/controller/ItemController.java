@@ -52,7 +52,7 @@ public class ItemController {
     @Autowired
     PurchaseListService purchaseListService;
     @Autowired
-    WishListService wishListService;  // 위시리스트 서비스 추가
+    WishListService wishListService;  // 위시리스트 서비스 추가d
     @Autowired
     GoodsWishService goodsWishService;
     @Autowired
