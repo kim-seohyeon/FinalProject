@@ -43,6 +43,7 @@
         margin-left: -800px;
         gap: 10px;
         margin-bottom: 30px;
+        margin-top: 30px;
     }
     .button-group a {
         display: inline-block;
@@ -151,6 +152,14 @@
     .login-box input[type="submit"]:hover {
         background-color: #0056b3;
     }
+    /* CSS 스타일만 들어가야 함 */
+    .main-banner {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        margin-bottom: 50px;
+    }
 </style>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -204,7 +213,10 @@ $(function(){
 
 <div class="container">
     <c:if test="${!empty auth}">
-        <div class="section-title">SJD 판매상품!!🛍️</div>
+       <img src="/static/images/aaaa.jpg" alt="배너" style="max-width:100%; height:auto;" />
+        <!--<div class="section-title">SJD 판매상품!!🛍️</div>
+        !-->
+        
         <div class="button-group">
             <a href="/stock/realStock">실시간데이터</a>
             <a href="/item/wishList">찜 목록</a>
