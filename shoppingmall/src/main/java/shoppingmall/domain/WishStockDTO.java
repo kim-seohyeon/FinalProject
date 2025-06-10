@@ -10,5 +10,6 @@ public class WishStockDTO {
     private String stockNum;
     private String stockName; 
     private Date wishStockDate;
+    private String price;
 }
 //d

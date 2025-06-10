@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import jakarta.servlet.http.HttpSession;
 import shoppingmall.domain.AuthInfoDTO;
 import shoppingmall.domain.StockA3;
+import shoppingmall.domain.StockDTO;
 import shoppingmall.domain.WishStockDTO;
 import shoppingmall.repository.StockRepository;
 import shoppingmall.service.StockService;
@@ -34,8 +35,11 @@ public class StockController {
         AuthInfoDTO auth = (AuthInfoDTO) session.getAttribute("auth");
         if (auth != null) {
             List<WishStockDTO> wishStocks = stockService.getWishStocks(auth.getUserId());
+            System.out.println("auth.getUserId() : " + auth.getUserId());
             model.addAttribute("wishStocks", wishStocks);
         }
+        List<StockDTO> list = stockRepository.stockInfo();
+        model.addAttribute("list", list);
         return "stock/stockMain";
     }
 
@@ -49,7 +53,12 @@ public class StockController {
         String memberNum = authInfo.getUserId();
         List<WishStockDTO> wishStocks = stockService.getWishStocks(memberNum);
         model.addAttribute("wishStocks", wishStocks);
+        
+        List<StockDTO> list = stockRepository.stockInfo();
+        model.addAttribute("list", list);
+        
         return "stock/stockWishList";
+        
     }
 
     @PostMapping("/addFavorite")

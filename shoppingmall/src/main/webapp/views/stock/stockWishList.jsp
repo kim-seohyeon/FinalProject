@@ -139,9 +139,11 @@
                         <span class="stock-name">종목명: ${stock.stockName}</span>
                         <span class="stock-date">등록일: ${stock.wishStockDate}</span>
                     </div>
-                    <div class="stock-price-placeholder">
-                        실시간 가격: -원
-                    </div>
+	                <c:if test="${not empty list}">
+	                    <div class="stock-price-placeholder">
+	                        <span class="stock-price">현재가: ${list[0].price}</span>
+	                    </div>
+	                </c:if>
                 </div>
             </c:forEach>
         </div>

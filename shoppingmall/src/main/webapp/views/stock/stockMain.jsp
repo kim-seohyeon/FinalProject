@@ -171,26 +171,13 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-stock-code="001">
-                <td data-label="종목명">삼성전자</td>
-                <td data-label="현재가">78,400원</td>
+        	<c:forEach items="${list }" var="dto" varStatus="idx">
+            <tr data-stock-code="00${idx.count }">
+                <td data-label="종목명">${dto.stockName }</td>
+                <td data-label="현재가">${dto.price }</td>
                 <td data-label="찜"><button class="toggle-wish">❤️</button></td>
             </tr>
-            <tr data-stock-code="002">
-                <td data-label="종목명">LG에너지솔루션</td>
-                <td data-label="현재가">408,000원</td>
-                <td data-label="찜"><button class="toggle-wish">❤️</button></td>
-            </tr>
-            <tr data-stock-code="003">
-                <td data-label="종목명">카카오</td>
-                <td data-label="현재가">105,000원</td>
-                <td data-label="찜"><button class="toggle-wish">❤️</button></td>
-            </tr>
-            <tr data-stock-code="004">
-                <td data-label="종목명">네이버</td>
-                <td data-label="현재가">360,000원</td>
-                <td data-label="찜"><button class="toggle-wish">❤️</button></td>
-            </tr>
+            </c:forEach>
         </tbody>
     </table>
 

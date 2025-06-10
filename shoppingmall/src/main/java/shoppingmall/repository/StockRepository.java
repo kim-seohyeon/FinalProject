@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import shoppingmall.domain.StockA3;
+import shoppingmall.domain.StockDTO;
 
 @Repository
 public class StockRepository {
@@ -56,6 +57,25 @@ public class StockRepository {
 				+ "WHERE rn = 1";
 		return jdbcTemplate.query(sql
 				, new BeanPropertyRowMapper<StockA3>(StockA3.class));
+	}
+	
+	public List<StockDTO> stockInfo(){
+		sql = "select STOCK_NUM , stock.STOCK_NAME,"
+				+ "        price "
+				+ "from stock left outer join ( select * from ( "
+				+ "                        select row_number() over (partition by trunc(trading_date)  order by trunc(trading_date) desc) rn "
+				+ "                             , case when symbol =  'KR7005930003' then '삼성전자' "
+				+ "                                    else '-' "
+				+ "                                end stock_name , price , trading_date, TRADING_HOURS "
+				+ "                        from stock1 "
+				+ "                        where trunc(trading_date) = trunc(sysdate) "
+				+ "                        order by trunc(trading_date) desc, TRADING_HOURS desc "
+				+ "                        ) "
+				+ "                        where rn = 1 "
+				+ "                        ) st "
+				+ "on stock.stock_name = st.stock_name";
+		return jdbcTemplate.query(sql
+				, new BeanPropertyRowMapper<StockDTO>(StockDTO.class));
 	}
 }
 //s
