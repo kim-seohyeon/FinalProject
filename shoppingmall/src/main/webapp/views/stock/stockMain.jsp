@@ -226,6 +226,11 @@
                         btn.text("❤️");
                         wishStocks.add(stockCode);
                     }
+                    item = "";
+                    $.each(res.wishStocks, function(idx, dto){
+                    	item += "<li>"+ dto.stockName + "(" + dto.stockNum + ")</li>";
+                    });
+                    $("#wishStockList").html(item);
                 },
                 error: function () {
                     alert("로그인이 필요합니다.");
