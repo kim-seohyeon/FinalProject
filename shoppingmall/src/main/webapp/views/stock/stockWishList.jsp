@@ -159,7 +159,7 @@
 
 <!-- <div class="footer">
     <p>© 2025 주식 정보 시스템. 모든 권리 보유.</p>
-</div> -->
+</div>s -->
 
 <jsp:include page="/views/footer.jsp" />
 </body>
