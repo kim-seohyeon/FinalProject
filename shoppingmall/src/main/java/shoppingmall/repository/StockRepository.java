@@ -12,10 +12,10 @@ import shoppingmall.domain.StockDTO;
 
 @Repository
 public class StockRepository {
-	@Autowired
-	JdbcTemplate jdbcTemplate;
-	String sql;
-	public List<StockA3> stockSelect() { 
+   @Autowired
+   JdbcTemplate jdbcTemplate;
+   String sql;
+   public List<StockA3> stockSelect() {
 		sql = "SELECT  "
 				+ "    TO_CHAR(trading_date, 'yyyy-MM-dd') AS trading_date, "
 				+ "    rn AS max_rn, "
@@ -35,7 +35,14 @@ public class StockRepository {
 				+ "        volume, "
 				+ "        cumulative_volume "
 				+ "    FROM stock1 "
-				+ "    WHERE TO_NUMBER(trading_hours) < 152000 "
+				+ "    WHERE TO_NUMBER(trading_hours) <= 153000 "
+				+ "      AND ( "
+				+ "          TRUNC(trading_date) < TRUNC(SYSDATE) "
+				+ "          OR ( "
+				+ "              TRUNC(trading_date) = TRUNC(SYSDATE)   "
+				+ "              AND TO_NUMBER(TO_CHAR(SYSDATE, 'HH24MI')) >= '1530'   "
+				+ "          ) "
+				+ "      ) "
 				+ ") "
 				+ "WHERE rn = 1 "
 				+ "ORDER BY trading_date DESC ";
@@ -58,24 +65,23 @@ public class StockRepository {
 		return jdbcTemplate.query(sql
 				, new BeanPropertyRowMapper<StockA3>(StockA3.class));
 	}
-	
-	public List<StockDTO> stockInfo(){
-		sql = "select STOCK_NUM , stock.STOCK_NAME,"
-				+ "        price "
-				+ "from stock left outer join ( select * from ( "
-				+ "                        select row_number() over (partition by trunc(trading_date)  order by trunc(trading_date) desc) rn "
-				+ "                             , case when symbol =  'KR7005930003' then '삼성전자' "
-				+ "                                    else '-' "
-				+ "                                end stock_name , price , trading_date, TRADING_HOURS "
-				+ "                        from stock1 "
-				+ "                        where trunc(trading_date) = trunc(sysdate) "
-				+ "                        order by trunc(trading_date) desc, TRADING_HOURS desc "
-				+ "                        ) "
-				+ "                        where rn = 1 "
-				+ "                        ) st "
-				+ "on stock.stock_name = st.stock_name";
-		return jdbcTemplate.query(sql
-				, new BeanPropertyRowMapper<StockDTO>(StockDTO.class));
-	}
+   public List<StockDTO> stockInfo(){
+      sql = "select STOCK_NUM , stock.STOCK_NAME,"
+            + "        price "
+            + "from stock left outer join ( select * from ( "
+            + "                        select row_number() over (partition by trunc(trading_date)  order by trunc(trading_date) desc) rn "
+            + "                             , case when symbol =  'KR7005930003' then '삼성전자' "
+            + "                                    else '-' "
+            + "                                end stock_name , price , trading_date, TRADING_HOURS "
+            + "                        from stock1 "
+            + "                        where trunc(trading_date) = trunc(sysdate) "
+            + "                        order by trunc(trading_date) desc, TRADING_HOURS desc "
+            + "                        ) "
+            + "                        where rn = 1 "
+            + "                        ) st "
+            + "on stock.stock_name = st.stock_name";
+      return jdbcTemplate.query(sql
+            , new BeanPropertyRowMapper<StockDTO>(StockDTO.class));
+   }
 }
 //s
