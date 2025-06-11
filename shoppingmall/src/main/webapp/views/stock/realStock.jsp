@@ -5,78 +5,26 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>삼성전자 실시간 주식 정보</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
-  <style>
-    body {
-      background-color: #f1f3f5;
-      font-family: 'Segoe UI', sans-serif;
-    }
+<title>Insert title here</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* 필요시 */
+  }
 
-    .stock-header {
-      background-color: #ffffff;
-      padding: 30px 20px 20px;
-      border-bottom: none;
-      text-align: center;
-      box-shadow: none;
-      margin-bottom: 20px;
-    }
+  #chartContainer {
+    width: 800px;
+    height: 400px;
+    margin: 0 auto;
+  }
 
-    .stock-header h2 {
-      margin-bottom: 5px;
-      font-weight: 700;
-    }
-
-    #chartContainer {
-      max-width: 900px;
-      margin: 0 auto;
-      background-color: #ffffff;
-      border-radius: 15px;
-      box-shadow: 0 0 12px rgba(0,0,0,0.08);
-      padding: 25px;
-    }
-
-    #myChart {
-      width: 100% !important;
-      height: 400px !important;
-    }
-
-    .stock-table-wrapper {
-      max-width: 900px;
-      margin: 40px auto 80px;
-    }
-
-    .stock-table-wrapper h5 {
-      margin-bottom: 20px;
-      font-weight: 600;
-    }
-
-    table {
-      background-color: #ffffff;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
-    }
-
-    th {
-      background-color: #f8f9fa !important;
-      font-weight: 600;
-    }
-
-    td, th {
-      vertical-align: middle !important;
-      font-size: 15px;
-    }
-
-    #stock td {
-      font-weight: bold;
-      color: #dc3545;
-    }
-  </style>
-
+  #myChart {
+    width: 800px !important;
+    height: 400px !important;
+    background-color: white;
+  }
+</style>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -204,34 +152,68 @@ function fetchData() {
   });
 }
 
-$(document).ready(function() {
-	  function startFetching() {
-	    const intervalId = setInterval(() => {
-	      const now = new Date();
-	      const targetHour = 15;
-	      const targetMinute = 30;
+function startInterval() {
+    // 8시 30분부터 15시 30분까지 interval 시작
+    const now = new Date();
+    const startTime = new Date();
+    startTime.setHours(8, 30, 0, 0);  // 8시 30분
+    const endTime = new Date();
+    endTime.setHours(15, 30, 0, 0);  // 15시 30분
 
-	      fetchData();
+    // 인터벌이 실행되는 시간대인지 체크
+    if (now >= startTime && now <= endTime) {
+        // 1초마다 fetchData 실행
+        fetchData();  // 새로 고침시 최초 한번 실행
+        return setInterval(fetchData, 1000);  // 1초마다 fetchData 실행
+    } else {
+        return null;
+    }
+}
 
-	      if (now.getHours() > targetHour || (now.getHours() === targetHour && now.getMinutes() >= targetMinute)) {
-	        clearInterval(intervalId);
-	        console.log("3시 30분이 지나 인터벌을 멈췄습니다.");
-	      }
-	    }, 1000);
-	  }
+function stopInterval(intervalId) {
+    // 인터벌 멈추기
+    clearInterval(intervalId);
+}
 
-	  const now = new Date();
-	  const targetTime = new Date();
-	  targetTime.setHours(9, 30, 0, 0); // 오전 9시 30분
+function checkTimeAndStartInterval() {
+    const now = new Date();
+    const startTime = new Date();
+    startTime.setHours(8, 30, 0, 0);  // 8시 30분
+    const endTime = new Date();
+    endTime.setHours(15, 30, 0, 0);  // 15시 30분
 
-	  if (now < targetTime) {
-	    const delay = targetTime.getTime() - now.getTime(); // ms 단위
-	    console.log("9시 30분까지 대기 중... (" + Math.round(delay / 1000) + "초)");
-	    setTimeout(startFetching, delay);
-	  } else {
-	    startFetching();
-	  }
-	});
+    // 인터벌을 시작할 시간인지 체크
+    if (now >= startTime && now <= endTime) {
+        return startInterval();  // interval 시작
+    }
+    return null;
+}
+
+// 페이지 로딩 시 첫 실행
+window.onload = function() {
+    // 새로고침 시 fetchData()를 한 번 실행
+    fetchData();
+
+    // 시간 체크 후 interval 시작/멈춤
+    let intervalId = checkTimeAndStartInterval();
+
+    // 시간을 계속 체크해서 인터벌을 관리
+    setInterval(() => {
+        const now = new Date();
+        const startTime = new Date();
+        startTime.setHours(8, 30, 0, 0);  // 8시 30분
+        const endTime = new Date();
+        endTime.setHours(15, 30, 0, 0);  // 15시 30분
+
+        // 현재 시간이 인터벌 시작 시간 범위 안에 있는지 확인
+        if (now >= startTime && now <= endTime && !intervalId) {
+            intervalId = startInterval();
+        } else if ((now < startTime || now > endTime) && intervalId) {
+            stopInterval(intervalId);
+            intervalId = null;
+        }
+    }, 60000 * 60);  // 매 1분마다 현재 시간을 체크
+}
 </script>
 <script>
 const today = new Date();
@@ -294,40 +276,30 @@ $(function(){
 
 </head>
 <body>
-  <jsp:include page="/views/header.jsp" />
-
-  <div class="stock-header">
-    <h2>📊 삼성전자 실시간 주식 정보</h2>
-    <span class="badge bg-secondary">Today: <script>document.write(new Date().toLocaleDateString())</script></span>
-  </div>
-
-  <div id="chartContainer">
-    <canvas id="myChart"></canvas>
-  </div>
-
-  <div class="stock-table-wrapper container">
-    <h5>📈 오늘의 주식 거래 정보</h5>
-    <table class="table table-bordered table-hover text-center align-middle">
-      <thead class="table-light">
+<div id="chartContainer">
+  <canvas id="myChart" width="800" height="400"></canvas>
+</div>
+<div class="container mt-4">
+  <h5 class="mb-3">📈 주식 정보</h5>
+  <table class="table table-bordered table-hover table-sm text-center align-middle">
+    <thead class="table-light">
+      <tr>
+        <th>거래일</th>
+        <th>종가</th>
+        <th>누적거래량</th>
+      </tr>
+    </thead>
+    <tbody>
+     <tr id="stock"></tr>
+      <c:forEach items="${list}" var="data">
         <tr>
-          <th>거래일</th>
-          <th>종가</th>
-          <th>누적거래량</th>
+          <td>${data.tradingDate}</td>
+          <td>${data.price}</td>
+          <td>${data.cumulativeVolume}</td>
         </tr>
-      </thead>
-      <tbody>
-        <tr id="stock"></tr>
-        <c:forEach items="${list}" var="data">
-          <tr>
-            <td>${data.tradingDate}</td>
-            <td>${data.price}</td>
-            <td>${data.cumulativeVolume}</td>
-          </tr>
-        </c:forEach>
-      </tbody>
-    </table>
-  </div>
-
-  <jsp:include page="/views/footer.jsp" />
+      </c:forEach>
+    </tbody>
+  </table>
+</div>
 </body>
 </html>
