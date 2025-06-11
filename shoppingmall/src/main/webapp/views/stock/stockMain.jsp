@@ -198,7 +198,6 @@
             <c:forEach var="wish" items="${wishStocks}">
                 <li>
                     ${wish.stockName} <br/>
-                    <span style="color:#888; font-size:0.9rem;">(${wish.stockNum})</span>
                 </li>
             </c:forEach>
         </ul>

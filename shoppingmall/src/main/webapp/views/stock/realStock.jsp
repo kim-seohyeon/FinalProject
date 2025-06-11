@@ -5,26 +5,78 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-<style>
-  body, html {
-    margin: 0;
-    padding: 0;
-    overflow: hidden; /* 필요시 */
-  }
+<title>삼성전자 실시간 주식 정보</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+  <style>
+    body {
+      background-color: #f1f3f5;
+      font-family: 'Segoe UI', sans-serif;
+    }
 
-  #chartContainer {
-    width: 800px;
-    height: 400px;
-    margin: 0 auto;
-  }
+    .stock-header {
+      background-color: #ffffff;
+      padding: 30px 20px 20px;
+      border-bottom: none;
+      text-align: center;
+      box-shadow: none;
+      margin-bottom: 20px;
+    }
 
-  #myChart {
-    width: 800px !important;
-    height: 400px !important;
-    background-color: white;
-  }
-</style>
+    .stock-header h2 {
+      margin-bottom: 5px;
+      font-weight: 700;
+    }
+
+    #chartContainer {
+      max-width: 900px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      border-radius: 15px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.08);
+      padding: 25px;
+    }
+
+    #myChart {
+      width: 100% !important;
+      height: 400px !important;
+    }
+
+    .stock-table-wrapper {
+      max-width: 900px;
+      margin: 40px auto 80px;
+    }
+
+    .stock-table-wrapper h5 {
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    table {
+      background-color: #ffffff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+
+    th {
+      background-color: #f8f9fa !important;
+      font-weight: 600;
+    }
+
+    td, th {
+      vertical-align: middle !important;
+      font-size: 15px;
+    }
+
+    #stock td {
+      font-weight: bold;
+      color: #dc3545;
+    }
+  </style>
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -242,32 +294,40 @@ $(function(){
 
 </head>
 <body>
-<jsp:include page="/views/header.jsp" />
-<div id="chartContainer">
-  <canvas id="myChart" width="800" height="400"></canvas>
-</div>
-<div class="container mt-4">
-  <h5 class="mb-3">📈 주식 정보</h5>
-  <table class="table table-bordered table-hover table-sm text-center align-middle">
-    <thead class="table-light">
-      <tr>
-        <th>거래일</th>
-        <th>종가</th>
-        <th>누적거래량</th>
-      </tr>
-    </thead>
-    <tbody>
-     <tr id="stock"></tr>
-      <c:forEach items="${list}" var="data">
+  <jsp:include page="/views/header.jsp" />
+
+  <div class="stock-header">
+    <h2>📊 삼성전자 실시간 주식 정보</h2>
+    <span class="badge bg-secondary">Today: <script>document.write(new Date().toLocaleDateString())</script></span>
+  </div>
+
+  <div id="chartContainer">
+    <canvas id="myChart"></canvas>
+  </div>
+
+  <div class="stock-table-wrapper container">
+    <h5>📈 오늘의 주식 거래 정보</h5>
+    <table class="table table-bordered table-hover text-center align-middle">
+      <thead class="table-light">
         <tr>
-          <td>${data.tradingDate}</td>
-          <td>${data.price}</td>
-          <td>${data.cumulativeVolume}</td>
+          <th>거래일</th>
+          <th>종가</th>
+          <th>누적거래량</th>
         </tr>
-      </c:forEach>
-    </tbody>
-  </table>
-</div>
-<jsp:include page="/views/footer.jsp" />
+      </thead>
+      <tbody>
+        <tr id="stock"></tr>
+        <c:forEach items="${list}" var="data">
+          <tr>
+            <td>${data.tradingDate}</td>
+            <td>${data.price}</td>
+            <td>${data.cumulativeVolume}</td>
+          </tr>
+        </c:forEach>
+      </tbody>
+    </table>
+  </div>
+
+  <jsp:include page="/views/footer.jsp" />
 </body>
 </html>
