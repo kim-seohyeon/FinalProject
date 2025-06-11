@@ -76,12 +76,14 @@
         box-shadow: 0 6px 15px rgba(0,0,0,0.12);
     }
     .product-item img {
-        width: 100%;
-        height: 180px;
-        object-fit: contain;
-        background-color: #ffffff;
-        padding: 10px;
-    }
+    	width: 100%;
+   	 	height: 180px;
+   		object-fit: cover;
+    	padding: 0;
+    	margin: 0;
+    	display: block;
+	}
+
     .product-name {
         padding: 8px 6px 4px;
         font-size: 14px;
