@@ -135,7 +135,6 @@
             <c:forEach var="stock" items="${wishStocks}">
                 <div class="stock-card">
                     <div class="stock-info">
-                        <span class="stock-num">종목 번호: ${stock.stockNum}</span>
                         <span class="stock-name">종목명: ${stock.stockName}</span>
                         <span class="stock-date">등록일: ${stock.wishStockDate}</span>
                     </div>
