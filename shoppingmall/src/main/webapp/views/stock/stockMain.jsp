@@ -156,7 +156,7 @@
         </thead>
         <tbody>
             <c:forEach items="${list }" var="dto" varStatus="idx">
-                <tr data-stock-code="00${idx.count }">
+  					<tr data-stock-code="${dto.stockNum }">
                     <td data-label="종목명">
                         <c:choose>
                             <c:when test="${dto.stockName == '삼성전자'}">
@@ -236,6 +236,11 @@
                         btn.text("❤️");
                         wishStocks.add(stockCode);
                     }
+                    item = "";
+                    $.each(res.wishStocks, function(idx, dto){
+                       item += "<li>"+ dto.stockName  + "</li>";
+                    });
+                    $("#wishStockList").html(item);
                 },
                 error: function () {
                     alert("로그인이 필요합니다.");
