@@ -7,6 +7,9 @@
 <meta charset="UTF-8">
 <title>Index</title>
 
+<!-- Font Awesome 아이콘 사용 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
 <style>
     body {
         font-family: 'Arial', sans-serif;
@@ -38,22 +41,25 @@
     .button-group {
         display: flex;
         justify-content: center;
-        margin-left: -800px;
+        margin-left: -1000px;
         gap: 10px;
         margin-bottom: 30px;
         margin-top: 30px;
     }
     .button-group a {
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
         padding: 6px 14px;
-        background-color: #ADD8E6;
-        color: white;
+        background-color: transparent;
+        color: #007BFF;
+        border: 1px solid #007BFF;
         border-radius: 6px;
         font-size: 12px;
-        transition: background-color 0.3s;
+        transition: background-color 0.3s, color 0.3s;
     }
     .button-group a:hover {
-        background-color: #7FBFEF;
+        background-color: #007BFF;
         color: white;
     }
     .product-grid {
@@ -76,13 +82,13 @@
         box-shadow: 0 6px 15px rgba(0,0,0,0.12);
     }
     .product-item img {
-    	width: 100%;
-   	 	height: 180px;
-   		object-fit: cover;
-    	padding: 0;
-    	margin: 0;
-    	display: block;
-	}
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        padding: 0;
+        margin: 0;
+        display: block;
+    }
 
     .product-name {
         padding: 8px 6px 4px;
@@ -153,22 +159,20 @@
         background-color: #0056b3;
     }
 
-    /* 슬라이더용 스타일 */
     .slider-container {
-    	width: 1200px;           /* 원하는 배너 너비 */
-    	height: 300px;         /* 원하는 배너 높이 */
-    	overflow: hidden;
-    	position: relative;
+        width: 1200px;
+        height: 200px;
+        overflow: hidden;
+        position: relative;
+        margin-bottom: 40px;
     }
-    
-    .slider-container img{
+
+    .slider-container img {
         width: 100%;
-    	height: 100%;
-    	object-fit: contain
+        height: 100%;
+        object-fit: contain;
         max-height: 400px;
         position: absolute;
-        overflow: hidden;
-        margin-bottom: 40px;
         border-radius: 12px;
     }
 
@@ -179,7 +183,6 @@
 </style>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 <script>
 $(function(){
     let currentPage = 1;
@@ -215,25 +218,18 @@ $(function(){
             }
         });
     });
+
+    // 슬라이더
+    let interval = setInterval(up_content, 4000);
+    $("#content").hover(
+        () => clearInterval(interval),
+        () => interval = setInterval(up_content, 4000)
+    );
+
+    function up_content(){
+        $("#content img:last").after($("#content img:first"));
+    }
 });
-
-// 슬라이더 전환 기능
-
-        $(function(){
-            interval = setInterval(up_content, 4000);
-            $("#content").hover(function(){
-                clearInterval(interval);
-            },function(){
-                interval = setInterval(up_content, 4000);
-            });
-        });
-        function up_content(){
-            $("#content img:last").after($("#content img:first"));
-        }
-        function down_content(){
-            $("#content img:first").before($("#content img:last"));
-        }
-
 </script>
 
 </head>
@@ -243,16 +239,15 @@ $(function(){
 
 <div class="container">
     <c:if test="${!empty auth}">
-        <!-- 슬라이더 이미지 영역 -->
         <div class="slider-container" id="content">
             <img src="<c:url value='/static/images/aaaa.jpg' />" alt="배너1" />
             <img src="<c:url value='/static/images/aaaa1.jpg' />" alt="배너2" />
-            <img src="<c:url value='/static/images/aaaa3.jpg' />" alt="배너3" />
+            <img src="<c:url value='/static/images/aaaa4.jpg' />" alt="배너3" />
         </div>
 
         <div class="button-group">
-            <a href="/item/wishList">찜 목록</a>
-            <a href="/item/purchaseList">구매 목록</a>
+            <a href="/item/wishList"><i class="fas fa-heart"></i> 찜 목록</a>
+            <a href="/item/purchaseList"><i class="fas fa-shopping-cart"></i> 구매 목록</a>
         </div>
     </c:if>
 
