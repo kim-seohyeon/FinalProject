@@ -246,5 +246,6 @@
             </ul>
         </div>
     </div>
+    <jsp:include page="/views/footer.jsp" />
 </body>
 </html>
