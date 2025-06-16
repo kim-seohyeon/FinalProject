@@ -154,7 +154,7 @@
             </c:forEach>
         </div>
 
-        <!-- 실시간 주가 정보 영역 -->
+        <!-- 실시간 주가 정보 영역 
         <div class="realtime-section">
             <h3>실시간 주가 정보</h3>
             <div class="realtime-placeholder">
@@ -162,6 +162,7 @@
                 아직 모르겠다. 담주에 하자ㅎㅎ
             </div>
         </div>
+        -->
     </div>
 </div>
 

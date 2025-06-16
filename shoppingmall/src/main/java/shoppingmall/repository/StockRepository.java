@@ -74,6 +74,7 @@ public class StockRepository {
 				+ "    WHERE TRUNC(trading_date) = TRUNC(SYSDATE) "
 				+ ") "
 				+ "WHERE rn = 1 " + StockName1;
+		System.out.println(sql);
 		return jdbcTemplate.query(sql
 				, new BeanPropertyRowMapper<StockA3>(StockA3.class));
 	}

@@ -141,7 +141,7 @@ public class StockController {
     
     @GetMapping("/stockCurrent")
     public @ResponseBody List<StockA3> currentDate(String StockName){
-       //System.out.println("q21341414");
+       System.out.println("stockCurrent");
        List<StockA3> list = stockRepository.stockCurrentSelect(StockName);
        System.out.println(list.size());
        return list;
