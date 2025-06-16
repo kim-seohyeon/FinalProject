@@ -170,10 +170,6 @@
     </table>
 </div>
 
-<div class="footer">
-    <p>© 2025 고객문의 시스템. 모든 권리 보유.</p>
-</div>
-
 <jsp:include page="/views/footer.jsp" />
 </body>
 </html>
