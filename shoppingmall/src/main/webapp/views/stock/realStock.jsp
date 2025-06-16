@@ -5,12 +5,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title> 주식 정보</title>
 <style>
   body, html {
     margin: 0;
     padding: 0;
-    overflow: hidden; /* 필요시 */
+    /* overflow: hidden;  필요시 스크롤바 */
   }
 
   #chartContainer {
@@ -25,6 +25,7 @@
     background-color: white;
   }
 </style>
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -208,6 +209,7 @@ window.onload = function() {
 
         // 현재 시간이 인터벌 시작 시간 범위 안에 있는지 확인
         if (now >= startTime && now <= endTime && !intervalId) {
+        	consokle.log("fetchData");
             intervalId = startInterval();
         } else if ((now < startTime || now > endTime) && intervalId) {
             stopInterval(intervalId);
@@ -273,15 +275,22 @@ $(function(){
 });
 </script>
 
- 
-
 </head>
 <body>
+<jsp:include page="/views/header.jsp" />
+
+<!-- 상단 주식 정보 제목 -->
+<div class="container mt-4">
+  <h2 class="text-center mb-4 fw-bold">
+    📊 ${StockName} 실시간 주식 정보
+  </h2>
+</div>
+
 <div id="chartContainer">
   <canvas id="myChart" width="800" height="400"></canvas>
 </div>
 <div class="container mt-4">
-  <h5 class="mb-3">📈 주식 정보</h5>
+  <h5 class="mb-3">📈 주식시장 정보 요약 </h5>
   <table class="table table-bordered table-hover table-sm text-center align-middle">
     <thead class="table-light">
       <tr>
