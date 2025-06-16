@@ -100,6 +100,7 @@
         <th>주문번호 / 결제번호</th>
         <th>상품명</th>
         <th>주문상태</th>
+        <th>주식종목</th>
       </tr>
     </thead>
     <tbody>
@@ -107,8 +108,9 @@
         <c:forEach items="${list}" var="dto">
           <tr>
             <td>${dto.purchaseNum}</td>
-            <td>${dto.goodsName}</td>
+            <td><a href="/item/detailView?goodsNum=${dto.goodsNum }"/>${dto.goodsName}</td>
             <td>${dto.purchaseStatus}</td>
+            <td><a href="/stock/realStock?stockName=${dto.stockName }" />${dto.stockName }</td>
           </tr>
         </c:forEach>
       </c:if>

@@ -132,15 +132,22 @@
     <div class="content">
         <!-- 관심 주식 리스트 -->
         <div class="stock-list">
-            <c:forEach var="stock" items="${wishStocks}">
+            <c:forEach var="stock" items="${wishStocks}" varStatus="idx">
                 <div class="stock-card">
                     <div class="stock-info">
                         <span class="stock-name">종목명: ${stock.stockName}</span>
                         <span class="stock-date">등록일: ${stock.wishStockDate}</span>
                     </div>
-	                <c:if test="${not empty list}">
+	                <c:if test="${not empty stock}">
 	                    <div class="stock-price-placeholder">
-	                        <span class="stock-price">현재가: ${list[0].price}</span>
+	                        <span class="stock-price">현재가: 
+	                        	<c:forEach var="dto" items="${list }"> 
+	                        		<c:if test="${dto.stockName == stock.stockName}" >
+	                        			${dto.price}
+	                        		</c:if>
+	                        	</c:forEach>
+	                        	
+	                        </span>
 	                    </div>
 	                </c:if>
                 </div>

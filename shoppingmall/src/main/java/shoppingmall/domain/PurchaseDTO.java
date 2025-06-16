@@ -17,5 +17,6 @@ public class PurchaseDTO {
 	String purchaseStatus;
 	String memberNum;	
 	String purchaseName; // 구매상품이름
+	String stockName;
 	
 }

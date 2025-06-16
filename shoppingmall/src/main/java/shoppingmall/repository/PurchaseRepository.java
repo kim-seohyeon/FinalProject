@@ -36,8 +36,8 @@ public class PurchaseRepository {
 
     // 구매 목록 조회
     public List<PurchaseListDTO> SelectAll(String memberNum) {
-        sql = " select g.GOODS_NUM, GOODS_NAME, GOODS_PRICE, GOODS_CONTENTS, GOODS_MAIN_IMAGE, GOODS_MAIN_STORE_IMAGE, UPDATE_EMP_NUM "
-            + "      , p.PURCHASE_NUM, PURCHASE_DATE, PURCHASE_PRICE, PURCHASE_STATUS"
+        sql = " select g.GOODS_NUM, GOODS_NAME, GOODS_PRICE, GOODS_CONTENTS, GOODS_MAIN_IMAGE, GOODS_MAIN_STORE_IMAGE, UPDATE_EMP_NUM, stock_name "
+            + "      , p.PURCHASE_NUM, p.PURCHASE_DATE, PURCHASE_PRICE, PURCHASE_STATUS"
             + "      , CONFIRMNUMBER, CARDNUM, APPLDATE "
             + " from goods g join purchase_list pl "
             + " on g.goods_num = pl.goods_num join purchase p "

@@ -15,7 +15,14 @@ public class StockRepository {
    @Autowired
    JdbcTemplate jdbcTemplate;
    String sql;
-   public List<StockA3> stockSelect() {
+   
+   //주식 차트 그래프 출력
+   public List<StockA3> stockSelect(String StockName) {
+		String	StockName1 = " and symbol = (select case when stock_name = '삼성전자' then 'KR7005930003' "
+					   + "                                       else '-' end stock_name "
+					   + "                            from stock"
+					   + "                            where stock_name = '"+StockName+"')";
+		
 		sql = "SELECT  "
 				+ "    TO_CHAR(trading_date, 'yyyy-MM-dd') AS trading_date, "
 				+ "    rn AS max_rn, "
@@ -44,13 +51,18 @@ public class StockRepository {
 				+ "          ) "
 				+ "      ) "
 				+ ") "
-				+ "WHERE rn = 1 "
+				+ "WHERE rn = 1 " + StockName1
 				+ "ORDER BY trading_date DESC ";
 		return jdbcTemplate.query(sql
 				, new BeanPropertyRowMapper<StockA3>(StockA3.class));
 	}
 	
-	public List<StockA3> stockCurrentSelect(){
+   //주식 표 출력
+	public List<StockA3> stockCurrentSelect(String StockName){
+		String	StockName1 = " and symbol = (select case when stock_name = '삼성전자' then 'KR7005930003' "
+					   + "                                       else '-' end stock_name "
+					   + "                            from stock"
+					   + "                            where stock_name = '"+StockName+"')";
 		sql = " SELECT * "
 				+ "FROM ( "
 				+ "    SELECT s.*,  "
@@ -61,11 +73,13 @@ public class StockRepository {
 				+ "    FROM stock1 s "
 				+ "    WHERE TRUNC(trading_date) = TRUNC(SYSDATE) "
 				+ ") "
-				+ "WHERE rn = 1";
+				+ "WHERE rn = 1 " + StockName1;
 		return jdbcTemplate.query(sql
 				, new BeanPropertyRowMapper<StockA3>(StockA3.class));
 	}
-   public List<StockDTO> stockInfo(){
+
+	//현재가
+	public List<StockDTO> stockInfo(){
       sql = "select STOCK_NUM , stock.STOCK_NAME,"
             + "        price "
             + "from stock left outer join ( select * from ( "
@@ -83,5 +97,44 @@ public class StockRepository {
       return jdbcTemplate.query(sql
             , new BeanPropertyRowMapper<StockDTO>(StockDTO.class));
    }
+	
+	//추천주식
+	public List<StockA3> recommandStock(String memberNum){
+		System.out.println("recommandStock");
+		sql = "  SELECT S1.* , CASE WHEN SYMBOL = 'KR7005930003' THEN '삼성전자' "
+				+ "                   ELSE '-' END STOCK_NAME   "
+				+ "FROM ( "
+				+ "    SELECT s.*, "
+				+ "           ROW_NUMBER() OVER ( "
+				+ "               PARTITION BY TO_CHAR(trading_date, 'yyyy-MM-dd'), trading_hours "
+				+ "               ORDER BY TO_CHAR(trading_date, 'yyyy-MM-dd') DESC, trading_hours DESC, ROWID DESC "
+				+ "           ) AS rn "
+				+ "    FROM stock1 s "
+				+ "    WHERE TRUNC(trading_date) = TRUNC(SYSDATE) "
+				+ ")S1 "
+				+ "WHERE rn = 1  "
+				+ "and SYMBOL = (  "
+				+ "SELECT CASE WHEN STOCK_NAME = '삼성전자' THEN 'KR7005930003' "
+				+ "            ELSE '-' END STOCK_NAME  "
+				+ "FROM GOODS "
+				+ "WHERE GOODS_NUM = ( "
+				+ "        SELECT GOODS_NUM FROM (     "
+				+ "            SELECT PL.GOODS_NUM, CNT  "
+				+ "            FROM purchase P JOIN (  "
+				+ "                                SELECT * "
+				+ "                                FROM ( "
+				+ "                                      SELECT purchase_NUM,  goods_num, COUNT(*) OVER (PARTITION BY goods_num) AS cnt "
+				+ "                                      FROM purchase_list "
+				+ "                                      ) "
+				+ "                               ) PL "
+				+ "            ON P.purchase_NUM = PL.purchase_NUM AND P.MEMBER_NUM = ? "
+				+ "            ORDER BY CNT DESC "
+				+ "        ) "
+				+ "        WHERE ROWNUM =1) "
+				+ ")";
+		return jdbcTemplate.query(sql
+				, new BeanPropertyRowMapper<StockA3>(StockA3.class), memberNum);
+	}
 }
-//s
+
+

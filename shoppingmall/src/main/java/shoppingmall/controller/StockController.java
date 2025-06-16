@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.http.HttpSession;
 import shoppingmall.domain.AuthInfoDTO;
+import shoppingmall.domain.MemberDTO;
 import shoppingmall.domain.StockA3;
 import shoppingmall.domain.StockDTO;
 import shoppingmall.domain.WishStockDTO;
+import shoppingmall.repository.MemberRepository;
 import shoppingmall.repository.StockRepository;
 import shoppingmall.service.StockService;
 
@@ -29,7 +31,20 @@ public class StockController {
     private StockService stockService;
     @Autowired
     StockRepository stockRepository ;
-
+    @Autowired 
+    MemberRepository memberRepository;
+    
+    @GetMapping("/realtime")
+    @ResponseBody
+    public List<StockA3> getRealtimeStock(HttpSession session) {
+    	System.out.println("realtime");
+    	AuthInfoDTO auth = (AuthInfoDTO) session.getAttribute("auth");
+    	MemberDTO dto = memberRepository.memberSelectOne(auth.getUserId());
+    	List<StockA3> list = stockRepository.recommandStock(dto.getMemberNum());
+    	System.out.println(list.toString());
+        return list;
+    }
+    
     @GetMapping("/main")
     public String stockMain(HttpSession session, Model model) {
         AuthInfoDTO auth = (AuthInfoDTO) session.getAttribute("auth");
@@ -38,8 +53,12 @@ public class StockController {
             System.out.println("auth.getUserId() : " + auth.getUserId());
             model.addAttribute("wishStocks", wishStocks);
         }
+        MemberDTO dto = memberRepository.memberSelectOne(auth.getUserId());
         List<StockDTO> list = stockRepository.stockInfo();
+        //List<StockA3> list1 =  stockRepository.recommandStock(dto.getMemberNum());
+        //System.out.println("list1.size() : " + list1.size());
         model.addAttribute("list", list);
+        //model.addAttribute("stockList", list1);
         return "stock/stockMain";
     }
 
@@ -110,16 +129,20 @@ public class StockController {
     }
     
     @GetMapping("/realStock")
-    public String realStock(Model model) {
-       List<StockA3> list =  stockRepository.stockSelect();
+    public String realStock(Model model,  String StockName) {
+       List<StockA3> list =  stockRepository.stockSelect(StockName);
+       if(list.size() == 0) {
+    	   return "redirect:stockX";
+       }
        model.addAttribute("list", list);
+       model.addAttribute("StockName", StockName);
        return "stock/realStock";
     }
     
     @GetMapping("/stockCurrent")
-    public @ResponseBody List<StockA3> currentDate(){
-       //dSystem.out.println("q21341414");
-       List<StockA3> list = stockRepository.stockCurrentSelect();
+    public @ResponseBody List<StockA3> currentDate(String StockName){
+       //System.out.println("q21341414");
+       List<StockA3> list = stockRepository.stockCurrentSelect(StockName);
        System.out.println(list.size());
        return list;
     }
