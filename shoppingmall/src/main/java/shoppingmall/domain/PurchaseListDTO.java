@@ -19,5 +19,6 @@ public class PurchaseListDTO {
 	String confirmNumber;
 	String cardNum;
 	String applDate;
-//ㄴ
+
+	String stockName;
 }

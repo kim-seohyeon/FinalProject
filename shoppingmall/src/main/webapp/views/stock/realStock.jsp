@@ -141,6 +141,7 @@ function fetchData() {
   $.ajax({
     url: "/stock/stockCurrent",
     type: "GET",
+    data: {"StockName": "${StockName}"},
     dataType: "json",
     success: function(result) {
 	  console.log(result.length)
@@ -164,7 +165,7 @@ function startInterval() {
     if (now >= startTime && now <= endTime) {
         // 1초마다 fetchData 실행
         fetchData();  // 새로 고침시 최초 한번 실행
-        return setInterval(fetchData, 1000);  // 1초마다 fetchData 실행
+        return setInterval(fetchData, 5000);  // 10초마다 fetchData 실행
     } else {
         return null;
     }
