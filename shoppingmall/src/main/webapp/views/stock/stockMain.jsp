@@ -211,7 +211,7 @@ tr:hover {
 										style="color: #2980b9; font-weight: bold; text-decoration: none;">
 										${dto.stockName} </a>
 								</c:when>
-								<c:when test="${dto.stockName == 'LG에너지솔루션'}">
+								<c:when test="${dto.stockName == 'LG전자'}">
 									<a href="/stock/realStock?StockName=${dto.stockName}"
 										style="color: #2980b9; font-weight: bold; text-decoration: none;">
 										${dto.stockName} </a>
