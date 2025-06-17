@@ -238,12 +238,13 @@ $(function(){
 <jsp:include page="/views/header.jsp" />
 
 <div class="container">
+    <div class="slider-container" id="content">
+        <img src="<c:url value='/static/images/aaaa.jpg' />" alt="배너1" />
+        <img src="<c:url value='/static/images/aaaa1.jpg' />" alt="배너2" />
+        <img src="<c:url value='/static/images/aaaa4.jpg' />" alt="배너3" />
+    </div>
+    
     <c:if test="${!empty auth}">
-        <div class="slider-container" id="content">
-            <img src="<c:url value='/static/images/aaaa.jpg' />" alt="배너1" />
-            <img src="<c:url value='/static/images/aaaa1.jpg' />" alt="배너2" />
-            <img src="<c:url value='/static/images/aaaa4.jpg' />" alt="배너3" />
-        </div>
 
         <div class="button-group">
             <a href="/item/wishList"><i class="fas fa-heart"></i> 찜 목록</a>
