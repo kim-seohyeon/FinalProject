@@ -238,7 +238,6 @@ $(function(){
 <jsp:include page="/views/header.jsp" />
 
 <div class="container">
-
     <div class="slider-container" id="content">
         <img src="<c:url value='/static/images/aaaa.jpg' />" alt="배너1" />
         <img src="<c:url value='/static/images/aaaa1.jpg' />" alt="배너2" />
