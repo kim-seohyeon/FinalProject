@@ -246,7 +246,6 @@ $(function(){
     </div>
     
     <c:if test="${!empty auth}">
-
         <div class="button-group">
             <a href="/item/wishList"><i class="fas fa-heart"></i> 찜 목록</a>
             <a href="/item/purchaseList"><i class="fas fa-shopping-cart"></i> 구매 목록</a>
