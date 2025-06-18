@@ -162,6 +162,9 @@ public class MemberRepository {
 		sql = " update members"
 				+ " set member_pw = ? "
 				+ " where member_id = ? ";
+		System.out.println(sql);
+		System.out.println(memberId);
+		System.out.println(newPw);
 		return jdbcTemplate.update(sql, newPw, memberId);
 		
 		
@@ -175,7 +178,7 @@ public class MemberRepository {
 
 	//아이디 + 전화번호로 비밀번호 찾기
 	public String findUserPwByIdPhone(String userId, String userPhone) {
-		sql = " select MEMBER_PW from members where member_id = ? and (member_phone1 = ? or member_phone2 = ?)";
+		sql = " select member_id from members where member_id = ? and (member_phone1 = ? or member_phone2 = ?)";
         return jdbcTemplate.queryForObject(sql, String.class, userId, userPhone, userPhone);
 	}
 

@@ -129,20 +129,21 @@ public class StockController {
     }
     
     @GetMapping("/realStock")
-    public String realStock(Model model,  String StockName) {
-       List<StockA3> list =  stockRepository.stockSelect(StockName);
+    public String realStock(Model model,  String stockName) {
+       System.out.println("stockName : " + stockName);
+       List<StockA3> list =  stockRepository.stockSelect(stockName);
        if(list.size() == 0) {
     	   return "redirect:stockX";
        }
        model.addAttribute("list", list);
-       model.addAttribute("StockName", StockName);
+       model.addAttribute("stockName", stockName);
        return "stock/realStock";
     }
     
     @GetMapping("/stockCurrent")
-    public @ResponseBody List<StockA3> currentDate(String StockName){
+    public @ResponseBody List<StockA3> currentDate(String stockName){
        System.out.println("stockCurrent");
-       List<StockA3> list = stockRepository.stockCurrentSelect(StockName);
+       List<StockA3> list = stockRepository.stockCurrentSelect(stockName);
        System.out.println(list.size());
        return list;
     }

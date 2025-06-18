@@ -142,7 +142,7 @@ function fetchData() {
   $.ajax({
     url: "/stock/stockCurrent",
     type: "GET",
-    data: {"StockName": "${StockName}"},
+    data: {"stockName": "${stockName}"},
     dataType: "json",
     success: function(result) {
 	  console.log(result.length)
@@ -166,7 +166,7 @@ function startInterval() {
     if (now >= startTime && now <= endTime) {
         // 1초마다 fetchData 실행
         fetchData();  // 새로 고침시 최초 한번 실행
-        return setInterval(fetchData, 5000);  // 10초마다 fetchData 실행
+        return setInterval(fetchData, 1000);  // 10초마다 fetchData 실행
     } else {
         return null;
     }
@@ -282,7 +282,7 @@ $(function(){
 <!-- 상단 주식 정보 제목 -->
 <div class="container mt-4">
   <h2 class="text-center mb-4 fw-bold">
-    📊 ${StockName} 실시간 주식 정보
+    📊 ${stockName} 실시간 주식 정보
   </h2>
 </div>
 

@@ -202,22 +202,22 @@ tr:hover {
 					<tr data-stock-code="${dto.stockNum }">
 						<td data-label="종목명"><c:choose>
 								<c:when test="${dto.stockName == '삼성전자'}">
-									<a href="/stock/realStock?StockName=${dto.stockName}"
+									<a href="/stock/realStock?stockName=${dto.stockName}"
 										style="color: #2980b9; font-weight: bold; text-decoration: none;">
 										${dto.stockName} </a>
 								</c:when>
 								<c:when test="${dto.stockName == '네이버'}">
-									<a href="/stock/realStock?StockName=${dto.stockName}"
+									<a href="/stock/realStock?stockName=${dto.stockName}"
 										style="color: #2980b9; font-weight: bold; text-decoration: none;">
 										${dto.stockName} </a>
 								</c:when>
 								<c:when test="${dto.stockName == 'LG전자'}">
-									<a href="/stock/realStock?StockName=${dto.stockName}"
+									<a href="/stock/realStock?stockName=${dto.stockName}"
 										style="color: #2980b9; font-weight: bold; text-decoration: none;">
 										${dto.stockName} </a>
 								</c:when>
 								<c:when test="${dto.stockName == '카카오'}">
-									<a href="/stock/realStock?StockName=${dto.stockName}"
+									<a href="/stock/realStock?stockName=${dto.stockName}"
 										style="color: #2980b9; font-weight: bold; text-decoration: none;">
 										${dto.stockName} </a>
 								</c:when>
